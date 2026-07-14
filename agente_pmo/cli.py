@@ -40,7 +40,8 @@ def construir_parser() -> argparse.ArgumentParser:
         "--modelo",
         default=None,
         help=(
-            "Modelo a usar. Defaults: claude-opus-4-8 (claude), llama3.1 (ollama); "
+            "Modelo a usar. Defaults: claude-opus-4-8 (claude), llama3.1 (ollama), "
+            "gemini-2.5-flash (gemini), llama-3.3-70b-versatile (groq); "
             "obligatorio con --proveedor openai"
         ),
     )

@@ -2,7 +2,7 @@
 
 from .base import ErrorProveedor, ProveedorLLM
 
-PROVEEDORES = ("claude", "ollama", "openai")
+PROVEEDORES = ("claude", "ollama", "gemini", "groq", "openai")
 
 
 def crear_proveedor(
@@ -20,6 +20,14 @@ def crear_proveedor(
         from .ollama import ProveedorOllama
 
         return ProveedorOllama(modelo=modelo, base_url=base_url)
+    if nombre == "gemini":
+        from .openai_compat import ProveedorGemini
+
+        return ProveedorGemini(modelo=modelo, base_url=base_url)
+    if nombre == "groq":
+        from .openai_compat import ProveedorGroq
+
+        return ProveedorGroq(modelo=modelo, base_url=base_url)
     if nombre == "openai":
         from .openai_compat import ProveedorOpenAICompat
 

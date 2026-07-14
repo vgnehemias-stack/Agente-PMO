@@ -22,7 +22,39 @@ pip install -r requirements.txt
 
 ## Uso
 
-### Con Claude (recomendado, proveedor de referencia)
+### Opciones gratuitas (sin pago)
+
+**Ollama — gratis, 100% local, sin API key.** Instala [Ollama](https://ollama.com), descarga un modelo y ejecuta:
+
+```bash
+ollama pull llama3.1        # o qwen2.5:7b, mistral, etc.
+python -m agente_pmo ejemplos/ -o salida/ --proveedor ollama --modelo llama3.1
+```
+
+No requiere API key ni conexión a internet.
+
+**Google Gemini — nivel gratuito, sin tarjeta.** Crea una API key gratuita en [aistudio.google.com/apikey](https://aistudio.google.com/apikey):
+
+```bash
+export GEMINI_API_KEY="tu-key-gratuita"
+python -m agente_pmo ejemplos/ -o salida/ --proveedor gemini
+```
+
+**Groq — nivel gratuito, modelos abiertos muy rápidos.** Crea una API key gratuita en [console.groq.com/keys](https://console.groq.com/keys):
+
+```bash
+export GROQ_API_KEY="tu-key-gratuita"
+python -m agente_pmo ejemplos/ -o salida/ --proveedor groq
+```
+
+**Cualquier servidor compatible con OpenAI** (LM Studio, llama.cpp server, etc.):
+
+```bash
+python -m agente_pmo ejemplos/ -o salida/ --proveedor openai \
+  --base-url http://localhost:1234/v1 --modelo <nombre-del-modelo>
+```
+
+### Con Claude (proveedor de referencia)
 
 Necesitas una API key de Anthropic ([console.anthropic.com](https://console.anthropic.com)):
 
@@ -31,40 +63,14 @@ export ANTHROPIC_API_KEY="tu-api-key"
 python -m agente_pmo ejemplos/ -o salida/
 ```
 
-### Con Ollama (gratis, 100% local)
-
-Instala [Ollama](https://ollama.com), descarga un modelo y ejecuta:
-
-```bash
-ollama pull llama3.1
-python -m agente_pmo ejemplos/ -o salida/ --proveedor ollama --modelo llama3.1
-```
-
-No requiere API key ni conexión a internet.
-
-### Con cualquier servidor compatible con OpenAI
-
-Sirve para LM Studio, Groq, llama.cpp server, etc.:
-
-```bash
-# LM Studio local
-python -m agente_pmo ejemplos/ -o salida/ --proveedor openai \
-  --base-url http://localhost:1234/v1 --modelo <nombre-del-modelo>
-
-# Servicio remoto con API key
-export OPENAI_API_KEY="tu-key"
-python -m agente_pmo ejemplos/ -o salida/ --proveedor openai \
-  --base-url https://api.groq.com/openai/v1 --modelo llama-3.3-70b-versatile
-```
-
 ### Opciones
 
 | Opción | Descripción | Default |
 |---|---|---|
 | `rutas` | Archivos y/o directorios con la data | (obligatorio) |
 | `-o, --salida` | Directorio de resultados | `./salida` |
-| `--proveedor` | `claude`, `ollama` u `openai` | `claude` |
-| `--modelo` | Modelo a usar | `claude-opus-4-8` / `llama3.1` |
+| `--proveedor` | `claude`, `ollama`, `gemini`, `groq` u `openai` | `claude` |
+| `--modelo` | Modelo a usar | `claude-opus-4-8` / `llama3.1` / `gemini-2.5-flash` / `llama-3.3-70b-versatile` |
 | `--base-url` | URL del servidor (ollama / openai-compatible) | según proveedor |
 | `--formato` | Salidas: `xlsx,csv,json,md` (separadas por coma) | todas |
 | `--contexto` | Contexto adicional para la extracción | — |
@@ -96,5 +102,5 @@ agente_pmo/
 └── proveedores/
     ├── claude.py      # Anthropic (referencia)
     ├── ollama.py      # Ollama local (gratis)
-    └── openai_compat.py  # cualquier endpoint estilo OpenAI
+    └── openai_compat.py  # OpenAI-compatible + presets Gemini y Groq (gratis)
 ```

@@ -37,7 +37,7 @@ class ProveedorOpenAICompat(ProveedorLLM):
     def __init__(self, modelo: str = None, base_url: str = None, api_key: str = None):
         if not modelo:
             raise ErrorProveedor(
-                "Con --proveedor openai debes indicar el modelo con --modelo."
+                f"Con --proveedor {self.nombre} debes indicar el modelo con --modelo."
             )
         self.modelo = modelo
         self.base_url = (base_url or "http://localhost:1234/v1").rstrip("/")
@@ -117,3 +117,54 @@ class ProveedorOpenAICompat(ProveedorLLM):
             raise ErrorProveedor(
                 f"El modelo no devolvió JSON válido: {contenido[:300]}"
             ) from exc
+
+
+class ProveedorGemini(ProveedorOpenAICompat):
+    """Google Gemini vía su endpoint compatible con OpenAI.
+
+    Tiene nivel gratuito sin tarjeta: crea una API key en
+    https://aistudio.google.com/apikey y expórtala como GEMINI_API_KEY.
+    """
+
+    nombre = "gemini"
+    MODELO_POR_DEFECTO = "gemini-2.5-flash"
+
+    def __init__(self, modelo: str = None, base_url: str = None):
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not api_key:
+            raise ErrorProveedor(
+                "Falta la API key de Gemini. Es gratuita y no pide tarjeta: "
+                "créala en https://aistudio.google.com/apikey y exporta "
+                "GEMINI_API_KEY antes de ejecutar el agente."
+            )
+        super().__init__(
+            modelo=modelo or self.MODELO_POR_DEFECTO,
+            base_url=base_url
+            or "https://generativelanguage.googleapis.com/v1beta/openai",
+            api_key=api_key,
+        )
+
+
+class ProveedorGroq(ProveedorOpenAICompat):
+    """Groq — inferencia rápida de modelos abiertos, con nivel gratuito.
+
+    Crea una API key gratuita en https://console.groq.com/keys y expórtala
+    como GROQ_API_KEY.
+    """
+
+    nombre = "groq"
+    MODELO_POR_DEFECTO = "llama-3.3-70b-versatile"
+
+    def __init__(self, modelo: str = None, base_url: str = None):
+        api_key = os.environ.get("GROQ_API_KEY")
+        if not api_key:
+            raise ErrorProveedor(
+                "Falta la API key de Groq. Es gratuita: créala en "
+                "https://console.groq.com/keys y exporta GROQ_API_KEY "
+                "antes de ejecutar el agente."
+            )
+        super().__init__(
+            modelo=modelo or self.MODELO_POR_DEFECTO,
+            base_url=base_url or "https://api.groq.com/openai/v1",
+            api_key=api_key,
+        )
