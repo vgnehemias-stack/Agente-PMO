@@ -71,23 +71,40 @@ class ProveedorOpenAICompat(ProveedorLLM):
         mensajes: List[Dict[str, str]],
         json_schema: Dict[str, Any],
     ) -> Dict[str, Any]:
-        base = {
-            "model": self.modelo,
-            "messages": [{"role": "system", "content": system}] + mensajes,
-            "temperature": 0,
-        }
         intentos: List[Optional[Dict[str, Any]]] = [
             {
                 "type": "json_schema",
                 "json_schema": {"name": "plan_proyecto", "schema": json_schema},
             },
             {"type": "json_object"},
-            None,  # sin response_format: el prompt ya exige JSON
+            None,  # sin response_format: el prompt exige JSON
         ]
+        # Cuando el servidor no recibe el esquema vía response_format, el modelo
+        # debe conocerlo por el prompt.
+        system_con_schema = (
+            system
+            + "\n\nDevuelve ÚNICAMENTE un objeto JSON (sin texto adicional) que "
+            "cumpla exactamente este JSON Schema:\n"
+            + json.dumps(json_schema, ensure_ascii=False)
+        )
 
         resp = None
         for response_format in intentos:
-            payload = dict(base)
+            usa_schema_nativo = (
+                response_format is not None
+                and response_format.get("type") == "json_schema"
+            )
+            payload = {
+                "model": self.modelo,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": system if usa_schema_nativo else system_con_schema,
+                    }
+                ]
+                + mensajes,
+                "temperature": 0,
+            }
             if response_format is not None:
                 payload["response_format"] = response_format
             resp = self._post(payload)
