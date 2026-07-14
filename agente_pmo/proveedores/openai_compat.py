@@ -110,10 +110,9 @@ class ProveedorOpenAICompat(ProveedorLLM):
             resp = self._post(payload)
             if resp.ok:
                 break
-            # 4xx suele significar que el servidor no soporta ese response_format;
-            # se degrada al siguiente intento. Otros errores se reportan al final.
-            if not (400 <= resp.status_code < 500):
-                break
+            # Cualquier fallo (algunos servidores devuelven 4xx y otros 500 ante
+            # un response_format no soportado) degrada al siguiente intento;
+            # el último error se reporta si ninguno funciona.
 
         if resp is None or not resp.ok:
             detalle = resp.text[:500] if resp is not None else "sin respuesta"
