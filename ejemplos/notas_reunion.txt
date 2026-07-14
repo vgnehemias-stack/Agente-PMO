@@ -1,0 +1,16 @@
+Reunión kickoff - proyecto migración intranet
+lunes 12 de enero 2026, sala 3
+
+asistentes: Carla (sponsor), Miguel (PM), Rosa y Tomás (desarrollo), Andrés (infraestructura)
+
+- Carla dijo que la nueva intranet DEBE estar en producción antes del 30 de junio 2026, no negociable
+- primero hay que levantar los requerimientos con las 4 gerencias. Rosa se encarga, cree que le toma unas 3 semanas, arranca el 19 de enero
+- después de requerimientos viene el diseño de arquitectura, eso lo ve Andrés. No puede empezar hasta que Rosa termine
+- Tomás mencionó que la migración de contenidos es lo más pesado, calcula 2 meses. depende de que esté lista la arquitectura
+- OJO: todavía no hay presupuesto aprobado para el hosting nuevo!!! Carla lo va a escalar a finanzas esta semana
+- hito importante: demo al comité ejecutivo a mediados de abril (fecha exacta por confirmar)
+- capacitación a usuarios finales al final, la ve Miguel, aprox 2 semanas
+- riesgo que mencionó Andrés: el proveedor actual del hosting termina contrato en mayo, si no se renueva o migra antes quedamos sin servicio
+- pendiente definir quién hace las pruebas QA, no tenemos QA en el equipo
+
+próxima reunión: lunes 19 enero
