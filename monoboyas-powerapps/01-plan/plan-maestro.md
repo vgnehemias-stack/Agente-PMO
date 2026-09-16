@@ -151,15 +151,15 @@ Prototipo navegable en [`../03-mockups/mockup-pantallas.html`](../03-mockups/moc
 
 | # | Pantalla | Qué muestra |
 |---|---|---|
-| 1 | **Vista global** | Los subsistemas de la monoboya con su código oficial, nombre, criticidad y número de partes. Búsqueda por código. Es la puerta de entrada |
-| 2 | **Subsistema** | Su código y descripción, las partes que lo componen, y accesos directos a sus materiales y documentos |
-| 3 | **Ficha — Técnico** | Fabricante, modelo, n° de serie, fecha de instalación, criticidad, ubicación física |
-| 4 | **Ficha — Materiales** | Repuestos del nodo con stock disponible, mínimo, plazo de reposición y código de reserva. Editable |
-| 5 | **Ficha — Frecuencias** | Cada cuánto corresponde mantener, última vez registrada y norma aplicable. Informativo |
-| 6 | **Ficha — Documentos y planos** | Planos, manuales, certificados e informes con su vigencia. Se abren y se suben desde aquí |
-| 7 | **Actualizar información** | Formulario de edición con el rastro de auditoría visible |
-| 8 | **Vista global con esquema** | La lista de subsistemas junto al esquema de la monoboya, con un punto por subsistema coloreado según el estado de su información |
-| 9 | **Subsistema resaltado** | Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés |
+| 1 | **Vista global — lista** | Los subsistemas con su código oficial, nombre, criticidad y número de partes. Búsqueda por código. Es la puerta de entrada |
+| 2 | **Vista global — esquema** | La **misma pantalla** con el selector *Ver como* en Esquema: el dibujo de la monoboya con un punto por subsistema |
+| 3 | **Esquema con un subsistema elegido** | El punto resaltado y el resto atenuado, con el resumen de esa parte al lado |
+| 4 | **Subsistema** | Su código y descripción, las partes que lo componen, y accesos directos a sus materiales y documentos |
+| 5 | **Ficha — Técnico** | Fabricante, modelo, n° de serie, fecha de instalación, criticidad, ubicación física |
+| 6 | **Ficha — Materiales** | Repuestos del nodo con stock disponible, mínimo, plazo de reposición y código de reserva. Editable |
+| 7 | **Ficha — Frecuencias** | Cada cuánto corresponde mantener, última vez registrada y norma aplicable. Informativo |
+| 8 | **Ficha — Documentos y planos** | Planos, manuales, certificados e informes con su vigencia. Se abren y se suben desde aquí |
+| 9 | **Actualizar información** | Formulario de edición con el rastro de auditoría visible |
 
 Sin botones de *iniciar*, sin firmas, sin checklists, sin estados de trabajo.
 
@@ -185,6 +185,21 @@ sincronizados en las dos direcciones.
 
 Técnicamente es una **página personalizada (canvas) embebida en la app model-driven**: misma barra
 lateral, mismos permisos, misma sesión. El usuario no percibe que cambió de herramienta.
+
+### Cómo se accede: un selector, no una pantalla aparte
+
+El esquema **no es una entrada nueva en el menú**. La vista global lleva en su cabecera un
+selector **«Ver como»** con dos opciones, *Lista* y *Esquema*:
+
+- Son **la misma pantalla**: mismos datos, misma selección, misma entrada en el menú lateral.
+  Cambia solo cómo se presentan.
+- Lo que esté seleccionado se mantiene al cambiar de una a otra.
+- La aplicación **recuerda la última elección de cada persona**, de modo que quien prefiere la
+  lista no vuelve a ver el dibujo y quien prefiere el dibujo lo encuentra ya puesto.
+
+Es deliberado que no sea una opción de menú aparte: dos entradas distintas para los mismos datos
+obligan al usuario a recordar en cuál estaba y parten la navegación en dos caminos. Un selector
+dentro de la pantalla mantiene un solo camino.
 
 ### La decisión que evita la sobreparametrización
 

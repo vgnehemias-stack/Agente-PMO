@@ -435,6 +435,20 @@
   .nivel p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
   .nivel .cost { font-size: 11.5px; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; margin-top: 5px; display: block; }
 
+  /* ---------- Selector de vista ---------- */
+  .vistabar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .vistabar .vl {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .vista { display: inline-flex; border: 1px solid var(--line-2); border-radius: 5px; overflow: hidden; }
+  .vista div {
+    padding: 5px 13px; font-size: 12px; color: var(--ink-2);
+    background: var(--surface); display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  }
+  .vista div + div { border-left: 1px solid var(--line-2); }
+  .vista div.on { background: var(--accent); color: #fff; font-weight: 600; }
+
   /* ---------- Índice ---------- */
   .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(188px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
   .toc div { background: var(--surface); padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 3px; }
@@ -617,6 +631,13 @@
         que cambia es la altura a la que se mira el árbol. Los datos que aparecen son ejemplos para
         ilustrar la navegación.
       </p>
+      <p style="margin-top:10px">
+        Las dos primeras no son pantallas distintas: son <b>la misma vista global con el selector
+        «Ver como» en Lista o en Esquema</b>. Mismos datos, misma selección, misma entrada en el
+        menú — solo cambia la forma de presentarlos. Quien prefiera la lista nunca ve el dibujo, y
+        quien prefiera el dibujo lo deja fijado: la aplicación recuerda la última elección de cada
+        persona.
+      </p>
     </div>
     <figure style="margin-bottom:38px">
       <svg viewBox="0 0 700 182" role="img" aria-label="Recorrido de navegación: en la vista global se hace clic en la tarjeta de un subsistema, que abre la pantalla de ese subsistema; ahí se hace clic en la fila de un equipo, que abre su ficha; dentro de la ficha las cuatro pestañas cambian el contenido sin cambiar de pantalla">
@@ -702,6 +723,10 @@
                 <h3>Monoboya MB-01</h3>
                 <span class="pill p-ok" style="margin-left:auto">Operativa</span>
               </div>
+              <div class="vistabar">
+                <span class="vl">Ver como</span>
+                <div class="vista"><div class="on">▤ Lista</div><div class="">◈ Esquema</div></div>
+              </div>
               <div class="stats">
                 <div class="stat"><span class="n">12</span><span class="l">Subsistemas</span></div>
                 <div class="stat"><span class="n">68</span><span class="l">Equipos</span></div>
@@ -746,8 +771,232 @@
           </div>
         </div>
         <div class="cap">
-          <p class="t">Vista global <span>01</span></p>
-          <p>La puerta de entrada: todos los subsistemas con su código, su criticidad y cuántas partes contienen. Un clic entra al desglose.</p>
+          <p class="t">Vista global · vista de lista <span>01</span></p>
+          <p>La puerta de entrada. Arriba, el selector <b>Ver como</b>: la misma pantalla se muestra en lista o en esquema. Un clic en cualquier subsistema entra al desglose.</p>
+        </div>
+      </div>
+
+      <!-- 1b. LA MISMA VISTA, EN ESQUEMA -->
+      <div>
+        <div class="app">
+          <div class="appbar">
+            <span class="brand">Monoboyas</span>
+            <span class="find">🔍 buscar por código o nombre…</span>
+            <span class="who">M. TORRES · CONSULTA</span>
+          </div>
+          <div class="shell">
+            <nav class="nav">
+              <span class="grp">Activo</span>
+              <a class="on">Vista global</a>
+              <a>Subsistemas</a>
+              <a>Equipos</a>
+              <span class="grp">Información</span>
+              <a>Materiales</a>
+              <a>Documentos</a>
+              <a>Frecuencias</a>
+            </nav>
+            <div class="main">
+              <div class="pagehead">
+                <span class="code">MB-01</span>
+                <h3>Monoboya MB-01</h3>
+                <span class="pill p-ok" style="margin-left:auto">Operativa</span>
+              </div>
+              <div class="vistabar">
+                <span class="vl">Ver como</span>
+                <div class="vista"><div class="">▤ Lista</div><div class="on">◈ Esquema</div></div>
+              </div>
+              <div class="split">
+                <div class="listcol">
+                  <span class="sect-lbl" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600">Subsistemas</span>
+                    <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
+                    <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
+                    <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
+                    <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
+                    <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
+                    <div class="li aten"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
+                    <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
+                    <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
+                  <p class="nota" style="margin-top:2px">8 de 12 · el resto al desplazar</p>
+                </div>
+                <div class="panelcol">
+                  <div class="marco">
+      <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="Esquema de la monoboya tipo CALM: a la izquierda la costa y la tuberia de fondo hasta el PLEM, de ahi las mangueras submarinas suben a la boya, que se sujeta al fondo por cadenas de fondeo; desde la boya salen la estacha de amarre y el tren de mangueras flotantes hasta el buque. Doce puntos numerados marcan cada subsistema sobre la parte que le corresponde.">
+        <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
+        <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
+        <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
+        <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
+        <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
+        <!-- tierra y tuberia a la refineria -->
+        <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
+        <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
+        <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
+        <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
+        <!-- PLEM -->
+        <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
+        <!-- mangueras submarinas -->
+        <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+        <!-- cadenas de fondeo -->
+        <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <!-- boya -->
+        <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
+        <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
+        <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
+        <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
+        <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
+        <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
+        <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
+        <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
+        <!-- estacha de amarre -->
+        <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
+        <!-- mangueras flotantes -->
+        <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
+        <!-- buque -->
+        <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
+        <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
+        <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
+        <text class="mk-lbl" x="4" y="116">TIERRA</text>
+        <text class="mk-lbl" x="222" y="224">BOYA</text>
+        <text class="mk-lbl" x="190" y="352">PLEM</text>
+        <text class="mk-lbl" x="520" y="196">BUQUE</text>
+        <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
+        <g><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
+        <g><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
+        <g><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
+        <g><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
+        <g><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
+        <g><circle class="mk aten" cx="388.1" cy="172.1" r="9.5"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
+        <g><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
+        <g><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
+        <g><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
+        <g><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
+        <g><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
+        <g><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
+      </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <p class="t">La misma pantalla · vista de esquema <span>02</span></p>
+          <p>No es otra pantalla ni otra herramienta: es la vista global con el selector en <b>Esquema</b>. Cada punto está sobre la parte que nombra y su número es el del código de subsistema. El 06 sale en ámbar porque tiene un certificado por vencer: el color lo pone el dato.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="app">
+          <div class="appbar">
+            <span class="brand">Monoboyas</span>
+            <span class="find">🔍 MB-01.S06</span>
+            <span class="who">M. TORRES · CONSULTA</span>
+          </div>
+          <div class="shell">
+            <nav class="nav">
+              <span class="grp">Activo</span>
+              <a class="on">Vista global</a>
+              <a>Subsistemas</a>
+              <a>Equipos</a>
+              <span class="grp">Información</span>
+              <a>Materiales</a>
+              <a>Documentos</a>
+              <a>Frecuencias</a>
+            </nav>
+            <div class="main">
+              <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S06</b></p>
+              <div class="pagehead">
+                <span class="code">MB-01.S06</span>
+                <h3>Mangueras flotantes</h3>
+                <span class="pill p-warn" style="margin-left:auto">1 documento por vencer</span>
+              </div>
+              <div class="vistabar">
+                <span class="vl">Ver como</span>
+                <div class="vista"><div class="">▤ Lista</div><div class="on">◈ Esquema</div></div>
+              </div>
+              <div class="split">
+                <div class="listcol">
+                    <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
+                    <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
+                    <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
+                    <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
+                    <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
+                    <div class="li aten on"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
+                    <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
+                    <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
+                </div>
+                <div class="panelcol">
+                  <div class="marco">
+      <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="El mismo esquema con el punto 06, las mangueras flotantes entre la boya y el buque, resaltado y el resto de los puntos atenuados.">
+        <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
+        <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
+        <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
+        <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
+        <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
+        <!-- tierra y tuberia a la refineria -->
+        <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
+        <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
+        <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
+        <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
+        <!-- PLEM -->
+        <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
+        <!-- mangueras submarinas -->
+        <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+        <!-- cadenas de fondeo -->
+        <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <!-- boya -->
+        <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
+        <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
+        <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
+        <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
+        <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
+        <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
+        <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
+        <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
+        <!-- estacha de amarre -->
+        <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
+        <!-- mangueras flotantes -->
+        <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
+        <!-- buque -->
+        <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
+        <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
+        <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
+        <text class="mk-lbl" x="4" y="116">TIERRA</text>
+        <text class="mk-lbl" x="222" y="224">BOYA</text>
+        <text class="mk-lbl" x="190" y="352">PLEM</text>
+        <text class="mk-lbl" x="520" y="196">BUQUE</text>
+        <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
+        <g opacity=".4"><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
+        <g opacity=".4"><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
+        <g opacity=".4"><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
+        <g opacity=".4"><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
+        <g opacity=".4"><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
+        <g><circle class="mk sel" cx="388.1" cy="172.1" r="12"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
+        <g opacity=".4"><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
+        <g opacity=".4"><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
+        <g opacity=".4"><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
+        <g opacity=".4"><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
+        <g opacity=".4"><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
+        <g opacity=".4"><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
+      </svg>
+                  </div>
+                  <div class="stats">
+                    <div class="stat"><span class="n">7</span><span class="l">Partes</span></div>
+                    <div class="stat"><span class="n">3</span><span class="l">Materiales</span></div>
+                    <div class="stat alert"><span class="n">1</span><span class="l">Por vencer</span></div>
+                  </div>
+                  <div class="btnrow"><span class="btn">Abrir el subsistema</span><span class="btn ghost">Ver sus documentos</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <p class="t">Esquema con un subsistema elegido <span>03</span></p>
+          <p>Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés: tocar el punto 06 selecciona el subsistema. Debajo del esquema puede ir la foto o el recorte de plano de esa parte.</p>
         </div>
       </div>
 
@@ -799,7 +1048,7 @@
           </div>
         </div>
         <div class="cap">
-          <p class="t">Subsistema <span>02</span></p>
+          <p class="t">Subsistema <span>04</span></p>
           <p>Las partes que lo componen y el resumen de lo que cuelga de él. Desde aquí se baja a la ficha de cualquier equipo, o se salta a sus materiales y documentos.</p>
         </div>
       </div>
@@ -853,14 +1102,14 @@
         </div>
       </div>
       <div class="cap">
-        <p class="t">Ficha del equipo · pestaña Técnico <span>03</span></p>
+        <p class="t">Ficha del equipo · pestaña Técnico <span>05</span></p>
         <p>Misma aplicación, misma barra lateral, un nivel más abajo. Las migas de pan de arriba muestran el camino completo y devuelven a cualquier nivel anterior.</p>
       </div>
     </div>
 
     <!-- 4-6. LAS OTRAS TRES PESTAÑAS -->
     <div style="margin-top:38px">
-      <p class="eyebrow" style="margin-bottom:6px">Pantallas 04 a 06</p>
+      <p class="eyebrow" style="margin-bottom:6px">Pantallas 06 a 08</p>
       <h3 style="font-size:19px;font-weight:600;letter-spacing:-.012em">Las otras tres pestañas de esa misma ficha</h3>
       <p style="color:var(--ink-2);margin-top:6px;max-width:70ch">
         No son pantallas nuevas: es el mismo registro, cambiando de pestaña. La cabecera, el código
@@ -1009,233 +1258,11 @@
         </div>
       </div>
       <div class="cap">
-        <p class="t">Actualizar información <span>07</span></p>
+        <p class="t">Actualizar información <span>09</span></p>
         <p>Mantener el dato al día es parte del propósito de la app, no un extra. Cada cambio queda registrado con autor y fecha sin que nadie tenga que anotarlo.</p>
       </div>
     </div>
 
-    <div class="sec-head" style="margin-top:50px">
-      <h2 style="font-size:19px">Y el esquema de la monoboya, dentro de la misma app</h2>
-      <p>
-        La lista a la izquierda y el dibujo a la derecha, sincronizados en las dos direcciones. Se
-        toca una parte del esquema y se abre su ficha; se elige en la lista y se resalta en el
-        dibujo.
-      </p>
-    </div>
-    <div>
-      <div class="app">
-        <div class="appbar">
-          <span class="brand">Monoboyas</span>
-          <span class="find">🔍 buscar por código o nombre…</span>
-          <span class="who">M. TORRES · CONSULTA</span>
-        </div>
-        <div class="shell">
-          <nav class="nav">
-            <span class="grp">Activo</span>
-            <a class="on">Vista global</a>
-            <a>Subsistemas</a>
-            <a>Equipos</a>
-            <span class="grp">Información</span>
-            <a>Materiales</a>
-            <a>Documentos</a>
-            <a>Frecuencias</a>
-          </nav>
-          <div class="main">
-            <div class="pagehead">
-              <span class="code">MB-01</span>
-              <h3>Monoboya MB-01</h3>
-              <span class="pill p-ok" style="margin-left:auto">Operativa</span>
-            </div>
-            <div class="split">
-              <div class="listcol">
-                <span class="sect-lbl" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600">Subsistemas</span>
-                  <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
-                  <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
-                  <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
-                  <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
-                  <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
-                  <div class="li aten"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
-                  <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
-                  <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
-                <p class="nota" style="margin-top:2px">8 de 12 · el resto al desplazar</p>
-              </div>
-              <div class="panelcol">
-                <div class="marco">
-    <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="Esquema de la monoboya tipo CALM: a la izquierda la costa y la tuberia de fondo hasta el PLEM, de ahi las mangueras submarinas suben a la boya, que se sujeta al fondo por cadenas de fondeo; desde la boya salen la estacha de amarre y el tren de mangueras flotantes hasta el buque. Doce puntos numerados marcan cada subsistema sobre la parte que le corresponde.">
-      <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
-      <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
-      <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
-      <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
-      <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
-      <!-- tierra y tuberia a la refineria -->
-      <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
-      <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
-      <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
-      <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
-      <!-- PLEM -->
-      <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
-      <!-- mangueras submarinas -->
-      <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
-      <!-- cadenas de fondeo -->
-      <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <!-- boya -->
-      <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
-      <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
-      <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
-      <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
-      <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
-      <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
-      <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
-      <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
-      <!-- estacha de amarre -->
-      <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
-      <!-- mangueras flotantes -->
-      <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
-      <!-- buque -->
-      <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
-      <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
-      <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
-      <text class="mk-lbl" x="4" y="116">TIERRA</text>
-      <text class="mk-lbl" x="222" y="224">BOYA</text>
-      <text class="mk-lbl" x="190" y="352">PLEM</text>
-      <text class="mk-lbl" x="520" y="196">BUQUE</text>
-      <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
-      <g><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
-      <g><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
-      <g><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
-      <g><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
-      <g><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
-      <g><circle class="mk aten" cx="388.1" cy="172.1" r="9.5"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
-      <g><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
-      <g><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
-      <g><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
-      <g><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
-      <g><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
-      <g><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
-    </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cap">
-        <p class="t">Vista global con esquema <span>08</span></p>
-        <p>Cada punto está sobre la parte que nombra y su número es el mismo del código de subsistema. El punto 06 sale en ámbar porque ese subsistema tiene un certificado por vencer: el color lo pone el dato, no la maqueta.</p>
-      </div>
-    </div>
-
-    <div style="margin-top:42px">
-      <div class="app">
-        <div class="appbar">
-          <span class="brand">Monoboyas</span>
-          <span class="find">🔍 MB-01.S06</span>
-          <span class="who">M. TORRES · CONSULTA</span>
-        </div>
-        <div class="shell">
-          <nav class="nav">
-            <span class="grp">Activo</span>
-            <a class="on">Vista global</a>
-            <a>Subsistemas</a>
-            <a>Equipos</a>
-            <span class="grp">Información</span>
-            <a>Materiales</a>
-            <a>Documentos</a>
-            <a>Frecuencias</a>
-          </nav>
-          <div class="main">
-            <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S06</b></p>
-            <div class="pagehead">
-              <span class="code">MB-01.S06</span>
-              <h3>Mangueras flotantes</h3>
-              <span class="pill p-warn" style="margin-left:auto">1 documento por vencer</span>
-            </div>
-            <div class="split">
-              <div class="listcol">
-                  <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
-                  <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
-                  <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
-                  <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
-                  <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
-                  <div class="li aten on"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
-                  <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
-                  <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
-              </div>
-              <div class="panelcol">
-                <div class="marco">
-    <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="El mismo esquema con el punto 06, las mangueras flotantes entre la boya y el buque, resaltado y el resto de los puntos atenuados.">
-      <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
-      <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
-      <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
-      <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
-      <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
-      <!-- tierra y tuberia a la refineria -->
-      <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
-      <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
-      <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
-      <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
-      <!-- PLEM -->
-      <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
-      <!-- mangueras submarinas -->
-      <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
-      <!-- cadenas de fondeo -->
-      <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
-      <!-- boya -->
-      <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
-      <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
-      <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
-      <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
-      <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
-      <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
-      <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
-      <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
-      <!-- estacha de amarre -->
-      <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
-      <!-- mangueras flotantes -->
-      <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
-      <!-- buque -->
-      <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
-      <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
-      <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
-      <text class="mk-lbl" x="4" y="116">TIERRA</text>
-      <text class="mk-lbl" x="222" y="224">BOYA</text>
-      <text class="mk-lbl" x="190" y="352">PLEM</text>
-      <text class="mk-lbl" x="520" y="196">BUQUE</text>
-      <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
-      <g opacity=".4"><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
-      <g opacity=".4"><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
-      <g opacity=".4"><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
-      <g opacity=".4"><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
-      <g opacity=".4"><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
-      <g><circle class="mk sel" cx="388.1" cy="172.1" r="12"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
-      <g opacity=".4"><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
-      <g opacity=".4"><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
-      <g opacity=".4"><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
-      <g opacity=".4"><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
-      <g opacity=".4"><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
-      <g opacity=".4"><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
-    </svg>
-                </div>
-                <div class="stats">
-                  <div class="stat"><span class="n">7</span><span class="l">Partes</span></div>
-                  <div class="stat"><span class="n">3</span><span class="l">Materiales</span></div>
-                  <div class="stat alert"><span class="n">1</span><span class="l">Por vencer</span></div>
-                </div>
-                <div class="btnrow"><span class="btn">Abrir el subsistema</span><span class="btn ghost">Ver sus documentos</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cap">
-        <p class="t">Subsistema resaltado en el esquema <span>09</span></p>
-        <p>Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés: tocar el punto 06 selecciona el subsistema. Debajo del esquema puede ir la foto o el recorte de plano de esa parte.</p>
-      </div>
-    </div>
   </section>
 
   <section>
@@ -1249,6 +1276,11 @@
     </div>
 
     <div class="dins">
+      <div class="din">
+        <span class="n">VER COMO</span>
+        <h4>Lista o esquema, la misma pantalla</h4>
+        <p>Un selector en la cabecera de la vista global cambia entre la lista de subsistemas y el dibujo de la monoboya. No es otra pantalla ni otra herramienta: mismos datos y misma selección, presentados de dos maneras. La aplicación recuerda cuál prefiere cada persona.</p>
+      </div>
       <div class="din">
         <span class="n">NAVEGACIÓN</span>
         <h4>Tres alturas y vuelta atrás</h4>
