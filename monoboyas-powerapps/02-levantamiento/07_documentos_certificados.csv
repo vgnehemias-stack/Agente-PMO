@@ -1,0 +1,13 @@
+tag_equipo,monoboya,nombre_documento,tipo,entidad_emisora,n_documento,fecha_emision,fecha_vencimiento,enlace,observaciones
+,MB-01,Certificado de operacion de la monoboya,Certificado DICAPI,DICAPI,,,,,PROPUESTA - VALIDAR SI APLICA
+MB01-MGF-001,MB-01,Certificado de manguera flotante tramo 1,Certificado de manguera (GMPHOM),,,,,,PROPUESTA - UNO POR TRAMO
+MB01-MGF-002,MB-01,Certificado de manguera flotante tramo 2,Certificado de manguera (GMPHOM),,,,,,PROPUESTA - UNO POR TRAMO
+MB01-MGF-003,MB-01,Certificado de manguera flotante tramo 3,Certificado de manguera (GMPHOM),,,,,,PROPUESTA - UNO POR TRAMO
+MB01-MGF-004,MB-01,Certificado de manguera flotante tramo 4,Certificado de manguera (GMPHOM),,,,,,PROPUESTA - UNO POR TRAMO
+MB01-MGS-001,MB-01,Certificado de manguera submarina tramo 1,Certificado de manguera (GMPHOM),,,,,,PROPUESTA - UNO POR TRAMO
+MB01-FON-001,MB-01,Informe de inspeccion subacuatica de cadenas,Informe de inspeccion subacuatica,,,,,,PROPUESTA - VALIDAR PERIODICIDAD
+MB01-PCA-004,MB-01,Informe de medicion de proteccion catodica,Informe de inspeccion subacuatica,,,,,,PROPUESTA
+MB01-ROD-001,MB-01,Manual del fabricante del rodamiento principal,Manual,,,,,,PROPUESTA - SOLICITAR AL FABRICANTE
+MB01-SWV-001,MB-01,Manual del fabricante del swivel,Manual,,,,,,PROPUESTA - SOLICITAR AL FABRICANTE
+,MB-01,Plano general de fondeo,Plano,,,,,,PROPUESTA - SOLICITAR
+,MB-01,Procedimiento de amarre y desamarre de buques,Procedimiento,,,,,,PROPUESTA - VALIDAR SI EXISTE

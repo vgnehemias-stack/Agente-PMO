@@ -1,0 +1,50 @@
+codigo_plan,n_paso,descripcion,tipo_registro,valor_minimo,valor_maximo,unidad,obligatorio,requiere_foto,ayuda
+PM-001,1,Verificar posicion y orientacion de la monoboya,OK/NO OK,,,,SI,NO,Comparar con la posicion de referencia del plano de fondeo
+PM-001,2,Inspeccionar casco por corrosion o deformaciones,OK/NO OK,,,,SI,SI,Recorrer el perimetro completo. Fotografiar cualquier hallazgo
+PM-001,3,Verificar ausencia de fugas de producto en cubierta,OK/NO OK,,,,SI,SI,Revisar bridas manifold y base del swivel
+PM-001,4,Verificar estado de barandas y pasamanos,OK/NO OK,,,,SI,NO,
+PM-001,5,Registrar francobordo observado,Numerico,1.2,2.0,m,SI,NO,Medir desde la linea de agua hasta la cubierta. Fuera de rango indica ingreso de agua
+PM-001,6,Verificar ausencia de residuos u objetos extranos,OK/NO OK,,,,NO,NO,
+PM-001,7,Observaciones generales de la inspeccion,Texto,,,,NO,NO,
+PM-001,8,Fotografia general de la monoboya,Foto,,,,SI,SI,Tomar desde la embarcacion a unos 20 metros
+PM-002,1,Verificar flotabilidad de cada tramo de manguera,OK/NO OK,,,,SI,SI,Un tramo hundido indica ingreso de agua en la camisa
+PM-002,2,Inspeccionar camisa exterior por cortes o abrasion,OK/NO OK,,,,SI,SI,Prestar atencion a las zonas de contacto entre tramos
+PM-002,3,Verificar ausencia de fugas en bridas de union,OK/NO OK,,,,SI,SI,
+PM-002,4,Verificar estado de la perneria de bridas,OK/NO OK,,,,SI,NO,Buscar pernos faltantes o con corrosion severa
+PM-002,5,Verificar marcas de identificacion y trazabilidad,OK/NO OK,,,,SI,NO,Cada tramo debe tener su numero de serie legible
+PM-002,6,Registrar numero de tramos con observaciones,Numerico,0,10,UN,SI,NO,
+PM-002,7,Observaciones,Texto,,,,NO,NO,
+PM-003,1,Verificar encendido de la luz principal,OK/NO OK,,,,SI,NO,Verificar en horario nocturno o cubriendo la fotocelda
+PM-003,2,Verificar caracteristica de destello,OK/NO OK,,,,SI,NO,Contrastar con la caracteristica autorizada por DICAPI
+PM-003,3,Medir tension de alimentacion,Numerico,11.5,14.5,V,SI,NO,Medir en bornes del equipo con la carga conectada
+PM-003,4,Verificar limpieza de la optica,OK/NO OK,,,,SI,NO,Limpiar con pano humedo si hay sal acumulada
+PM-003,5,Verificar ajuste del soporte de la luminaria,OK/NO OK,,,,SI,NO,
+PM-003,6,Fotografia de la luminaria,Foto,,,,NO,SI,
+PM-011,1,Verificar y registrar nivel de grasa en el deposito,Numerico,20,100,%,SI,NO,Por debajo de 20 por ciento reponer antes de continuar
+PM-011,2,Verificar ausencia de fugas en lineas de engrase,OK/NO OK,,,,SI,SI,
+PM-011,3,Aplicar grasa segun especificacion del fabricante,OK/NO OK,,,,SI,NO,Usar solo la grasa especificada en el manual
+PM-011,4,Registrar cantidad de grasa aplicada,Numerico,0,50,KG,SI,NO,
+PM-011,5,Verificar giro libre de la mesa giratoria,OK/NO OK,,,,SI,NO,Girar manualmente y verificar ausencia de puntos duros
+PM-011,6,Verificar ausencia de ruidos anormales,OK/NO OK,,,,SI,NO,Un ruido metalico ciclico puede indicar dano en pista
+PM-011,7,Inspeccionar estado de sellos del rodamiento,OK/NO OK,,,,SI,SI,
+PM-011,8,Registrar temperatura de la carcasa del rodamiento,Numerico,0,60,C,SI,NO,Por encima de 60 grados detener y escalar al supervisor
+PM-011,9,Observaciones,Texto,,,,NO,NO,
+PM-011,10,Firma del tecnico ejecutor,Firma,,,,SI,NO,
+PM-018,1,Verificar operatividad del equipo de medicion,OK/NO OK,,,,SI,NO,Calibrar el electrodo de referencia antes de sumergirse
+PM-018,2,Medir potencial en punto de referencia 1 - proa,Numerico,-1100,-800,mV,SI,NO,Valores menos negativos que -800 mV indican proteccion insuficiente
+PM-018,3,Medir potencial en punto de referencia 2 - popa,Numerico,-1100,-800,mV,SI,NO,
+PM-018,4,Medir potencial en punto de referencia 3 - babor,Numerico,-1100,-800,mV,SI,NO,
+PM-018,5,Medir potencial en punto de referencia 4 - estribor,Numerico,-1100,-800,mV,SI,NO,
+PM-018,6,Estimar porcentaje de consumo de anodos,Numerico,0,100,%,SI,SI,Por encima de 75 por ciento programar reemplazo
+PM-018,7,Registrar visibilidad y condiciones de buceo,Texto,,,,SI,NO,
+PM-018,8,Video o fotografia del estado de los anodos,Foto,,,,SI,SI,
+PM-018,9,Firma del supervisor de buceo,Firma,,,,SI,NO,
+PM-024,1,Verificar identificacion y trazabilidad del tramo,OK/NO OK,,,,SI,NO,Registrar el numero de serie antes de la prueba
+PM-024,2,Desconectar y trasladar el tramo a la zona de prueba,OK/NO OK,,,,SI,NO,
+PM-024,3,Registrar presion de prueba aplicada,Numerico,15,21,bar,SI,NO,Segun GMPHOM 2009 equivale a 1.5 veces la presion de diseno
+PM-024,4,Registrar duracion de la prueba,Numerico,30,60,min,SI,NO,
+PM-024,5,Registrar elongacion medida,Numerico,0,2.5,%,SI,NO,Una elongacion por encima del limite es causal de rechazo
+PM-024,6,Verificar ausencia de fugas durante la prueba,OK/NO OK,,,,SI,SI,
+PM-024,7,Registrar resultado de la prueba,Seleccion,,,,SI,NO,Opciones APROBADO o RECHAZADO o APROBADO CON OBSERVACIONES
+PM-024,8,Adjuntar certificado de prueba emitido,Foto,,,,SI,SI,
+PM-024,9,Firma del inspector responsable,Firma,,,,SI,NO,

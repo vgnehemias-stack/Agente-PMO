@@ -1,0 +1,987 @@
+<title>Mantenimiento de Monoboyas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F2F1EE;
+    --surface: #FFFFFF;
+    --surface-2: #E9E8E4;
+    --ink: #1B2228;
+    --ink-2: #4A555E;
+    --ink-3: #7A858E;
+    --line: #D6D5D0;
+    --line-2: #C2C1BB;
+    --accent: #D2570D;
+    --accent-soft: #FBEEE4;
+    --steel: #2B3A45;
+    --ok: #1C6E48;
+    --ok-soft: #E2F0E8;
+    --warn: #9B6A05;
+    --warn-soft: #F8EED6;
+    --bad: #A8291F;
+    --bad-soft: #F8E5E2;
+    --shadow: 0 1px 2px rgba(27,34,40,.07), 0 8px 24px rgba(27,34,40,.06);
+    --shadow-phone: 0 2px 4px rgba(27,34,40,.10), 0 18px 44px rgba(27,34,40,.16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14191D;
+      --surface: #1D242A;
+      --surface-2: #262E35;
+      --ink: #E9EDEF;
+      --ink-2: #AFBAC2;
+      --ink-3: #7D8993;
+      --line: #313B43;
+      --line-2: #3E4952;
+      --accent: #F5843D;
+      --accent-soft: #33231A;
+      --steel: #A9BAC6;
+      --ok: #6FC79A;
+      --ok-soft: #1A2E25;
+      --warn: #E0B25C;
+      --warn-soft: #302819;
+      --bad: #EE8C80;
+      --bad-soft: #33201D;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+      --shadow-phone: 0 2px 4px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #14191D;
+    --surface: #1D242A;
+    --surface-2: #262E35;
+    --ink: #E9EDEF;
+    --ink-2: #AFBAC2;
+    --ink-3: #7D8993;
+    --line: #313B43;
+    --line-2: #3E4952;
+    --accent: #F5843D;
+    --accent-soft: #33231A;
+    --steel: #A9BAC6;
+    --ok: #6FC79A;
+    --ok-soft: #1A2E25;
+    --warn: #E0B25C;
+    --warn-soft: #302819;
+    --bad: #EE8C80;
+    --bad-soft: #33201D;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    --shadow-phone: 0 2px 4px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 72px;
+  }
+
+  h1, h2, h3, h4 { font-family: Archivo, system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* ---------- Cabecera ---------- */
+  header.hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: 52px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  header.hero h1 {
+    font-size: clamp(30px, 5.4vw, 50px);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -.022em;
+  }
+  header.hero .lead {
+    font-size: 17px;
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .02em;
+    padding: 5px 10px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--ink-2);
+    background: var(--surface);
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Secciones ---------- */
+  section { padding-block: 52px 0; }
+  .sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; max-width: 70ch; }
+  .sec-head h2 {
+    font-size: clamp(21px, 3vw, 27px);
+    font-weight: 600;
+    letter-spacing: -.012em;
+  }
+  .sec-head p { color: var(--ink-2); }
+
+  /* ---------- Flujo ---------- */
+  .flujo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .paso {
+    background: var(--surface);
+    padding: 16px 15px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .paso .n {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .paso h4 { font-size: 14.5px; font-weight: 600; line-height: 1.25; }
+  .paso p { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
+
+  /* ---------- Rejilla de teléfonos ---------- */
+  .fleet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+    gap: 34px 26px;
+    align-items: start;
+  }
+  .unit { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .caption { max-width: 300px; }
+  .caption .t {
+    font-family: Archivo, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .caption .t span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .caption p { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; margin-top: 2px; }
+
+  /* ---------- Marco de teléfono ---------- */
+  .phone {
+    width: 268px;
+    max-width: 100%;
+    background: var(--steel);
+    border-radius: 26px;
+    padding: 7px;
+    box-shadow: var(--shadow-phone);
+  }
+  .screen {
+    background: var(--ground);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 486px;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+  }
+  .statusbar {
+    background: var(--surface);
+    padding: 6px 14px 2px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .appbar {
+    background: var(--surface);
+    padding: 7px 13px 11px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .appbar .back { color: var(--accent); font-size: 15px; line-height: 1; }
+  .appbar h3 { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+  .appbar .sub {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    color: var(--ink-3);
+    margin-left: auto;
+  }
+  .body-s {
+    flex: 1;
+    overflow: hidden;
+    padding: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .body-s.tight { gap: 7px; }
+
+  /* Piezas de UI reutilizadas */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 11px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 82px;
+  }
+  .tile .num {
+    font-family: Archivo, sans-serif;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.02em;
+  }
+  .tile .lbl { font-size: 11px; color: var(--ink-2); line-height: 1.3; }
+  .tile.hot { border-color: var(--bad); background: var(--bad-soft); }
+  .tile.hot .num { color: var(--bad); }
+  .tile.act { background: var(--accent); border-color: var(--accent); }
+  .tile.act .lbl, .tile.act .ico { color: #fff; }
+  .tile .ico { font-size: 19px; line-height: 1; color: var(--accent); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .card.bare { border-radius: 0; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 9px 2px; }
+  .row { display: flex; align-items: center; gap: 7px; justify-content: space-between; }
+  .tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-3);
+    letter-spacing: .01em;
+  }
+  .ttl { font-size: 12.5px; font-weight: 600; line-height: 1.25; font-family: Archivo, sans-serif; }
+  .meta { font-size: 10.5px; color: var(--ink-3); }
+
+  .pill {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 3px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .p-ok { background: var(--ok-soft); color: var(--ok); }
+  .p-warn { background: var(--warn-soft); color: var(--warn); }
+  .p-bad { background: var(--bad-soft); color: var(--bad); }
+  .p-neutral { background: var(--surface-2); color: var(--ink-2); }
+
+  .btn {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    padding: 11px;
+    text-align: center;
+    font-family: Archivo, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .btn.ghost {
+    background: none;
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    font-weight: 500;
+    padding: 9px;
+    font-size: 12px;
+  }
+  .btn.dim { background: var(--surface-2); color: var(--ink-3); }
+
+  .search {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    display: flex;
+    gap: 6px;
+  }
+
+  .seg { display: flex; gap: 5px; }
+  .seg div {
+    flex: 1;
+    text-align: center;
+    font-size: 10.5px;
+    padding: 5px 2px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--ink-2);
+  }
+  .seg div.on { background: var(--steel); color: var(--ground); font-weight: 600; }
+
+  .bar { height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .step { display: flex; gap: 8px; align-items: flex-start; }
+  .step .idx {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    background: var(--surface-2);
+    border-radius: 3px;
+    padding: 2px 4px;
+    margin-top: 1px;
+  }
+  .step .txt { flex: 1; font-size: 11.5px; line-height: 1.35; }
+  .step .txt em { font-style: normal; color: var(--ink-3); font-size: 10.5px; display: block; }
+  .toggle {
+    width: 30px; height: 17px; border-radius: 9px;
+    background: var(--ok); position: relative; flex: none; margin-top: 2px;
+  }
+  .toggle::after {
+    content: ""; position: absolute; right: 2px; top: 2px;
+    width: 13px; height: 13px; border-radius: 50%; background: #fff;
+  }
+  .toggle.off { background: var(--line-2); }
+  .toggle.off::after { right: auto; left: 2px; }
+
+  .num-in {
+    border: 1px solid var(--line-2);
+    border-radius: 5px;
+    padding: 5px 7px;
+    background: var(--surface);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .num-in.alert { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+  .num-in small { font-weight: 400; font-size: 9.5px; color: var(--ink-3); }
+  .num-in.alert small { color: var(--bad); }
+
+  .photo {
+    background: var(--surface-2);
+    border: 1px dashed var(--line-2);
+    border-radius: 6px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    gap: 5px;
+  }
+  .photo.filled {
+    border-style: solid;
+    background: linear-gradient(145deg, #3D525F 0%, #6E8493 55%, #A8B8C2 100%);
+    color: #fff;
+    border-color: var(--line-2);
+    font-weight: 500;
+  }
+  .sign {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe Script", "Brush Script MT", cursive;
+    font-size: 17px;
+    color: var(--ink-2);
+  }
+  .kv { display: flex; justify-content: space-between; font-size: 11px; gap: 8px; }
+  .kv span { color: var(--ink-3); }
+  .kv b { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 11px; }
+  .divider { height: 1px; background: var(--line); }
+  .sect-lbl {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .tabbar {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    display: flex;
+    padding: 7px 0 9px;
+  }
+  .tabbar div {
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    color: var(--ink-3);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+  }
+  .tabbar div.on { color: var(--accent); font-weight: 600; }
+  .tabbar .g { font-size: 14px; line-height: 1; }
+
+  /* ---------- Tablas y bloques informativos ---------- */
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .block h3 { font-size: 15px; font-weight: 600; }
+  .block ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 5px; }
+  .block li { font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+  .block li b { color: var(--ink); font-weight: 600; }
+
+  .fases { display: flex; flex-direction: column; }
+  .fase {
+    display: grid;
+    grid-template-columns: 82px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    padding: 14px 4px;
+    border-top: 1px solid var(--line);
+  }
+  .fase:last-child { border-bottom: 1px solid var(--line); }
+  .fase .id {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: .04em;
+  }
+  .fase .d h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 2px; }
+  .fase .d p { font-size: 13px; color: var(--ink-2); }
+  .fase .t {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  .aviso {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 16px 18px;
+    border-radius: 0 5px 5px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .aviso h3 { font-size: 15px; font-weight: 600; }
+  .aviso p { font-size: 13.5px; color: var(--ink-2); max-width: 72ch; }
+
+  .abiertas { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .ab {
+    background: var(--surface);
+    padding: 13px 15px;
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .ab .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--bad); }
+  .ab .q { font-size: 13.5px; font-weight: 600; }
+  .ab .w { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; margin-top: 2px; }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    justify-content: space-between;
+  }
+  footer .mono { font-family: "IBM Plex Mono", monospace; font-size: 11px; }
+
+  @media (max-width: 560px) {
+    .fase { grid-template-columns: 1fr; gap: 3px; }
+    .ab { grid-template-columns: 1fr; gap: 3px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">TAMOIN · Repsol — Refinería La Pampilla</p>
+    <h1>Gestión de mantenimiento de monoboyas</h1>
+    <p class="lead">
+      Propuesta de aplicación en Power Apps para planificar, ejecutar y trazar el mantenimiento
+      de la monoboya: desde la frecuencia de cada plan hasta el código de reserva del repuesto y
+      la evidencia fotográfica del trabajo hecho.
+    </p>
+    <div class="chips">
+      <span class="chip">Backend · <b>Dataverse</b></span>
+      <span class="chip">Inventario · <b>autónomo, sin ERP</b></span>
+      <span class="chip">Offline · <b>no requerido</b></span>
+      <span class="chip">Apps · <b>canvas + model-driven</b></span>
+      <span class="chip">Activo · <b>SPM tipo CALM</b></span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El circuito</p>
+      <h2>Una sola cadena, de la frecuencia a la evidencia</h2>
+      <p>
+        Hoy cada eslabón vive en un sitio distinto: las frecuencias en Excel, el stock en almacén,
+        la evidencia en el teléfono de alguien. La aplicación los une en un solo recorrido.
+      </p>
+    </div>
+    <div class="flujo">
+      <div class="paso"><span class="n">01</span><h4>Frecuencia</h4><p>Cada plan sabe cada cuánto toca y cuándo fue la última vez.</p></div>
+      <div class="paso"><span class="n">02</span><h4>Sistemas</h4><p>12 sistemas, 68 equipos con TAG propio.</p></div>
+      <div class="paso"><span class="n">03</span><h4>Materiales</h4><p>Cada plan declara qué consume y cuánto.</p></div>
+      <div class="paso"><span class="n">04</span><h4>¿Hay stock?</h4><p>La orden nace con semáforo verde, ámbar o rojo.</p></div>
+      <div class="paso"><span class="n">05</span><h4>Reserva</h4><p>Solicitud, aprobación y código de reserva registrado.</p></div>
+      <div class="paso"><span class="n">06</span><h4>Ejecución</h4><p>Checklist, mediciones, fotos y firma en campo.</p></div>
+      <div class="paso"><span class="n">07</span><h4>Historial</h4><p>Reporte en PDF y trazabilidad por equipo.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Prototipo</p>
+      <h2>Las siete pantallas del técnico</h2>
+      <p>
+        Esto es lo que ve quien hace el trabajo, en su teléfono. El resto —maestros, planes,
+        inventario, aprobaciones— vive en una aplicación de escritorio que Dataverse genera casi
+        sola. Los datos que aparecen son ejemplos para ilustrar el flujo.
+      </p>
+    </div>
+
+    <div class="fleet">
+
+      <!-- 1. INICIO -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>07:42</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><h3>Hola, Luis</h3><span class="sub">TÉCNICO · MEC</span></div>
+          <div class="body-s">
+            <div class="tiles">
+              <div class="tile"><span class="num">3</span><span class="lbl">Órdenes para hoy</span></div>
+              <div class="tile hot"><span class="num">1</span><span class="lbl">Vencida</span></div>
+              <div class="tile act"><span class="ico">⚑</span><span class="lbl">Reportar hallazgo</span></div>
+              <div class="tile"><span class="ico">▤</span><span class="lbl">Consultar stock</span></div>
+            </div>
+            <div class="divider"></div>
+            <span class="sect-lbl">Próxima intervención</span>
+            <div class="card">
+              <div class="row"><span class="tag">MB01-ROD-003</span><span class="pill p-ok">Materiales OK</span></div>
+              <p class="ttl">Lubricación del rodamiento principal</p>
+              <p class="meta">Hoy · 4 h estimadas · requiere parada</p>
+            </div>
+            <div class="card">
+              <div class="row"><span class="tag">MB01-ELE-001</span><span class="pill p-neutral">Sin material</span></div>
+              <p class="ttl">Verificación de luces de navegación</p>
+              <p class="meta">Hoy · 1 h estimada</p>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="on"><span class="g">⌂</span>Inicio</div>
+            <div><span class="g">☰</span>Órdenes</div>
+            <div><span class="g">▤</span>Stock</div>
+            <div><span class="g">⚑</span>Hallazgos</div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Inicio <span>01</span></p>
+          <p>Lo que toca hoy, en la primera pantalla y sin filtrar nada. Un toque para empezar a trabajar.</p>
+        </div>
+      </div>
+
+      <!-- 2. LISTA DE OT -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>07:44</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><h3>Mis órdenes</h3><span class="sub">8 ABIERTAS</span></div>
+          <div class="body-s tight">
+            <div class="seg"><div class="on">Hoy</div><div>Semana</div><div>Vencidas</div><div>Todas</div></div>
+            <div class="card">
+              <div class="row"><span class="tag">OT-00412 · MB01-ROD-003</span><span class="pill p-ok">OK</span></div>
+              <p class="ttl">Lubricación del rodamiento principal</p>
+              <p class="meta">Trimestral · hoy · 4 h · Mecánica</p>
+            </div>
+            <div class="card">
+              <div class="row"><span class="tag">OT-00408 · MB01-MGF-001</span><span class="pill p-warn">Parcial</span></div>
+              <p class="ttl">Inspección visual de mangueras flotantes</p>
+              <p class="meta">Semanal · hoy · 2 h · falta 1 material</p>
+            </div>
+            <div class="card">
+              <div class="row"><span class="tag">OT-00395 · MB01-PCA-004</span><span class="pill p-bad">Vencida</span></div>
+              <p class="ttl">Medición de potencial catódico</p>
+              <p class="meta">Semestral · venció hace 6 días · requiere buzo</p>
+            </div>
+            <div class="card">
+              <div class="row"><span class="tag">OT-00419 · MB01-ELE-004</span><span class="pill p-ok">OK</span></div>
+              <p class="ttl">Mantenimiento de banco de baterías</p>
+              <p class="meta">Mensual · mañana · 2 h · Eléctrica</p>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div><span class="g">⌂</span>Inicio</div>
+            <div class="on"><span class="g">☰</span>Órdenes</div>
+            <div><span class="g">▤</span>Stock</div>
+            <div><span class="g">⚑</span>Hallazgos</div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Lista de órdenes <span>02</span></p>
+          <p>El semáforo de materiales va en la tarjeta: se sabe si se puede trabajar antes de embarcarse.</p>
+        </div>
+      </div>
+
+      <!-- 3. DETALLE DE OT -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>07:46</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><span class="back">‹</span><h3>OT-00412</h3><span class="sub">LIBERADA</span></div>
+          <div class="body-s tight">
+            <div class="card">
+              <p class="ttl">Lubricación del rodamiento principal</p>
+              <span class="tag">MB01-ROD-003 · Sistema de lubricación</span>
+              <div class="divider" style="margin:3px 0"></div>
+              <div class="kv"><span>Frecuencia</span><b>Cada 3 meses</b></div>
+              <div class="kv"><span>Última ejecución</span><b>2026-06-14</b></div>
+              <div class="kv"><span>Criticidad</span><b>A</b></div>
+              <div class="kv"><span>Norma</span><b>Manual fabricante</b></div>
+            </div>
+            <span class="sect-lbl">Materiales requeridos</span>
+            <div class="card bare">
+              <div class="row"><div><p class="ttl">Grasa para rodamiento</p><span class="tag">MAT-001 · 25 KG</span></div><span class="pill p-ok">Disponible</span></div>
+            </div>
+            <div class="card bare">
+              <div class="row"><div><p class="ttl">Trapo industrial</p><span class="tag">MAT-023 · 2 KG</span></div><span class="pill p-ok">Disponible</span></div>
+            </div>
+            <div class="card bare">
+              <div class="row"><div><p class="ttl">Arnés de seguridad</p><span class="tag">MAT-032 · 2 JGO</span></div><span class="pill p-ok">Disponible</span></div>
+            </div>
+            <div style="margin-top:auto; display:flex; flex-direction:column; gap:6px">
+              <div class="btn">Iniciar trabajo</div>
+              <div class="btn ghost">Ver historial del equipo</div>
+            </div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Detalle de la orden <span>03</span></p>
+          <p>Todo lo que hace falta saber antes de subir a la boya, incluida la disponibilidad real de cada material.</p>
+        </div>
+      </div>
+
+      <!-- 4. CHECKLIST -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>09:18</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><span class="back">‹</span><h3>Ejecución</h3><span class="sub">7/10</span></div>
+          <div class="body-s tight">
+            <div class="bar"><i style="width:70%"></i></div>
+            <div class="step">
+              <span class="idx">05</span>
+              <div class="txt">Verificar giro libre de la mesa giratoria<em>Sin puntos duros</em></div>
+              <div class="toggle"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="step">
+              <span class="idx">06</span>
+              <div class="txt">Verificar ausencia de ruidos anormales</div>
+              <div class="toggle"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="step">
+              <span class="idx">07</span>
+              <div class="txt" style="display:flex;flex-direction:column;gap:5px">
+                Registrar temperatura de la carcasa
+                <div class="num-in alert"><span>68.4 °C</span><small>máx. 60 · fuera de rango</small></div>
+                <em>Por encima de 60 °C detener y avisar al supervisor</em>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="step">
+              <span class="idx">08</span>
+              <div class="txt" style="display:flex;flex-direction:column;gap:5px">
+                Inspeccionar estado de sellos
+                <div class="photo filled">📷 2 fotos adjuntas</div>
+              </div>
+            </div>
+            <div style="margin-top:auto"><div class="btn dim">Faltan 3 pasos obligatorios</div></div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Checklist en campo <span>04</span></p>
+          <p>Cada paso con su control: interruptor, número con rango, foto. Si la medición se sale de norma, la app lo dice ahí mismo.</p>
+        </div>
+      </div>
+
+      <!-- 5. CIERRE -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>12:05</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><span class="back">‹</span><h3>Cerrar orden</h3><span class="sub">OT-00412</span></div>
+          <div class="body-s tight">
+            <div class="card">
+              <div class="kv"><span>Pasos completados</span><b>10 / 10</b></div>
+              <div class="kv"><span>Conformes</span><b>9</b></div>
+              <div class="kv"><span>No conformes</span><b style="color:var(--bad)">1</b></div>
+              <div class="kv"><span>Horas reales</span><b>4.6 h</b></div>
+            </div>
+            <div class="card" style="border-color:var(--warn)">
+              <div class="row"><span class="sect-lbl">Hallazgo generado</span><span class="pill p-warn">Alta</span></div>
+              <p class="ttl">Temperatura de carcasa sobre el límite</p>
+              <p class="meta">Genera OT correctiva al cerrar</p>
+            </div>
+            <span class="sect-lbl">Consumo de materiales</span>
+            <div class="kv"><span>MAT-001 · Grasa</span><b>23 KG</b></div>
+            <div class="kv"><span>MAT-023 · Trapo</span><b>2 KG</b></div>
+            <div class="divider"></div>
+            <span class="sect-lbl">Firma del técnico</span>
+            <div class="sign">Luis Quispe</div>
+            <div style="margin-top:auto"><div class="btn">Cerrar y enviar a supervisor</div></div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Cierre de la orden <span>05</span></p>
+          <p>El consumo descuenta stock, el hallazgo abre la correctiva y el PDF queda archivado. Sin doble digitación.</p>
+        </div>
+      </div>
+
+      <!-- 6. HALLAZGO -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>10:31</span><span>MB-01 · 4G</span></div>
+          <div class="appbar"><span class="back">‹</span><h3>Nuevo hallazgo</h3></div>
+          <div class="body-s">
+            <div class="photo filled" style="height:118px">📷 Toma una foto</div>
+            <span class="sect-lbl">Equipo</span>
+            <div class="search">MB01-CAS-003 · Cubierta principal</div>
+            <span class="sect-lbl">Severidad</span>
+            <div class="seg">
+              <div>Baja</div><div>Media</div><div class="on">Alta</div><div>Crítica</div>
+            </div>
+            <span class="sect-lbl">¿Qué encontraste?</span>
+            <div class="search" style="height:64px; align-items:flex-start">
+              Corrosión avanzada en el enchape de estribor, cerca de la escotilla de acceso.
+            </div>
+            <div style="margin-top:auto"><div class="btn">Reportar</div></div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Reportar un hallazgo <span>06</span></p>
+          <p>Foto, equipo, severidad y una frase. Menos de 30 segundos, o nadie lo reporta.</p>
+        </div>
+      </div>
+
+      <!-- 7. STOCK -->
+      <div class="unit">
+        <div class="phone"><div class="screen">
+          <div class="statusbar"><span>14:20</span><span>Base · WiFi</span></div>
+          <div class="appbar"><h3>Consulta de stock</h3></div>
+          <div class="body-s tight">
+            <div class="search">🔍 anodo</div>
+            <div class="card">
+              <div class="row"><div><p class="ttl">Ánodo de zinc para casco</p><span class="tag">MAT-002 · SAP 40021884</span></div><span class="pill p-bad">Bajo mínimo</span></div>
+              <div class="divider" style="margin:3px 0"></div>
+              <div class="kv"><span>Disponible</span><b>2 UN</b></div>
+              <div class="kv"><span>Mínimo</span><b>4 UN</b></div>
+              <div class="kv"><span>Plazo de reposición</span><b>90 días</b></div>
+              <div class="btn ghost" style="margin-top:4px">Solicitar material</div>
+            </div>
+            <div class="card">
+              <div class="row"><div><p class="ttl">Ánodo para cadena de fondeo</p><span class="tag">MAT-003 · SAP 40021885</span></div><span class="pill p-ok">Disponible</span></div>
+              <div class="divider" style="margin:3px 0"></div>
+              <div class="kv"><span>Disponible</span><b>11 UN</b></div>
+              <div class="kv"><span>Reservado</span><b>6 UN</b></div>
+            </div>
+            <div class="card" style="border-color:var(--warn)">
+              <div class="row"><span class="sect-lbl">Solicitud SM-00087</span><span class="pill p-warn">Reservada</span></div>
+              <div class="kv"><span>Código de reserva</span><b>RES-2026-004512</b></div>
+              <div class="kv"><span>Entrega estimada</span><b>2026-10-28</b></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div><span class="g">⌂</span>Inicio</div>
+            <div><span class="g">☰</span>Órdenes</div>
+            <div class="on"><span class="g">▤</span>Stock</div>
+            <div><span class="g">⚑</span>Hallazgos</div>
+          </div>
+        </div></div>
+        <div class="caption">
+          <p class="t">Stock y reservas <span>07</span></p>
+          <p>El código de reserva de SAP se registra aquí: es el único puente con el ERP mientras no haya integración.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Debajo de las pantallas</p>
+      <h2>Dieciséis tablas en Dataverse</h2>
+      <p>La jerarquía sigue el estilo de ubicación técnica de SAP —<b>Terminal ▸ Monoboya ▸ Sistema ▸ Equipo</b>— para que resulte familiar al equipo y compatible con una integración futura.</p>
+    </div>
+    <div class="grid3">
+      <div class="block">
+        <h3>Maestros</h3>
+        <ul>
+          <li><b>Terminal, Monoboya, Sistema, Equipo</b> — la jerarquía, con TAG único por equipo</li>
+          <li><b>Material</b> — catálogo con código SAP, plazo de reposición y stock mínimo</li>
+          <li><b>Almacén</b> y <b>Personal</b> — dónde está el stock y quién puede hacer qué</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Planificación</h3>
+        <ul>
+          <li><b>Plan de mantenimiento</b> — la frecuencia se guarda como valor + unidad: «cada 3 meses», no «cada 90 días»</li>
+          <li><b>Tarea de plan</b> — los pasos del checklist, con rangos de validación</li>
+          <li><b>Material por plan</b> — la tabla que permite cruzar lo que viene contra lo que hay</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Transacciones</h3>
+        <ul>
+          <li><b>Orden de trabajo</b> y <b>Tarea de OT</b> — el checklist se congela al crearse: si mañana cambia el plan, el historial no se altera</li>
+          <li><b>Movimiento de inventario</b> — solo se inserta, nunca se edita. El stock se deriva de él</li>
+          <li><b>Solicitud de material</b> — donde vive el código de reserva</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Ruta</p>
+      <h2>Seis fases, arrancando por lo que no tenemos</h2>
+      <p>El alcance todavía no está cerrado. Por eso la primera fase no es construir: es levantar la información, con plantillas que el equipo de mantenimiento llena.</p>
+    </div>
+    <div class="fases">
+      <div class="fase">
+        <span class="id">FASE 0</span>
+        <div class="d"><h4>Levantamiento</h4><p>Siete plantillas: jerarquía de sistemas, frecuencias, gamas de tareas, catálogo de materiales. Taller de validación. <b>Bloquea todo lo demás.</b></p></div>
+        <span class="t">2–3 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 1</span>
+        <div class="d"><h4>Fundación</h4><p>Entornos DEV/UAT/PROD, solución gestionada, tablas de Dataverse, roles de seguridad, carga de maestros.</p></div>
+        <span class="t">1 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 2</span>
+        <div class="d"><h4>MVP de mantenimiento</h4><p>Planes, generación automática de órdenes, app de campo y app de escritorio.</p></div>
+        <span class="t">3–4 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 3</span>
+        <div class="d"><h4>Inventario y materiales</h4><p>Stock, movimientos, lista de materiales por plan, solicitudes, código de reserva y aprobaciones.</p></div>
+        <span class="t">2–3 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 4</span>
+        <div class="d"><h4>Visibilidad y control</h4><p>Tableros en Power BI, control de vencimiento de certificados, hallazgos, reporte en PDF.</p></div>
+        <span class="t">2 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 5</span>
+        <div class="d"><h4>Piloto y puesta en marcha</h4><p>Piloto con una monoboya, capacitación, manual y paso a producción.</p></div>
+        <span class="t">2 sem</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Antes de empezar</p>
+      <h2>Cuatro preguntas que hay que responder</h2>
+      <p>Ninguna es técnica. Las cuatro cambian el costo o el alcance, y contestarlas tarde sale caro.</p>
+    </div>
+    <div class="abiertas">
+      <div class="ab">
+        <span class="cod">D-01</span>
+        <div><p class="q">¿En qué tenant de Microsoft 365 vive la aplicación: el de TAMOIN o el de Repsol?</p>
+        <p class="w">Define quién paga las licencias, de quién es el dato, si Repsol consulta la app directamente y qué pasa al terminar el contrato. Cambiarlo después es una migración completa.</p></div>
+      </div>
+      <div class="ab">
+        <span class="cod">D-02</span>
+        <div><p class="q">¿Cuántos usuarios y con qué rol?</p>
+        <p class="w">Determina si conviene licenciar por usuario o por aplicación. A partir de cierto número el cálculo se invierte.</p></div>
+      </div>
+      <div class="ab">
+        <span class="cod">D-03</span>
+        <div><p class="q">¿Cuántas monoboyas entran al alcance?</p>
+        <p class="w">Afecta más al esfuerzo de levantamiento que al de desarrollo. La app ya se diseña para varias.</p></div>
+      </div>
+      <div class="ab">
+        <span class="cod">D-04</span>
+        <div><p class="q">¿Existe hoy un plan de mantenimiento documentado?</p>
+        <p class="w">Si lo hay —del fabricante, de Repsol o propio—, la Fase 0 pasa de semanas a días: se transcribe en vez de construirse.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="aviso">
+      <h3>Nada de esto es todavía un dato confirmado</h3>
+      <p>
+        Los 12 sistemas, los 68 equipos, los 40 planes y las frecuencias que aparecen aquí son una
+        propuesta armada a partir de la configuración estándar de una monoboya tipo CALM y de las
+        guías del sector (OCIMF SMOG, GMPHOM 2009, MEG4, API RP 2SK). Se entregan precargados
+        porque corregir una lista es mucho más rápido que escribirla desde cero — pero cada línea
+        va marcada como <b>propuesta a validar</b> y ninguna entra a la aplicación sin la firma de
+        quien conoce el activo.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Propuesta de solución · Power Platform · v1.0</span>
+    <span class="mono">TAMOIN · 2026</span>
+  </footer>
+
+</div>
