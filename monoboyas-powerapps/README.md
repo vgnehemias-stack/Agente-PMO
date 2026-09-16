@@ -110,6 +110,30 @@ Reúne toda la propuesta en una sola página navegable, publicada además como a
 
 Se abre en cualquier navegador, sin servidor.
 
+### Para presentar: `propuesta-monoboyas.html` ⭐
+
+[`03-mockups/propuesta-monoboyas.html`](03-mockups/propuesta-monoboyas.html) — **el archivo que se
+lleva a la reunión.** Es el mismo documento, convertido en un HTML completo y autónomo:
+
+- Se abre con **doble clic** y funciona **sin internet**: las tipografías van incrustadas y no
+  pide nada a la red.
+- **Barra superior** con el índice, para saltar a cualquier apartado cuando alguien pregunte.
+- **Modo presentación**: la tecla `P` o el botón *Presentar* pasa a pantalla completa y avanza
+  apartado por apartado — `→` y `←` para moverse, `Esc` para salir. Son 22 pasos, con un mockup
+  por paso.
+- Arranca en **tema claro** aunque el equipo esté en oscuro, con conmutador en la barra.
+
+Pesa 470 KB: se envía por correo sin problema.
+
+**Se genera, no se edita a mano.** Si cambia la propuesta, se vuelve a ejecutar:
+
+```bash
+cd monoboyas-powerapps/03-mockups && python3 exportar.py
+```
+
+Así el artifact publicado y el archivo para presentar no se separan nunca. La fuente sigue siendo
+`mockup-pantallas.html`.
+
 ---
 
 ## ⚠️ Nada aquí es todavía un dato confirmado
