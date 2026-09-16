@@ -435,6 +435,46 @@
   .nivel p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
   .nivel .cost { font-size: 11.5px; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; margin-top: 5px; display: block; }
 
+  /* ---------- Índice ---------- */
+  .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(188px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .toc div { background: var(--surface); padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 3px; }
+  .toc .n { font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; color: var(--accent); letter-spacing: .1em; }
+  .toc h4 { font-size: 14px; font-weight: 600; line-height: 1.25; }
+  .toc p { font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+
+  /* ---------- Decisiones ---------- */
+  .dec { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; }
+  .dec table { min-width: 460px; font-size: 13px; }
+  .dec td { padding: 11px 15px; }
+  .dec td:first-child { font-weight: 600; white-space: nowrap; }
+  .dec td:nth-child(2) { color: var(--ink); }
+  .dec td:last-child { color: var(--ink-3); font-size: 12.5px; }
+
+  /* ---------- Dinámicas ---------- */
+  .dins { display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 14px; }
+  .din {
+    border: 1px solid var(--line); border-radius: 5px; padding: 15px 16px 17px;
+    background: var(--surface); display: flex; flex-direction: column; gap: 6px;
+  }
+  .din .n {
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600;
+    color: var(--accent); letter-spacing: .1em;
+  }
+  .din h4 { font-size: 14.5px; font-weight: 600; line-height: 1.3; }
+  .din p { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+
+  /* ---------- Qué necesitamos ---------- */
+  .need { display: flex; flex-direction: column; }
+  .nd {
+    display: grid; grid-template-columns: 30px 1fr auto; gap: 14px;
+    padding: 14px 4px; border-top: 1px solid var(--line); align-items: baseline;
+  }
+  .nd:last-child { border-bottom: 1px solid var(--line); }
+  .nd .i { font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; color: var(--accent); }
+  .nd h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 2px; }
+  .nd p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  @media (max-width: 560px) { .nd { grid-template-columns: 24px 1fr; } .nd .pill { grid-column: 2; } }
+
   @media (max-width: 640px) {
     .shell { grid-template-columns: 1fr; }
     .split { grid-template-columns: 1fr; }
@@ -449,19 +489,19 @@
 </style>
 
 <div class="wrap">
-
   <header class="hero">
     <p class="eyebrow">TAMOIN · Repsol — Refinería La Pampilla</p>
     <h1>Sistema de monoboya, centralizado</h1>
     <p class="lead">
-      Propuesta de aplicación en Power Apps que reúne toda la información del sistema de monoboya
-      bajo su codificación de subsistemas: una vista global primero, y desde ahí el desglose hasta
-      el detalle de cada parte, con sus materiales, sus frecuencias de referencia y sus planos.
+      Propuesta completa de la aplicación en Power Apps que reunirá toda la información del sistema
+      de monoboya bajo su codificación de subsistemas. Este documento recoge qué verá el equipo,
+      cómo se comportará la aplicación, cómo se construye y qué falta por definir.
     </p>
     <div class="chips">
       <span class="chip">Eje · <b>código de subsistema</b></span>
       <span class="chip">Backend · <b>Dataverse</b></span>
       <span class="chip">Una sola app · <b>model-driven</b></span>
+      <span class="chip">Esquema interactivo · <b>dentro de la app</b></span>
       <span class="chip no">órdenes de trabajo</span>
       <span class="chip no">ejecución en campo</span>
     </div>
@@ -469,7 +509,40 @@
 
   <section>
     <div class="sec-head">
-      <p class="eyebrow">El cambio de eje</p>
+      <p class="eyebrow">Contenido</p>
+      <h2>Lo que encontrará en este documento</h2>
+    </div>
+    <div class="toc">
+      <div><span class="n">01</span><h4>El problema</h4><p>Qué resuelve la aplicación y qué deliberadamente no hace</p></div>
+      <div><span class="n">02</span><h4>La estructura</h4><p>El árbol del sistema y por qué se modela así</p></div>
+      <div><span class="n">03</span><h4>Qué verá el equipo</h4><p>Las nueve pantallas y el recorrido entre ellas</p></div>
+      <div><span class="n">04</span><h4>Las dinámicas</h4><p>Cómo se comporta: navegación, edición, avisos, auditoría</p></div>
+      <div><span class="n">05</span><h4>Cómo se construye</h4><p>Arquitectura, niveles de visualización y modelo de datos</p></div>
+      <div><span class="n">06</span><h4>La ruta</h4><p>Seis fases y qué necesitamos de ustedes para arrancar</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">01 · El problema</p>
+      <h2>La información existe, pero está repartida</h2>
+      <p>
+        Los planos en una carpeta, los certificados en otra, el catálogo de repuestos en un Excel, y
+        las características de cada equipo en la memoria de quien lleva años en el activo. Cuando
+        alguien necesita saber algo concreto de un subsistema —qué modelo es, qué repuesto le
+        corresponde, dónde está el plano, si el certificado sigue vigente— tiene que buscarlo en
+        cuatro sitios y preguntar a dos personas.
+      </p>
+      <p style="margin-top:10px">
+        La aplicación pone todo eso detrás de un único código de subsistema. La supervisión del
+        trabajo la lleva Repsol; lo que esta herramienta aporta es que la información del activo
+        esté centralizada, clara y al día.
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">01 · El alcance</p>
       <h2>Informar, no ejecutar</h2>
       <p>
         La supervisión del trabajo la lleva Repsol. Lo que TAMOIN necesita es que la información
@@ -490,10 +563,27 @@
       </table>
     </div>
   </section>
-
   <section>
     <div class="sec-head">
-      <p class="eyebrow">La estructura</p>
+      <p class="eyebrow">Decisiones ya tomadas</p>
+      <h2>El marco sobre el que se construye</h2>
+    </div>
+    <div class="dec">
+      <table>
+        <tbody>
+          <tr><td>Eje de identificación</td><td>Código de subsistema</td><td>La codificación que ya existe, no un identificador nuevo</td></tr>
+          <tr><td>Backend de datos</td><td>Dataverse</td><td>Jerarquía real, permisos por perfil y auditoría automática de cada cambio</td></tr>
+          <tr><td>Tipo de aplicación</td><td>Una sola, model-driven</td><td>Misma app en escritorio y en móvil, sin desarrollo aparte</td></tr>
+          <tr><td>Inventario</td><td>Autónomo, sin SAP</td><td>El código de reserva se registra a mano como puente con el ERP</td></tr>
+          <tr><td>Uso sin conexión</td><td>No requerido</td><td>Simplifica sustancialmente la aplicación</td></tr>
+          <tr><td>Visualización</td><td>Dentro de la propia app</td><td>Sin un Power BI aparte que mantener</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">02 · La estructura</p>
       <h2>Un árbol, no cuatro tablas</h2>
       <p>
         La jerarquía se modela como una sola tabla donde cada nodo apunta a su padre. Acepta
@@ -518,18 +608,16 @@
       aplicación mostrará.
     </span></p>
   </section>
-
   <section>
     <div class="sec-head">
-      <p class="eyebrow">Prototipo</p>
-      <h2>De la vista global al detalle</h2>
+      <p class="eyebrow">03 · Qué verá el equipo</p>
+      <h2>Nueve pantallas, una sola aplicación</h2>
       <p>
-        Todo ocurre dentro de una sola aplicación model-driven: la misma barra lateral, los mismos
-        permisos. Lo que cambia es la altura a la que se mira el árbol. Los datos son ejemplos para
+        Todo ocurre dentro de la misma aplicación: la misma barra lateral, los mismos permisos. Lo
+        que cambia es la altura a la que se mira el árbol. Los datos que aparecen son ejemplos para
         ilustrar la navegación.
       </p>
     </div>
-
     <figure style="margin-bottom:38px">
       <svg viewBox="0 0 700 182" role="img" aria-label="Recorrido de navegación: en la vista global se hace clic en la tarjeta de un subsistema, que abre la pantalla de ese subsistema; ahí se hace clic en la fila de un equipo, que abre su ficha; dentro de la ficha las cuatro pestañas cambian el contenido sin cambiar de pantalla">
         <defs>
@@ -925,19 +1013,15 @@
         <p>Mantener el dato al día es parte del propósito de la app, no un extra. Cada cambio queda registrado con autor y fecha sin que nadie tenga que anotarlo.</p>
       </div>
     </div>
-  </section>
 
-  <section>
-    <div class="sec-head">
-      <p class="eyebrow">El plus</p>
-      <h2>Visualización dinámica, dentro de la misma app</h2>
+    <div class="sec-head" style="margin-top:50px">
+      <h2 style="font-size:19px">Y el esquema de la monoboya, dentro de la misma app</h2>
       <p>
-        Sin Power BI aparte: una página del propio aplicativo con la lista a la izquierda y el
-        esquema de la monoboya a la derecha, sincronizados en las dos direcciones. Se toca una
-        parte del dibujo y se abre su ficha; se elige en la lista y se resalta en el dibujo.
+        La lista a la izquierda y el dibujo a la derecha, sincronizados en las dos direcciones. Se
+        toca una parte del esquema y se abre su ficha; se elige en la lista y se resalta en el
+        dibujo.
       </p>
     </div>
-
     <div>
       <div class="app">
         <div class="appbar">
@@ -1152,7 +1236,113 @@
         <p>Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés: tocar el punto 06 selecciona el subsistema. Debajo del esquema puede ir la foto o el recorte de plano de esa parte.</p>
       </div>
     </div>
+  </section>
 
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">04 · Las dinámicas</p>
+      <h2>Cómo se comporta la aplicación</h2>
+      <p>
+        No son pantallas quietas. Esto es lo que la aplicación hace por su cuenta mientras el equipo
+        la usa.
+      </p>
+    </div>
+
+    <div class="dins">
+      <div class="din">
+        <span class="n">NAVEGACIÓN</span>
+        <h4>Tres alturas y vuelta atrás</h4>
+        <p>Del activo completo al subsistema y de ahí a la parte concreta. Las migas de pan de arriba devuelven a cualquier nivel anterior, y la búsqueda por código o nombre está disponible desde cualquier pantalla.</p>
+      </div>
+      <div class="din">
+        <span class="n">SINCRONÍA</span>
+        <h4>Lista y dibujo, en las dos direcciones</h4>
+        <p>Se elige un subsistema en la lista y el esquema lo resalta atenuando el resto. Se toca el punto en el dibujo y se abre su ficha. Es la misma selección vista de dos maneras.</p>
+      </div>
+      <div class="din">
+        <span class="n">SEMÁFORO</span>
+        <h4>El color lo pone el dato</h4>
+        <p>Un subsistema con un certificado por vencer o con material bajo mínimo se ve distinto en el esquema y en la lista, sin que nadie lo marque a mano. Al resolverse, vuelve solo a su color normal.</p>
+      </div>
+      <div class="din">
+        <span class="n">FICHAS</span>
+        <h4>Cambiar de pestaña no es cambiar de pantalla</h4>
+        <p>Técnico, Materiales, Frecuencias y Documentos comparten la cabecera, el código y las migas. El contexto no se pierde al moverse entre ellas.</p>
+      </div>
+      <div class="din">
+        <span class="n">AUDITORÍA</span>
+        <h4>Cada cambio queda registrado solo</h4>
+        <p>Quién cambió qué campo, de qué valor a cuál y cuándo. No hay que anotarlo en ningún sitio: la plataforma lo hace, y el historial se ve en la propia ficha.</p>
+      </div>
+      <div class="din">
+        <span class="n">DOCUMENTOS</span>
+        <h4>Las revisiones no se pisan</h4>
+        <p>Al subir una revisión nueva de un plano, la anterior queda marcada como superada en vez de borrarse. Siempre se sabe cuál es la vigente y qué había antes.</p>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:44px">
+      <h2 style="font-size:19px">Quién puede actualizar qué</h2>
+      <p>La aplicación no es solo de lectura: mantener el dato al día es parte de su propósito. Pero cada perfil toca lo suyo.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Perfil</th><th>Consulta</th><th>Puede actualizar</th></tr></thead>
+        <tbody>
+          <tr><td class="strong">Consulta</td><td>Todo</td><td class="cod">nada</td></tr>
+          <tr><td class="strong">Materiales</td><td>Todo</td><td>Repuestos del nodo, stock, solicitudes y <b>código de reserva</b></td></tr>
+          <tr><td class="strong">Documentación</td><td>Todo</td><td>Planos, manuales y certificados: alta, revisión y fechas</td></tr>
+          <tr><td class="strong">Técnico</td><td>Todo</td><td>Atributos técnicos y frecuencias de referencia</td></tr>
+          <tr><td class="strong">Administrador</td><td>Todo</td><td>Todo, incluida la jerarquía</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota" style="margin-top:12px">
+      La jerarquía y los códigos de subsistema <b>no se editan desde la aplicación</b>, y es
+      deliberado: son la columna vertebral del sistema, y un cambio accidental en un código rompería
+      todas las referencias de materiales, frecuencias y documentos. Se modifican por carga
+      controlada.
+    </p>
+
+    <div class="sec-head" style="margin-top:44px">
+      <h2 style="font-size:19px">Los avisos que salen solos</h2>
+      <p>Nadie tiene que acordarse. La aplicación revisa y avisa por Teams y por correo.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Aviso</th><th>Cuándo</th><th>A quién</th></tr></thead>
+        <tbody>
+          <tr><td class="strong">Certificado por vencer</td><td class="cod">60, 30 y 7 días antes</td><td>Perfil Documentación</td></tr>
+          <tr><td class="strong">Material bajo mínimo</td><td class="cod">a diario, priorizando el de mayor plazo de reposición</td><td>Perfil Materiales</td></tr>
+          <tr><td class="strong">Inventario pendiente</td><td class="cod">cuando la última verificación supera el plazo acordado</td><td>Perfil Materiales</td></tr>
+          <tr><td class="strong">Solicitud sin código de reserva</td><td class="cod">a diario mientras siga sin registrarse</td><td>Perfil Materiales</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota" style="margin-top:12px">
+      Ningún aviso crea trabajo ni programa mantenimientos: todos hablan del estado de la
+      información.
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">05 · Cómo se construye</p>
+      <h2>Una sola aplicación, no dos</h2>
+      <p>
+        Al no haber ejecución en campo, todo lo que queda —navegar una jerarquía, leer fichas, abrir
+        planos, corregir un stock— es exactamente lo que una aplicación <i>model-driven</i> de
+        Dataverse hace de fábrica: navegación y búsqueda sin construir pantallas, formularios
+        generados desde las tablas, permisos por perfil, auditoría automática, y la misma app en
+        escritorio y en móvil.
+      </p>
+      <p style="margin-top:10px">
+        Los planos, manuales y certificados se guardan en SharePoint y Dataverse conserva el enlace
+        y sus datos: tipo, emisor, revisión, vencimiento y de qué parte del sistema cuelgan.
+      </p>
+    </div>
+  </section>
+  <section>
     <div class="sec-head" style="margin-top:46px">
       <h2 style="font-size:19px">Cómo se construye, y qué cuesta cada nivel</h2>
       <p>Lo que evita que esto se vuelva inmanejable es una sola decisión: <b>las posiciones de los puntos se guardan como dato en la tabla del nodo</b>, no como controles colocados a mano en la pantalla.</p>
@@ -1195,10 +1385,9 @@
       </p>
     </div>
   </section>
-
   <section>
     <div class="sec-head">
-      <p class="eyebrow">Debajo de las pantallas</p>
+      <p class="eyebrow">05 · El modelo de datos</p>
       <h2>Nueve tablas en Dataverse</h2>
       <p>La versión anterior necesitaba dieciséis. Al quitar la ejecución, siete desaparecieron.</p>
     </div>
@@ -1228,11 +1417,9 @@
         </ul>
       </div>
     </div>
-  </section>
-
-  <section>
+  </section>  <section>
     <div class="sec-head">
-      <p class="eyebrow">Ruta</p>
+      <p class="eyebrow">06 · La ruta</p>
       <h2>Seis fases, arrancando por la codificación</h2>
       <p>Sin la codificación oficial de subsistemas no hay identificadores sobre los que construir. Es el primer punto del orden del día.</p>
     </div>
@@ -1269,7 +1456,51 @@
       </div>
     </div>
   </section>
-
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">06 · Para arrancar</p>
+      <h2>Qué necesitamos de ustedes</h2>
+      <p>Seis cosas. Las dos primeras bloquean el resto.</p>
+    </div>
+    <div class="need">
+      <div class="nd">
+        <span class="i">1</span>
+        <div><h4>La codificación oficial de subsistemas</h4>
+        <p>Es el eje de toda la aplicación: define los identificadores y cuántos niveles tiene la jerarquía. Mientras tanto trabajamos con códigos provisionales que sostienen la estructura, pero no se carga nada definitivo sin ella.</p></div>
+        <span class="pill p-bad">Bloqueante</span>
+      </div>
+      <div class="nd">
+        <span class="i">2</span>
+        <div><h4>Decidir en qué tenant de Microsoft 365 vive</h4>
+        <p>¿El de TAMOIN o el de Repsol? Define quién paga las licencias, de quién es el dato, si Repsol consulta la aplicación directamente y qué pasa al terminar el contrato. Cambiarlo después es una migración completa.</p></div>
+        <span class="pill p-bad">Bloqueante</span>
+      </div>
+      <div class="nd">
+        <span class="i">3</span>
+        <div><h4>La lista de usuarios y su perfil</h4>
+        <p>Quién consulta y quién actualiza, con su correo corporativo. Determina también el modelo de licenciamiento: si la mayoría solo lee, conviene evaluar el plan por aplicación.</p></div>
+        <span class="pill p-warn">Fase 0</span>
+      </div>
+      <div class="nd">
+        <span class="i">4</span>
+        <div><h4>Un responsable nombrado por cada clase de información</h4>
+        <p>Quién responde de los materiales, quién de los documentos, quién de los datos técnicos. Es lo que evita que la aplicación se desactualice: ver el aviso del final.</p></div>
+        <span class="pill p-warn">Fase 0</span>
+      </div>
+      <div class="nd">
+        <span class="i">5</span>
+        <div><h4>Los planos y manuales en digital</h4>
+        <p>O al menos saber cuáles existen y cuáles habría que digitalizar. Si hay un plano de disposición general, el esquema del panel visual se dibuja sobre el real en lugar del esquemático.</p></div>
+        <span class="pill p-warn">Fase 0</span>
+      </div>
+      <div class="nd">
+        <span class="i">6</span>
+        <div><h4>Las seis plantillas de levantamiento completas</h4>
+        <p>El árbol del sistema, las frecuencias, el catálogo de materiales, qué repuesto corresponde a qué parte, los documentos y los accesos. Se entregan precargadas con una propuesta para corregir, no en blanco.</p></div>
+        <span class="pill p-warn">Fase 0</span>
+      </div>
+    </div>
+  </section>
   <section>
     <div class="aviso">
       <h3>El riesgo que más vale la pena mirar</h3>
@@ -1282,9 +1513,7 @@
         aunque tenga todos los avisos del mundo.
       </p>
     </div>
-  </section>
-
-  <section>
+  </section>  <section>
     <div class="aviso" style="border-left-color: var(--line-2); background: var(--surface-3)">
       <h3>Nada de esto es todavía un dato confirmado</h3>
       <p>
@@ -1297,9 +1526,8 @@
       </p>
     </div>
   </section>
-
   <footer>
-    <span>Propuesta de solución · Power Platform · v2.0 — consulta centralizada</span>
+    <span>Propuesta de solución · Power Platform · v4.0 — documento consolidado</span>
     <span class="mono">TAMOIN · 2026</span>
   </footer>
 

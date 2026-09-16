@@ -3,8 +3,8 @@
 Paquete de diseño para la aplicación en Power Apps que centralizará la información del sistema de
 monoboya (SPM tipo CALM) de Repsol — Refinería La Pampilla.
 
-**Estado:** propuesta v2.0, pendiente de validación en Fase 0.
-**Prototipo publicado:** https://claude.ai/artifact/ESJQuSq58Ugb2HvHcTuWyp
+**Estado:** propuesta v4.0, pendiente de validación en Fase 0.
+**Documento para el cliente:** https://claude.ai/artifact/ESJQuSq58Ugb2HvHcTuWyp
 
 ---
 
@@ -94,11 +94,21 @@ Power BI queda reservado para lo único que Dataverse no puede — **tendencia e
 entonces se embebe como un panel más de la app. Detalle y limitaciones en
 [`plan-maestro.md`](01-plan/plan-maestro.md), sección 6 bis.
 
-### `03-mockups/` — Prototipo visual
+### `03-mockups/` — Documento consolidado para el cliente ⭐
 
-[`mockup-pantallas.html`](03-mockups/mockup-pantallas.html) — las siete pantallas de la
-aplicación, el árbol del sistema, el modelo de datos y la ruta de fases. Es el mismo archivo
-publicado como artifact. Se abre en cualquier navegador, sin servidor.
+[`mockup-pantallas.html`](03-mockups/mockup-pantallas.html) — **es el entregable que se presenta**.
+Reúne toda la propuesta en una sola página navegable, publicada además como artifact:
+
+| | |
+|---|---|
+| 01 · El problema | Qué resuelve y qué deliberadamente no hace |
+| 02 · La estructura | El árbol del sistema y por qué se modela así |
+| 03 · Qué verá el equipo | Las nueve pantallas y el recorrido entre ellas |
+| 04 · Las dinámicas | Navegación, sincronía, quién actualiza qué, avisos y auditoría |
+| 05 · Cómo se construye | Arquitectura, los tres niveles de visualización y las nueve tablas |
+| 06 · La ruta | Las seis fases y qué se necesita del cliente para arrancar |
+
+Se abre en cualquier navegador, sin servidor.
 
 ---
 
