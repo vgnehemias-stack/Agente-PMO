@@ -61,6 +61,9 @@ relación padre-hijo es la que produce tanto la vista global como el desglose.
 | Descripción | Texto multilínea | |
 | Ruta completa | Calc | `MB-01 ▸ Rodamiento ▸ Sistema de lubricación`. Facilita búsqueda y migas de pan |
 | N° de partes | Calc | Hijos directos. Es lo que la vista global muestra por subsistema |
+| **Coordenada X (%)** | Decimal 0–100 | Posición horizontal del punto sobre el esquema de la monoboya |
+| **Coordenada Y (%)** | Decimal 0–100 | Posición vertical |
+| Imagen de referencia | URL | Foto o recorte de plano que se muestra en el panel visual |
 
 ### Por qué auto-referenciada y no una tabla por nivel
 
@@ -79,6 +82,19 @@ relación padre-hijo es la que produce tanto la vista global como el desglose.
 - El código oficial es **único en toda la solución**.
 
 Las tres primeras se validan en la carga; la cuarta, con una clave alternativa de Dataverse.
+
+### Las coordenadas son dato, no maqueta
+
+Los tres campos del final son los que sostienen el panel visual (ver el plan maestro). Guardarlos
+**en la tabla** y no en la pantalla es lo que evita que el esquema se vuelva inmanejable:
+
+- Agregar un subsistema es **agregar una fila**, no editar la aplicación.
+- Mover un punto es **cambiar un número** desde la propia ficha.
+- Al ser porcentajes y no píxeles, el esquema **escala solo** en cualquier pantalla.
+- El color de cada punto sale de los datos del nodo, no de la maqueta.
+
+Se guardan en `Nodo del sistema` y no en una tabla aparte porque son un atributo del nodo: cada
+subsistema tiene un único sitio en el dibujo.
 
 ## 3. Atributos técnicos
 

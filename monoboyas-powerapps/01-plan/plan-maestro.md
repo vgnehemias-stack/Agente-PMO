@@ -158,6 +158,8 @@ Prototipo navegable en [`../03-mockups/mockup-pantallas.html`](../03-mockups/moc
 | 5 | **Ficha — Frecuencias** | Cada cuánto corresponde mantener, última vez registrada y norma aplicable. Informativo |
 | 6 | **Ficha — Documentos y planos** | Planos, manuales, certificados e informes con su vigencia. Se abren y se suben desde aquí |
 | 7 | **Actualizar información** | Formulario de edición con el rastro de auditoría visible |
+| 8 | **Vista global con esquema** | La lista de subsistemas junto al esquema de la monoboya, con un punto por subsistema coloreado según el estado de su información |
+| 9 | **Subsistema resaltado** | Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés |
 
 Sin botones de *iniciar*, sin firmas, sin checklists, sin estados de trabajo.
 
@@ -170,6 +172,71 @@ Sin botones de *iniciar*, sin firmas, sin checklists, sin estados de trabajo.
 
 ---
 
+## 6 bis. El panel visual: visualización dinámica dentro de la app
+
+No hace falta un Power BI aparte. La visualización dinámica se construye como **una página más de
+la misma aplicación**: la lista a la izquierda, el esquema de la monoboya a la derecha,
+sincronizados en las dos direcciones.
+
+```
+  clic en la lista   ─────────►  se resalta en el esquema
+  clic en el esquema ─────────►  se selecciona en la lista y se abre su ficha
+```
+
+Técnicamente es una **página personalizada (canvas) embebida en la app model-driven**: misma barra
+lateral, mismos permisos, misma sesión. El usuario no percibe que cambió de herramienta.
+
+### La decisión que evita la sobreparametrización
+
+El riesgo real de un esquema con zonas clicables es que las posiciones queden incrustadas en la
+pantalla: doce botones colocados a mano, y cada vez que cambia el dibujo o se agrega un subsistema
+hay que reabrir el editor y recolocarlos.
+
+**Se evita guardando las posiciones como dato**, en tres campos de `Nodo del sistema`:
+`Coordenada X (%)`, `Coordenada Y (%)` e `Imagen de referencia`.
+
+La página dibuja una **galería de puntos posicionada por fórmula**, no doce controles colocados a
+mano. Consecuencias:
+
+| | |
+|---|---|
+| Agregar un subsistema | Es agregar una fila, no editar la pantalla |
+| Mover un punto | Es cambiar un número desde la propia ficha |
+| Color de cada punto | Sale del dato (documento vencido, stock bajo mínimo), no de la maqueta |
+| Pantallas distintas | Al ser porcentajes y no píxeles, el esquema escala solo |
+
+Esa es la diferencia entre una pantalla que se mantiene sola y una que hay que tocar cada vez.
+
+### Tres niveles, en orden de costo
+
+| Nivel | Qué es | Costo | Cuándo |
+|---|---|---|---|
+| **1. Panel visual sincronizado** | Página canvas embebida: esquema con puntos clicables y lista, bidireccional | Una página + 3 campos. Sin licencia adicional | Fase 4 |
+| **2. Gráficos nativos de Dataverse** | Documentos por vencer, materiales bajo mínimo, completitud de la información. Al hacer clic filtran la lista de abajo | Configuración, cero código. Sin licencia adicional | Fase 4 |
+| **3. Power BI embebido *dentro* de la app** | Solo para **tendencia en el tiempo** | Licencias + un informe que mantener | Solo si se pide |
+
+**Cuándo sí hace falta Power BI:** Dataverse guarda el estado de hoy, no fotos del pasado. Ver
+*cómo evolucionó* la completitud de la información mes a mes, o el consumo histórico de repuestos,
+exige acumular historia — y eso es territorio de Power BI. Todo lo que sea "cómo está hoy" se
+resuelve nativo.
+
+Y cuando llegue ese momento, **tampoco será un Power BI aparte**: se embebe como un panel más de
+la propia aplicación.
+
+### Limitaciones, por delante
+
+- **El esquema es una imagen de fondo.** Si la configuración de la monoboya cambia de forma
+  sustancial hay que rehacer el dibujo. Los puntos no: esos son datos.
+- **Un dibujo por tipo de monoboya.** Si todas son CALM, uno solo sirve para todas.
+- **En móvil el panel se apila** debajo de la lista en vez de ir al lado. Hay que diseñarlo así
+  desde el principio.
+- **Los gráficos nativos agregan sobre una tabla a la vez** (conteo, suma, promedio, mín, máx), sin
+  medidas calculadas ni cruces complejos. Para eso está el nivel 3.
+- **La llamada exacta para navegar** desde la página canvas al registro de la app model-driven se
+  valida con una prueba corta en Fase 1, antes de comprometer el diseño de la página.
+
+---
+
 ## 7. Fases de ejecución
 
 | Fase | Duración est. | Entregable | Bloqueante |
@@ -178,7 +245,7 @@ Sin botones de *iniciar*, sin firmas, sin checklists, sin estados de trabajo.
 | **1. Fundación** | 1 sem | Entornos DEV/UAT/PROD, solución gestionada, tablas Dataverse, perfiles de acceso, carga del árbol | — |
 | **2. Consulta** | 2–3 sem | App model-driven: vista global, desglose y fichas completas | — |
 | **3. Materiales y documentos** | 2 sem | Stock, solicitudes, código de reserva, carga de planos y certificados a SharePoint | — |
-| **4. Alertas y control** | 1–2 sem | Avisos de vencimiento y de stock bajo mínimo. Tableros en Power BI (opcional) | — |
+| **4. Panel visual y alertas** | 2 sem | Página del esquema interactivo, gráficos nativos de Dataverse, avisos de vencimiento y de stock bajo mínimo | — |
 | **5. Piloto y puesta en marcha** | 2 sem | Piloto con una monoboya, capacitación, manual, paso a producción | — |
 
 **La Fase 0 es bloqueante**, y dentro de ella lo primero es la codificación: sin ella no hay
@@ -205,6 +272,7 @@ Detalle y seguimiento en [`decisiones-abiertas.md`](decisiones-abiertas.md).
 | 5 | Los planos y manuales no existen en digital | Medio | Inventariar en Fase 0 qué hay y qué falta digitalizar |
 | 6 | Códigos de reserva ingresados a mano → desfase con SAP | Medio | Validación de formato y campo auditado |
 | 7 | La codificación real tiene más niveles de los previstos | Bajo | Ya mitigado: el árbol acepta cualquier profundidad |
+| 8 | No existe un plano o esquema digital que sirva de base al panel visual | Bajo | Se dibuja uno esquemático: el valor está en los puntos y en el dato, no en el detalle del dibujo |
 
 ---
 

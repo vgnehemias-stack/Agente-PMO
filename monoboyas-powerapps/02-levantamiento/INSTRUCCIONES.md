@@ -66,9 +66,16 @@ MB-01                          nivel 1   Monoboya
 | `fabricante`, `modelo`, `n_serie`, `fecha_instalacion` | De la placa del equipo o del manual. Si no hay, déjalo vacío — **no lo inventes** |
 | `ubicacion_fisica` | `Cubierta` / `Casco` / `Interior` / `Superficie` / `Submarino` / `Fondo marino` |
 | `requiere_buzo_rov` | `SI` / `NO` |
+| `coordenada_x`, `coordenada_y` | **Solo en los subsistemas.** Dónde cae su punto sobre el esquema de la monoboya, en porcentaje de 0 a 100. Vienen precargadas: revísalas contra el dibujo del prototipo y corrígelas si el punto no está donde debería |
+| `imagen_referencia` | Opcional. Enlace a una foto o recorte de plano de esa parte, que se muestra en el panel visual |
 
 > **Puntos a confirmar:** precargamos 6 líneas de fondeo y 4 tramos de manguera flotante más el
 > tramo de acople. Corrígelo según la configuración real.
+
+> **Sobre las coordenadas:** no hace falta que sean exactas al milímetro. Son el sitio donde se
+> pone el punto que representa al subsistema sobre el dibujo, y **se pueden ajustar después desde
+> la propia aplicación** sin tocar nada más. Están aquí para que el panel visual arranque con algo
+> razonable el primer día.
 
 ### `02_frecuencias_referencia.csv` — Cada cuánto corresponde mantener
 

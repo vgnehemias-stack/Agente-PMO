@@ -29,6 +29,7 @@ Vista global  →  Subsistema  →  Equipo/Componente
 | Informa cada cuánto corresponde mantener, como referencia | Programa ni dispara mantenimientos |
 | Guarda planos y certificados, y avisa de vencimientos | Valoriza ni factura |
 | Permite **actualizar** materiales, stock y documentos | Gestiona permisos de trabajo ni HSE |
+| Muestra un **esquema interactivo** de la monoboya dentro de la propia app | Necesita un Power BI aparte |
 
 ## Decisiones tomadas
 
@@ -74,12 +75,24 @@ niveles que tenga, sin rehacerse.
 
 | Archivo | Precargado | Qué recoge |
 |---|---|---|
-| `01_jerarquia_subsistemas.csv` | 81 nodos | El árbol: 1 monoboya + 12 subsistemas + 68 equipos |
+| `01_jerarquia_subsistemas.csv` | 81 nodos | El árbol: 1 monoboya + 12 subsistemas + 68 equipos, con las coordenadas de cada subsistema sobre el esquema |
 | `02_frecuencias_referencia.csv` | 40 | Cada cuánto corresponde mantener, como dato informativo |
 | `03_catalogo_materiales.csv` | 27 | Repuestos y consumibles, con código SAP y plazo de reposición |
 | `04_materiales_por_nodo.csv` | 26 | Qué repuesto corresponde a qué parte del sistema |
 | `05_documentos_planos.csv` | 26 (13 planos) | Planos, manuales, certificados e informes con su vigencia |
 | `06_personal_accesos.csv` | vacío | Quién consulta y quién actualiza |
+
+### El panel visual
+
+La visualización dinámica vive **dentro de la misma aplicación**, no en un Power BI aparte: una
+página con la lista de subsistemas a la izquierda y el esquema de la monoboya a la derecha,
+sincronizados en las dos direcciones. Lo que evita que se vuelva inmanejable es que **las
+posiciones de los puntos se guardan como dato** (`coordenada_x`, `coordenada_y` en la tabla del
+nodo), no como controles colocados a mano: agregar un subsistema es agregar una fila.
+
+Power BI queda reservado para lo único que Dataverse no puede — **tendencia en el tiempo** — y aun
+entonces se embebe como un panel más de la app. Detalle y limitaciones en
+[`plan-maestro.md`](01-plan/plan-maestro.md), sección 6 bis.
 
 ### `03-mockups/` — Prototipo visual
 

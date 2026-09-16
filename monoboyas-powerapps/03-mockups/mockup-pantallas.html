@@ -22,6 +22,12 @@
     --bad: #A8291F;
     --bad-soft: #F8E5E2;
     --shadow: 0 1px 2px rgba(27,34,40,.07), 0 10px 30px rgba(27,34,40,.09);
+    --sky: #E4EBF0;
+    --sea: #BBD2E0;
+    --sea-deep: #9DBBCD;
+    --bed: #D8D2C4;
+    --hull: #43535F;
+    --linea: #6C7F8C;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -45,6 +51,12 @@
       --bad: #EE8C80;
       --bad-soft: #33201D;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+      --sky: #1E262C;
+      --sea: #22343F;
+      --sea-deep: #1A2A33;
+      --bed: #2E2B25;
+      --hull: #8FA3B0;
+      --linea: #7A8D9A;
     }
   }
   :root[data-theme="dark"] {
@@ -68,6 +80,12 @@
     --bad: #EE8C80;
     --bad-soft: #33201D;
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+    --sky: #1E262C;
+    --sea: #22343F;
+    --sea-deep: #1A2A33;
+    --bed: #2E2B25;
+    --hull: #8FA3B0;
+    --linea: #7A8D9A;
   }
 
   * { box-sizing: border-box; }
@@ -359,8 +377,69 @@
     display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between;
   }
 
+  /* ---------- Esquema de la monoboya ---------- */
+  .esq { width: 100%; max-width: 100%; height: auto; display: block; border-radius: 4px; }
+  .esq text { font-family: "IBM Plex Mono", monospace; }
+  .mk-n { font-size: 9px; font-weight: 600; fill: #fff; }
+  .mk-lbl { font-size: 10px; fill: var(--ink-3); }
+  .mk { fill: var(--accent); stroke: #fff; stroke-width: 1.5; }
+  .mk.aten { fill: var(--warn); }
+  .mk.sel { fill: var(--accent); stroke-width: 2.5; }
+
+  /* panel dividido: lista + esquema */
+  .split { display: grid; grid-template-columns: 1fr 1.25fr; gap: 14px; align-items: start; }
+  .listcol { display: flex; flex-direction: column; gap: 5px; max-height: 340px; overflow: hidden; }
+  .li {
+    display: flex; align-items: center; gap: 9px; padding: 6px 9px;
+    border: 1px solid var(--line); border-radius: 4px; font-size: 12px; background: var(--surface);
+  }
+  .li.on { border-color: var(--accent); background: var(--accent-soft); }
+  .li .n {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    background: var(--accent); color: #fff; border-radius: 3px;
+    width: 19px; text-align: center; padding: 2px 0; flex: none;
+  }
+  .li.aten .n { background: var(--warn); }
+  .li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .panelcol { display: flex; flex-direction: column; gap: 8px; }
+  .panelcol .marco { border: 1px solid var(--line); border-radius: 5px; padding: 8px; background: var(--surface); }
+
+  /* fragmentos: pestañas de una misma ficha */
+  .frag { border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; background: var(--surface); }
+  .fragbar {
+    background: var(--surface-2); padding: 6px 12px;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3);
+    border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 7px;
+  }
+  .fragbody { padding: 13px 15px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* figura del recorrido */
+  figure { margin: 0; }
+  figure svg { width: 100%; max-width: 100%; height: auto; display: block; }
+  figcaption { font-size: 12.5px; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
+  .rec-box { fill: var(--surface); stroke: var(--line-2); }
+  .rec-bar { fill: var(--surface-2); }
+  .rec-nav { fill: var(--surface-3); }
+  .rec-hit { fill: var(--accent-soft); stroke: var(--accent); }
+  .rec-t { font-family: Archivo, sans-serif; font-size: 11px; fill: var(--ink); font-weight: 600; }
+  .rec-s { font-family: "IBM Plex Mono", monospace; font-size: 9px; fill: var(--ink-3); }
+  .rec-a { font-family: "IBM Plex Sans", sans-serif; font-size: 10.5px; fill: var(--accent); }
+  .rec-ln { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+
+  /* niveles de visualización */
+  .niveles { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .nivel { background: var(--surface); padding: 15px 17px; display: grid; grid-template-columns: 74px 1fr; gap: 16px; align-items: baseline; }
+  .nivel .nn { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600; color: var(--accent); letter-spacing: .05em; }
+  .nivel h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 3px; }
+  .nivel p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  .nivel .cost { font-size: 11.5px; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; margin-top: 5px; display: block; }
+
   @media (max-width: 640px) {
     .shell { grid-template-columns: 1fr; }
+    .split { grid-template-columns: 1fr; }
+    .listcol { max-height: none; }
+    .nivel { grid-template-columns: 1fr; gap: 4px; }
     .nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 6px 4px; }
     .nav .grp { display: none; }
     .nav a { white-space: nowrap; padding: 6px 11px; }
@@ -445,10 +524,65 @@
       <p class="eyebrow">Prototipo</p>
       <h2>De la vista global al detalle</h2>
       <p>
-        Siete pantallas de una sola aplicación model-driven, que funciona igual en escritorio y en
-        móvil. Los datos son ejemplos para ilustrar la navegación.
+        Todo ocurre dentro de una sola aplicación model-driven: la misma barra lateral, los mismos
+        permisos. Lo que cambia es la altura a la que se mira el árbol. Los datos son ejemplos para
+        ilustrar la navegación.
       </p>
     </div>
+
+    <figure style="margin-bottom:38px">
+      <svg viewBox="0 0 700 182" role="img" aria-label="Recorrido de navegación: en la vista global se hace clic en la tarjeta de un subsistema, que abre la pantalla de ese subsistema; ahí se hace clic en la fila de un equipo, que abre su ficha; dentro de la ficha las cuatro pestañas cambian el contenido sin cambiar de pantalla">
+        <defs>
+          <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,1 L9,5 L0,9 z" fill="var(--accent)"/>
+          </marker>
+        </defs>
+        <rect class="rec-box" x="8" y="34" width="160" height="104" rx="5"/>
+        <rect class="rec-bar" x="9" y="35" width="158" height="12"/>
+        <rect class="rec-nav" x="9" y="47" width="33" height="90"/>
+        <rect class="rec-hit" x="52" y="56" width="50" height="30" rx="3" stroke-width="1.5"/>
+        <rect class="rec-box" x="108" y="56" width="50" height="30" rx="3"/>
+        <rect class="rec-box" x="52" y="94" width="50" height="30" rx="3"/>
+        <rect class="rec-box" x="108" y="94" width="50" height="30" rx="3"/>
+        <text class="rec-t" x="8" y="24">Vista global</text>
+        <text class="rec-s" x="8" y="156">MB-01</text>
+        <text class="rec-s" x="8" y="169">12 subsistemas</text>
+        <rect class="rec-box" x="270" y="34" width="160" height="104" rx="5"/>
+        <rect class="rec-bar" x="271" y="35" width="158" height="12"/>
+        <rect class="rec-nav" x="271" y="47" width="33" height="90"/>
+        <rect class="rec-hit" x="312" y="60" width="110" height="16" rx="2" stroke-width="1.5"/>
+        <rect class="rec-box" x="312" y="82" width="110" height="16" rx="2"/>
+        <rect class="rec-box" x="312" y="104" width="110" height="16" rx="2"/>
+        <text class="rec-t" x="270" y="24">Subsistema</text>
+        <text class="rec-s" x="270" y="156">MB-01.S02</text>
+        <text class="rec-s" x="270" y="169">5 partes</text>
+        <rect class="rec-box" x="532" y="34" width="160" height="104" rx="5"/>
+        <rect class="rec-bar" x="533" y="35" width="158" height="12"/>
+        <rect class="rec-nav" x="533" y="47" width="33" height="90"/>
+        <rect class="rec-hit" x="574" y="58" width="24" height="13" rx="2" stroke-width="1.5"/>
+        <rect class="rec-box" x="602" y="58" width="24" height="13" rx="2"/>
+        <rect class="rec-box" x="630" y="58" width="24" height="13" rx="2"/>
+        <rect class="rec-box" x="658" y="58" width="24" height="13" rx="2"/>
+        <line x1="574" y1="84" x2="684" y2="84" stroke="var(--line-2)" stroke-width="1"/>
+        <line x1="574" y1="96" x2="652" y2="96" stroke="var(--line-2)" stroke-width="1"/>
+        <line x1="574" y1="108" x2="684" y2="108" stroke="var(--line-2)" stroke-width="1"/>
+        <line x1="574" y1="120" x2="636" y2="120" stroke="var(--line-2)" stroke-width="1"/>
+        <text class="rec-t" x="532" y="24">Ficha del equipo</text>
+        <text class="rec-s" x="532" y="156">…S02.ROD-001</text>
+        <text class="rec-s" x="532" y="169">4 pestañas</text>
+        <path class="rec-ln" d="M180,86 L256,86" marker-end="url(#fl)"/>
+        <text class="rec-a" x="219" y="76" text-anchor="middle">clic en la tarjeta</text>
+        <text class="rec-a" x="219" y="104" text-anchor="middle">del subsistema</text>
+        <path class="rec-ln" d="M442,86 L518,86" marker-end="url(#fl)"/>
+        <text class="rec-a" x="481" y="76" text-anchor="middle">clic en la fila</text>
+        <text class="rec-a" x="481" y="104" text-anchor="middle">del equipo</text>
+      </svg>
+      <figcaption>
+        Dos clics para bajar del activo completo a una parte concreta. Las cuatro pestañas de la
+        ficha —Técnico, Materiales, Frecuencias, Documentos— cambian el contenido sin cambiar de
+        pantalla, y las migas de pan de arriba devuelven a cualquier nivel anterior.
+      </figcaption>
+    </figure>
 
     <div class="stack">
 
@@ -584,51 +718,72 @@
 
     </div>
 
-    <!-- FICHA: cuatro pestañas -->
-    <div class="duo" style="margin-top:42px">
-
-      <!-- 3. FICHA TECNICO -->
-      <div>
-        <div class="app">
-          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">TÉCNICO</span></div>
-          <div class="main" style="padding:16px 18px 20px">
-            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-001</b></p>
+    <!-- 3. FICHA DEL EQUIPO -->
+    <div style="margin-top:42px">
+      <div class="app">
+        <div class="appbar">
+          <span class="brand">Monoboyas</span>
+          <span class="find">🔍 MB-01.S02.ROD-001</span>
+          <span class="who">M. TORRES · CONSULTA</span>
+        </div>
+        <div class="shell">
+          <nav class="nav">
+            <span class="grp">Activo</span>
+            <a>Vista global</a>
+            <a>Subsistemas</a>
+            <a class="on">Equipos</a>
+            <span class="grp">Información</span>
+            <a>Materiales</a>
+            <a>Documentos</a>
+            <a>Frecuencias</a>
+            <span class="grp">Avisos</span>
+            <a>Vencimientos</a>
+            <a>Stock bajo mínimo</a>
+          </nav>
+          <div class="main">
+            <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S02</b> ▸ <b>MB-01.S02.ROD-001</b></p>
             <div class="pagehead">
               <span class="code">…S02.ROD-001</span>
-              <h3 style="font-size:17px">Rodamiento principal</h3>
+              <h3>Rodamiento principal</h3>
+              <span class="pill p-ok" style="margin-left:auto">Operativo</span>
             </div>
             <div class="tabs">
               <div class="on">Técnico</div><div>Materiales</div><div>Frecuencias</div><div>Documentos</div>
             </div>
             <div class="kvs">
               <div class="kv"><span>Fabricante</span><b class="vacio">por completar</b></div>
-              <div class="kv"><span>Modelo</span><b class="vacio">por completar</b></div>
-              <div class="kv"><span>N° de serie</span><b class="vacio">por completar</b></div>
-              <div class="kv"><span>Instalación</span><b class="vacio">por completar</b></div>
               <div class="kv"><span>Criticidad</span><b>A</b></div>
-              <div class="kv"><span>Ubicación</span><b>Interior</b></div>
-              <div class="kv"><span>Buzo o ROV</span><b>NO</b></div>
-              <div class="kv"><span>Estado</span><b>Operativo</b></div>
+              <div class="kv"><span>Modelo</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>Ubicación física</span><b>Interior</b></div>
+              <div class="kv"><span>N° de serie</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>Requiere buzo o ROV</span><b>NO</b></div>
+              <div class="kv"><span>Fecha de instalación</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>Subsistema</span><b>MB-01.S02</b></div>
             </div>
-            <p class="nota">Los campos vacíos se llenan en Fase 0 desde la placa del equipo o el manual del fabricante. La app nunca los rellena sola.</p>
+            <p class="nota">Los campos vacíos se llenan en Fase 0 desde la placa del equipo o el manual del fabricante. La aplicación nunca los rellena sola: un dato ausente es información, un dato inventado es un problema.</p>
           </div>
         </div>
-        <div class="cap">
-          <p class="t">Ficha · Técnico <span>03</span></p>
-          <p>Lo que identifica a la parte. Los huecos se muestran como huecos: un dato ausente es información, un dato inventado es un problema.</p>
-        </div>
       </div>
+      <div class="cap">
+        <p class="t">Ficha del equipo · pestaña Técnico <span>03</span></p>
+        <p>Misma aplicación, misma barra lateral, un nivel más abajo. Las migas de pan de arriba muestran el camino completo y devuelven a cualquier nivel anterior.</p>
+      </div>
+    </div>
 
-      <!-- 4. FICHA MATERIALES -->
-      <div>
-        <div class="app">
-          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">MATERIALES</span></div>
-          <div class="main" style="padding:16px 18px 20px">
-            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-003</b></p>
-            <div class="pagehead">
-              <span class="code">…S02.ROD-003</span>
-              <h3 style="font-size:17px">Sistema de lubricación</h3>
-            </div>
+    <!-- 4-6. LAS OTRAS TRES PESTAÑAS -->
+    <div style="margin-top:38px">
+      <p class="eyebrow" style="margin-bottom:6px">Pantallas 04 a 06</p>
+      <h3 style="font-size:19px;font-weight:600;letter-spacing:-.012em">Las otras tres pestañas de esa misma ficha</h3>
+      <p style="color:var(--ink-2);margin-top:6px;max-width:70ch">
+        No son pantallas nuevas: es el mismo registro, cambiando de pestaña. La cabecera, el código
+        y las migas de pan siguen ahí arriba.
+      </p>
+
+      <div class="duo" style="margin-top:20px">
+
+        <div class="frag">
+          <div class="fragbar">◂ misma ficha · pestaña Materiales</div>
+          <div class="fragbody">
             <div class="tabs">
               <div>Técnico</div><div class="on">Materiales</div><div>Frecuencias</div><div>Documentos</div>
             </div>
@@ -643,27 +798,15 @@
               </table>
             </div>
             <div class="stats">
-              <div class="stat"><span class="n">SM-00087</span><span class="l">Solicitud abierta</span></div>
-              <div class="stat alert"><span class="n" style="font-size:15px">RES-2026-004512</span><span class="l">Código de reserva</span></div>
+              <div class="stat"><span class="n" style="font-size:16px">SM-00087</span><span class="l">Solicitud abierta</span></div>
+              <div class="stat alert"><span class="n" style="font-size:14px">RES-2026-004512</span><span class="l">Código de reserva</span></div>
             </div>
           </div>
         </div>
-        <div class="cap">
-          <p class="t">Ficha · Materiales <span>04</span></p>
-          <p>Qué repuestos corresponden a esta parte y si los hay. El código de reserva de SAP se registra aquí: es el único puente con el ERP mientras no haya integración.</p>
-        </div>
-      </div>
 
-      <!-- 5. FICHA FRECUENCIAS -->
-      <div>
-        <div class="app">
-          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">CONSULTA</span></div>
-          <div class="main" style="padding:16px 18px 20px">
-            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-001</b></p>
-            <div class="pagehead">
-              <span class="code">…S02.ROD-001</span>
-              <h3 style="font-size:17px">Rodamiento principal</h3>
-            </div>
+        <div class="frag">
+          <div class="fragbar">◂ misma ficha · pestaña Frecuencias</div>
+          <div class="fragbody">
             <div class="tabs">
               <div>Técnico</div><div>Materiales</div><div class="on">Frecuencias</div><div>Documentos</div>
             </div>
@@ -680,22 +823,10 @@
             <p class="nota">Información de referencia. La aplicación <b>no</b> programa ni dispara mantenimientos a partir de estas frecuencias.</p>
           </div>
         </div>
-        <div class="cap">
-          <p class="t">Ficha · Frecuencias <span>05</span></p>
-          <p>Cada cuánto corresponde mantener y cuándo fue la última vez, como dato del equipo. Sin botones, sin programación, sin órdenes.</p>
-        </div>
-      </div>
 
-      <!-- 6. FICHA DOCUMENTOS -->
-      <div>
-        <div class="app">
-          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">DOCUMENTACIÓN</span></div>
-          <div class="main" style="padding:16px 18px 20px">
-            <p class="crumb"><b>MB-01</b> ▸ <b>S06</b></p>
-            <div class="pagehead">
-              <span class="code">MB-01.S06</span>
-              <h3 style="font-size:17px">Mangueras flotantes</h3>
-            </div>
+        <div class="frag">
+          <div class="fragbar">◂ misma ficha · pestaña Documentos</div>
+          <div class="fragbody">
             <div class="tabs">
               <div>Técnico</div><div>Materiales</div><div>Frecuencias</div><div class="on">Documentos</div>
             </div>
@@ -703,23 +834,41 @@
               <table>
                 <thead><tr><th>Documento</th><th>Tipo</th><th>Rev.</th><th>Vence</th><th>Vigencia</th></tr></thead>
                 <tbody>
-                  <tr><td><a class="doclink">Certificado de mangueras (GMPHOM)</a></td><td class="cod">Certificado</td><td class="cod">—</td><td class="cod">2026-11-08</td><td><span class="pill p-warn">Por vencer</span></td></tr>
-                  <tr><td><a class="doclink">Plano del tren de mangueras</a></td><td class="cod">Plano</td><td class="cod">Rev. C</td><td class="cod">—</td><td><span class="pill p-n">No vence</span></td></tr>
-                  <tr><td><a class="doclink">Informe de prueba hidrostática</a></td><td class="cod">Informe</td><td class="cod">—</td><td class="cod">2027-02-14</td><td><span class="pill p-ok">Vigente</span></td></tr>
-                  <tr><td><a class="doclink">Plano del tren de mangueras</a></td><td class="cod">Plano</td><td class="cod">Rev. B</td><td class="cod">—</td><td><span class="pill p-n">Superado</span></td></tr>
+                  <tr><td><a class="doclink">Manual del fabricante</a></td><td class="cod">Manual</td><td class="cod">—</td><td class="cod">—</td><td><span class="pill p-n">No vence</span></td></tr>
+                  <tr><td><a class="doclink">Plano de montaje</a></td><td class="cod">Plano</td><td class="cod">Rev. C</td><td class="cod">—</td><td><span class="pill p-n">No vence</span></td></tr>
+                  <tr><td><a class="doclink">Plano de montaje</a></td><td class="cod">Plano</td><td class="cod">Rev. B</td><td class="cod">—</td><td><span class="pill p-n">Superado</span></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="btnrow"><span class="btn ghost">Subir documento</span></div>
           </div>
         </div>
-        <div class="cap">
-          <p class="t">Ficha · Documentos y planos <span>06</span></p>
-          <p>Planos, manuales y certificados del nodo. El plano guarda su revisión y las anteriores quedan marcadas como superadas, no se borran.</p>
-        </div>
-      </div>
 
+        <div class="frag">
+          <div class="fragbar">◂ un nivel arriba · documentos del subsistema S06</div>
+          <div class="fragbody">
+            <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S06</b></p>
+            <div class="pagehead">
+              <span class="code">MB-01.S06</span>
+              <h3 style="font-size:16px">Mangueras flotantes</h3>
+            </div>
+            <div class="tablewrap">
+              <table>
+                <thead><tr><th>Documento</th><th>Tipo</th><th>Vence</th><th>Vigencia</th></tr></thead>
+                <tbody>
+                  <tr><td><a class="doclink">Certificado de mangueras (GMPHOM)</a></td><td class="cod">Certificado</td><td class="cod">2026-11-08</td><td><span class="pill p-warn">Por vencer</span></td></tr>
+                  <tr><td><a class="doclink">Plano del tren de mangueras</a></td><td class="cod">Plano</td><td class="cod">—</td><td><span class="pill p-n">No vence</span></td></tr>
+                  <tr><td><a class="doclink">Informe de prueba hidrostática</a></td><td class="cod">Informe</td><td class="cod">2027-02-14</td><td><span class="pill p-ok">Vigente</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="nota">Los documentos cuelgan del nodo que les corresponde: unos del equipo, otros del subsistema completo.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
+
 
     <!-- 7. ACTUALIZAR -->
     <div style="margin-top:42px">
@@ -775,6 +924,275 @@
         <p class="t">Actualizar información <span>07</span></p>
         <p>Mantener el dato al día es parte del propósito de la app, no un extra. Cada cambio queda registrado con autor y fecha sin que nadie tenga que anotarlo.</p>
       </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El plus</p>
+      <h2>Visualización dinámica, dentro de la misma app</h2>
+      <p>
+        Sin Power BI aparte: una página del propio aplicativo con la lista a la izquierda y el
+        esquema de la monoboya a la derecha, sincronizados en las dos direcciones. Se toca una
+        parte del dibujo y se abre su ficha; se elige en la lista y se resalta en el dibujo.
+      </p>
+    </div>
+
+    <div>
+      <div class="app">
+        <div class="appbar">
+          <span class="brand">Monoboyas</span>
+          <span class="find">🔍 buscar por código o nombre…</span>
+          <span class="who">M. TORRES · CONSULTA</span>
+        </div>
+        <div class="shell">
+          <nav class="nav">
+            <span class="grp">Activo</span>
+            <a class="on">Vista global</a>
+            <a>Subsistemas</a>
+            <a>Equipos</a>
+            <span class="grp">Información</span>
+            <a>Materiales</a>
+            <a>Documentos</a>
+            <a>Frecuencias</a>
+          </nav>
+          <div class="main">
+            <div class="pagehead">
+              <span class="code">MB-01</span>
+              <h3>Monoboya MB-01</h3>
+              <span class="pill p-ok" style="margin-left:auto">Operativa</span>
+            </div>
+            <div class="split">
+              <div class="listcol">
+                <span class="sect-lbl" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600">Subsistemas</span>
+                  <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
+                  <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
+                  <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
+                  <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
+                  <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
+                  <div class="li aten"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
+                  <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
+                  <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
+                <p class="nota" style="margin-top:2px">8 de 12 · el resto al desplazar</p>
+              </div>
+              <div class="panelcol">
+                <div class="marco">
+    <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="Esquema de la monoboya tipo CALM: a la izquierda la costa y la tuberia de fondo hasta el PLEM, de ahi las mangueras submarinas suben a la boya, que se sujeta al fondo por cadenas de fondeo; desde la boya salen la estacha de amarre y el tren de mangueras flotantes hasta el buque. Doce puntos numerados marcan cada subsistema sobre la parte que le corresponde.">
+      <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
+      <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
+      <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
+      <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
+      <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
+      <!-- tierra y tuberia a la refineria -->
+      <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
+      <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
+      <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
+      <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
+      <!-- PLEM -->
+      <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
+      <!-- mangueras submarinas -->
+      <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+      <!-- cadenas de fondeo -->
+      <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <!-- boya -->
+      <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
+      <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
+      <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
+      <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
+      <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
+      <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
+      <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
+      <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
+      <!-- estacha de amarre -->
+      <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
+      <!-- mangueras flotantes -->
+      <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- buque -->
+      <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
+      <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
+      <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
+      <text class="mk-lbl" x="4" y="116">TIERRA</text>
+      <text class="mk-lbl" x="222" y="224">BOYA</text>
+      <text class="mk-lbl" x="190" y="352">PLEM</text>
+      <text class="mk-lbl" x="520" y="196">BUQUE</text>
+      <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
+      <g><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
+      <g><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
+      <g><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
+      <g><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
+      <g><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
+      <g><circle class="mk aten" cx="388.1" cy="172.1" r="9.5"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
+      <g><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
+      <g><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
+      <g><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
+      <g><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
+      <g><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
+      <g><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
+    </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <p class="t">Vista global con esquema <span>08</span></p>
+        <p>Cada punto está sobre la parte que nombra y su número es el mismo del código de subsistema. El punto 06 sale en ámbar porque ese subsistema tiene un certificado por vencer: el color lo pone el dato, no la maqueta.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:42px">
+      <div class="app">
+        <div class="appbar">
+          <span class="brand">Monoboyas</span>
+          <span class="find">🔍 MB-01.S06</span>
+          <span class="who">M. TORRES · CONSULTA</span>
+        </div>
+        <div class="shell">
+          <nav class="nav">
+            <span class="grp">Activo</span>
+            <a class="on">Vista global</a>
+            <a>Subsistemas</a>
+            <a>Equipos</a>
+            <span class="grp">Información</span>
+            <a>Materiales</a>
+            <a>Documentos</a>
+            <a>Frecuencias</a>
+          </nav>
+          <div class="main">
+            <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S06</b></p>
+            <div class="pagehead">
+              <span class="code">MB-01.S06</span>
+              <h3>Mangueras flotantes</h3>
+              <span class="pill p-warn" style="margin-left:auto">1 documento por vencer</span>
+            </div>
+            <div class="split">
+              <div class="listcol">
+                  <div class="li"><span class="n">01</span><span class="t">Casco y estructura flotante</span></div>
+                  <div class="li"><span class="n">02</span><span class="t">Rodamiento y girador</span></div>
+                  <div class="li"><span class="n">03</span><span class="t">Swivel y tuberías</span></div>
+                  <div class="li"><span class="n">04</span><span class="t">Amarre de fondeo</span></div>
+                  <div class="li"><span class="n">05</span><span class="t">Amarre de buque</span></div>
+                  <div class="li aten on"><span class="n">06</span><span class="t">Mangueras flotantes</span><span class="pill p-warn">1 por vencer</span></div>
+                  <div class="li"><span class="n">07</span><span class="t">Mangueras submarinas</span></div>
+                  <div class="li"><span class="n">08</span><span class="t">PLEM y válvulas</span></div>
+              </div>
+              <div class="panelcol">
+                <div class="marco">
+    <svg class="esq" viewBox="0 0 660 380" role="img" aria-label="El mismo esquema con el punto 06, las mangueras flotantes entre la boya y el buque, resaltado y el resto de los puntos atenuados.">
+      <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
+      <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
+      <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
+      <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
+      <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
+      <!-- tierra y tuberia a la refineria -->
+      <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
+      <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
+      <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
+      <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
+      <!-- PLEM -->
+      <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
+      <!-- mangueras submarinas -->
+      <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+      <!-- cadenas de fondeo -->
+      <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+      <!-- boya -->
+      <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
+      <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
+      <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
+      <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
+      <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
+      <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
+      <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
+      <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
+      <!-- estacha de amarre -->
+      <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
+      <!-- mangueras flotantes -->
+      <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- buque -->
+      <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
+      <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
+      <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
+      <text class="mk-lbl" x="4" y="116">TIERRA</text>
+      <text class="mk-lbl" x="222" y="224">BOYA</text>
+      <text class="mk-lbl" x="190" y="352">PLEM</text>
+      <text class="mk-lbl" x="520" y="196">BUQUE</text>
+      <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
+      <g opacity=".4"><circle class="mk" cx="250.1" cy="175.9" r="9.5"/><text class="mk-n" x="250.1" y="175.9" text-anchor="middle" dominant-baseline="central">01</text></g>
+      <g opacity=".4"><circle class="mk" cx="250.1" cy="137.2" r="9.5"/><text class="mk-n" x="250.1" y="137.2" text-anchor="middle" dominant-baseline="central">02</text></g>
+      <g opacity=".4"><circle class="mk" cx="277.9" cy="131.9" r="9.5"/><text class="mk-n" x="277.9" y="131.9" text-anchor="middle" dominant-baseline="central">03</text></g>
+      <g opacity=".4"><circle class="mk" cx="159.7" cy="259.9" r="9.5"/><text class="mk-n" x="159.7" y="259.9" text-anchor="middle" dominant-baseline="central">04</text></g>
+      <g opacity=".4"><circle class="mk" cx="370.3" cy="125.0" r="9.5"/><text class="mk-n" x="370.3" y="125.0" text-anchor="middle" dominant-baseline="central">05</text></g>
+      <g><circle class="mk sel" cx="388.1" cy="172.1" r="12"/><text class="mk-n" x="388.1" y="172.1" text-anchor="middle" dominant-baseline="central">06</text></g>
+      <g opacity=".4"><circle class="mk" cx="291.1" cy="269.0" r="9.5"/><text class="mk-n" x="291.1" y="269.0" text-anchor="middle" dominant-baseline="central">07</text></g>
+      <g opacity=".4"><circle class="mk" cx="205.3" cy="321.9" r="9.5"/><text class="mk-n" x="205.3" y="321.9" text-anchor="middle" dominant-baseline="central">08</text></g>
+      <g opacity=".4"><circle class="mk" cx="250.1" cy="107.9" r="9.5"/><text class="mk-n" x="250.1" y="107.9" text-anchor="middle" dominant-baseline="central">09</text></g>
+      <g opacity=".4"><circle class="mk" cx="295.7" cy="191.9" r="9.5"/><text class="mk-n" x="295.7" y="191.9" text-anchor="middle" dominant-baseline="central">10</text></g>
+      <g opacity=".4"><circle class="mk" cx="217.8" cy="139.8" r="9.5"/><text class="mk-n" x="217.8" y="139.8" text-anchor="middle" dominant-baseline="central">11</text></g>
+      <g opacity=".4"><circle class="mk" cx="196.0" cy="180.1" r="9.5"/><text class="mk-n" x="196.0" y="180.1" text-anchor="middle" dominant-baseline="central">12</text></g>
+    </svg>
+                </div>
+                <div class="stats">
+                  <div class="stat"><span class="n">7</span><span class="l">Partes</span></div>
+                  <div class="stat"><span class="n">3</span><span class="l">Materiales</span></div>
+                  <div class="stat alert"><span class="n">1</span><span class="l">Por vencer</span></div>
+                </div>
+                <div class="btnrow"><span class="btn">Abrir el subsistema</span><span class="btn ghost">Ver sus documentos</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <p class="t">Subsistema resaltado en el esquema <span>09</span></p>
+        <p>Al elegir en la lista, el dibujo resalta la parte y atenúa el resto. Funciona igual al revés: tocar el punto 06 selecciona el subsistema. Debajo del esquema puede ir la foto o el recorte de plano de esa parte.</p>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:46px">
+      <h2 style="font-size:19px">Cómo se construye, y qué cuesta cada nivel</h2>
+      <p>Lo que evita que esto se vuelva inmanejable es una sola decisión: <b>las posiciones de los puntos se guardan como dato en la tabla del nodo</b>, no como controles colocados a mano en la pantalla.</p>
+    </div>
+    <div class="niveles">
+      <div class="nivel">
+        <span class="nn">NIVEL 1</span>
+        <div>
+          <h4>Panel visual sincronizado</h4>
+          <p>Una página personalizada embebida en la misma app model-driven. El esquema es una imagen de fondo y los puntos son una galería posicionada por fórmula a partir de los campos <span class="mono">coordenada X</span> y <span class="mono">coordenada Y</span> de cada subsistema. Agregar un subsistema es agregar una fila; mover un punto es cambiar un número desde la propia app.</p>
+          <span class="cost">Una página + 3 campos · sin licencia adicional</span>
+        </div>
+      </div>
+      <div class="nivel">
+        <span class="nn">NIVEL 2</span>
+        <div>
+          <h4>Gráficos nativos de Dataverse</h4>
+          <p>Documentos por vencer, materiales bajo mínimo y cuánta información falta por completar. Son interactivos de fábrica: al hacer clic en una porción, la lista de abajo se filtra. Viven en la misma app, junto al esquema.</p>
+          <span class="cost">Configuración, cero código · sin licencia adicional</span>
+        </div>
+      </div>
+      <div class="nivel">
+        <span class="nn">NIVEL 3</span>
+        <div>
+          <h4>Power BI embebido <i>dentro</i> de la app</h4>
+          <p>Solo hace falta para lo que Dataverse no puede: <b>tendencia en el tiempo</b>. Dataverse guarda el estado de hoy, no fotos del pasado; para ver cómo evolucionó la completitud mes a mes hay que acumular historia. Y aun entonces se embebe como un panel más de la aplicación — el usuario nunca sale de ella.</p>
+          <span class="cost">Licencias + un informe que mantener · solo si se pide</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="aviso" style="margin-top:22px;border-left-color:var(--line-2);background:var(--surface-3)">
+      <h3>Lo que hay que saber antes de decidir</h3>
+      <p>
+        El esquema es una imagen de fondo: si la configuración de la monoboya cambia de forma
+        sustancial hay que rehacer el dibujo — los puntos no, esos son datos. Si todas las
+        monoboyas son del tipo CALM, un solo dibujo sirve para todas y el color lo pone el dato.
+        En móvil el panel se apila debajo de la lista en vez de ir al lado. Y los gráficos nativos
+        agregan sobre una tabla a la vez, sin cruces complejos: para eso está el nivel 3.
+      </p>
     </div>
   </section>
 

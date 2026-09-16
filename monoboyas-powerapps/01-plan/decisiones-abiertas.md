@@ -30,7 +30,9 @@ supuesto en silencio: lo que aparece precargado en las plantillas está marcado 
 | D-10 🟡 | ¿Existe el catálogo de materiales en Excel? ¿Con códigos SAP? | `03_catalogo_materiales.csv` |
 | D-11 🟡 | ¿Cuántos almacenes hay y quién es responsable de cada uno? | Tabla Almacén |
 | D-12 🟡 | **Formato del código de reserva de SAP.** ¿Longitud fija? ¿Prefijo? | Validación en Solicitud de material |
-| D-13 🟡 | ¿Quién es responsable de mantener actualizada cada clase de información? | Es el riesgo principal del proyecto: ver D-16 |
+| D-13 🟡 | ¿Quién es responsable de mantener actualizada cada clase de información? | Es el riesgo principal del proyecto: ver el cierre de este documento |
+| D-14 🟡 | **¿Existe un esquema o plano general de la monoboya en digital** que sirva de base para el panel visual? Con un plano de disposición general basta | Panel visual. Si no existe, se dibuja uno esquemático |
+| D-15 🟡 | ¿Las demás monoboyas del alcance son también del tipo CALM? | Si lo son, un solo dibujo sirve para todas |
 
 ---
 
@@ -38,12 +40,12 @@ supuesto en silencio: lo que aparece precargado en las plantillas está marcado 
 
 | # | Pregunta | Fase |
 |---|---|---|
-| D-14 🟡 | ¿Se usa Microsoft Teams? ¿A qué canal van las alertas de vencimiento y de stock? | 4 |
-| D-15 🟡 | ¿Con qué periodicidad se hace inventario físico? Define el umbral del recordatorio | 3 |
-| D-16 🟡 | ¿Repsol necesita acceso de consulta a la aplicación? ¿De solo lectura? | 2 |
-| D-17 🟢 | ¿Hay histórico de mantenimientos anteriores que valga la pena cargar como referencia? | 3 |
-| D-18 🟢 | ¿Se quiere tablero en Power BI, o basta con las vistas de la app? | 4 |
-| D-19 🟢 | ¿Integración futura con SAP para stock y reservas? ¿TI de Repsol la habilitaría? | Fuera de alcance hoy |
+| D-16 🟡 | ¿Se usa Microsoft Teams? ¿A qué canal van las alertas de vencimiento y de stock? | 4 |
+| D-17 🟡 | ¿Con qué periodicidad se hace inventario físico? Define el umbral del recordatorio | 3 |
+| D-18 🟡 | ¿Repsol necesita acceso de consulta a la aplicación? ¿De solo lectura? | 2 |
+| D-19 🟢 | ¿Hay histórico de mantenimientos anteriores que valga la pena cargar como referencia? | 3 |
+| D-20 🟢 | **¿Se quiere ver tendencia en el tiempo** (cómo evoluciona la completitud de la información, el consumo de repuestos)? Es lo único que obliga a Power BI y a acumular historia | 4 |
+| D-21 🟢 | ¿Integración futura con SAP para stock y reservas? ¿TI de Repsol la habilitaría? | Fuera de alcance hoy |
 
 ---
 
