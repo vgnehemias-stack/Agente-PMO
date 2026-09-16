@@ -5,6 +5,7 @@
     --ground: #F2F1EE;
     --surface: #FFFFFF;
     --surface-2: #E9E8E4;
+    --surface-3: #F7F6F4;
     --ink: #1B2228;
     --ink-2: #4A555E;
     --ink-3: #7A858E;
@@ -13,20 +14,21 @@
     --accent: #D2570D;
     --accent-soft: #FBEEE4;
     --steel: #2B3A45;
+    --steel-ink: #F2F1EE;
     --ok: #1C6E48;
     --ok-soft: #E2F0E8;
     --warn: #9B6A05;
     --warn-soft: #F8EED6;
     --bad: #A8291F;
     --bad-soft: #F8E5E2;
-    --shadow: 0 1px 2px rgba(27,34,40,.07), 0 8px 24px rgba(27,34,40,.06);
-    --shadow-phone: 0 2px 4px rgba(27,34,40,.10), 0 18px 44px rgba(27,34,40,.16);
+    --shadow: 0 1px 2px rgba(27,34,40,.07), 0 10px 30px rgba(27,34,40,.09);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --ground: #14191D;
       --surface: #1D242A;
       --surface-2: #262E35;
+      --surface-3: #212930;
       --ink: #E9EDEF;
       --ink-2: #AFBAC2;
       --ink-3: #7D8993;
@@ -34,21 +36,22 @@
       --line-2: #3E4952;
       --accent: #F5843D;
       --accent-soft: #33231A;
-      --steel: #A9BAC6;
+      --steel: #101519;
+      --steel-ink: #D8E0E5;
       --ok: #6FC79A;
       --ok-soft: #1A2E25;
       --warn: #E0B25C;
       --warn-soft: #302819;
       --bad: #EE8C80;
       --bad-soft: #33201D;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
-      --shadow-phone: 0 2px 4px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.45);
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
     }
   }
   :root[data-theme="dark"] {
     --ground: #14191D;
     --surface: #1D242A;
     --surface-2: #262E35;
+    --surface-3: #212930;
     --ink: #E9EDEF;
     --ink-2: #AFBAC2;
     --ink-3: #7D8993;
@@ -56,15 +59,15 @@
     --line-2: #3E4952;
     --accent: #F5843D;
     --accent-soft: #33231A;
-    --steel: #A9BAC6;
+    --steel: #101519;
+    --steel-ink: #D8E0E5;
     --ok: #6FC79A;
     --ok-soft: #1A2E25;
     --warn: #E0B25C;
     --warn-soft: #302819;
     --bad: #EE8C80;
     --bad-soft: #33201D;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
-    --shadow-phone: 0 2px 4px rgba(0,0,0,.5), 0 18px 44px rgba(0,0,0,.45);
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
   }
 
   * { box-sizing: border-box; }
@@ -79,472 +82,290 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  .wrap {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding-inline: 20px;
-    padding-block: 0 72px;
-  }
-
+  .wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 0 72px; }
   h1, h2, h3, h4 { font-family: Archivo, system-ui, sans-serif; text-wrap: balance; margin: 0; }
   p { margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
 
   .eyebrow {
     font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--accent);
+    font-size: 11px; font-weight: 500; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--accent);
   }
 
   /* ---------- Cabecera ---------- */
   header.hero {
     border-bottom: 1px solid var(--line);
     padding-block: 52px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+    display: flex; flex-direction: column; gap: 18px;
   }
   header.hero h1 {
-    font-size: clamp(30px, 5.4vw, 50px);
-    font-weight: 700;
-    line-height: 1.04;
-    letter-spacing: -.022em;
+    font-size: clamp(30px, 5.4vw, 50px); font-weight: 700;
+    line-height: 1.04; letter-spacing: -.022em;
   }
-  header.hero .lead {
-    font-size: 17px;
-    color: var(--ink-2);
-    max-width: 60ch;
-  }
+  header.hero .lead { font-size: 17px; color: var(--ink-2); max-width: 62ch; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 11.5px;
-    letter-spacing: .02em;
-    padding: 5px 10px;
-    border: 1px solid var(--line-2);
-    border-radius: 3px;
-    color: var(--ink-2);
-    background: var(--surface);
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    padding: 5px 10px; border: 1px solid var(--line-2); border-radius: 3px;
+    color: var(--ink-2); background: var(--surface);
   }
   .chip b { color: var(--ink); font-weight: 600; }
+  .chip.no { color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--line-2); }
 
-  /* ---------- Secciones ---------- */
   section { padding-block: 52px 0; }
-  .sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; max-width: 70ch; }
-  .sec-head h2 {
-    font-size: clamp(21px, 3vw, 27px);
-    font-weight: 600;
-    letter-spacing: -.012em;
-  }
+  .sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 26px; max-width: 72ch; }
+  .sec-head h2 { font-size: clamp(21px, 3vw, 27px); font-weight: 600; letter-spacing: -.012em; }
   .sec-head p { color: var(--ink-2); }
 
-  /* ---------- Flujo ---------- */
-  .flujo {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-    gap: 2px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: 4px;
+  /* ---------- Marco de aplicación ---------- */
+  .app {
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
     overflow: hidden;
-  }
-  .paso {
     background: var(--surface);
-    padding: 16px 15px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .paso .n {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent);
-  }
-  .paso h4 { font-size: 14.5px; font-weight: 600; line-height: 1.25; }
-  .paso p { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
-
-  /* ---------- Rejilla de teléfonos ---------- */
-  .fleet {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
-    gap: 34px 26px;
-    align-items: start;
-  }
-  .unit { display: flex; flex-direction: column; gap: 12px; align-items: center; }
-  .caption { max-width: 300px; }
-  .caption .t {
-    font-family: Archivo, sans-serif;
-    font-size: 14.5px;
-    font-weight: 600;
-    display: flex;
-    align-items: baseline;
-    gap: 7px;
-  }
-  .caption .t span {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    color: var(--accent);
-    font-weight: 500;
-  }
-  .caption p { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; margin-top: 2px; }
-
-  /* ---------- Marco de teléfono ---------- */
-  .phone {
-    width: 268px;
-    max-width: 100%;
-    background: var(--steel);
-    border-radius: 26px;
-    padding: 7px;
-    box-shadow: var(--shadow-phone);
-  }
-  .screen {
-    background: var(--ground);
-    border-radius: 20px;
-    overflow: hidden;
-    height: 486px;
-    display: flex;
-    flex-direction: column;
-    font-size: 12px;
-  }
-  .statusbar {
-    background: var(--surface);
-    padding: 6px 14px 2px;
-    display: flex;
-    justify-content: space-between;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    font-weight: 600;
-    color: var(--ink-3);
+    box-shadow: var(--shadow);
   }
   .appbar {
-    background: var(--surface);
-    padding: 7px 13px 11px;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    gap: 9px;
+    background: var(--steel);
+    color: var(--steel-ink);
+    padding: 9px 14px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12.5px;
   }
-  .appbar .back { color: var(--accent); font-size: 15px; line-height: 1; }
-  .appbar h3 { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
-  .appbar .sub {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    color: var(--ink-3);
+  .appbar .brand { font-family: Archivo, sans-serif; font-weight: 600; letter-spacing: -.01em; }
+  .appbar .find {
     margin-left: auto;
+    background: rgba(255,255,255,.12);
+    border-radius: 4px; padding: 4px 10px;
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    opacity: .85; max-width: 240px; overflow: hidden; white-space: nowrap;
   }
-  .body-s {
-    flex: 1;
-    overflow: hidden;
-    padding: 11px;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-  .body-s.tight { gap: 7px; }
-
-  /* Piezas de UI reutilizadas */
-  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-  .tile {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 11px 10px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-height: 82px;
-  }
-  .tile .num {
-    font-family: Archivo, sans-serif;
-    font-size: 27px;
-    font-weight: 700;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -.02em;
-  }
-  .tile .lbl { font-size: 11px; color: var(--ink-2); line-height: 1.3; }
-  .tile.hot { border-color: var(--bad); background: var(--bad-soft); }
-  .tile.hot .num { color: var(--bad); }
-  .tile.act { background: var(--accent); border-color: var(--accent); }
-  .tile.act .lbl, .tile.act .ico { color: #fff; }
-  .tile .ico { font-size: 19px; line-height: 1; color: var(--accent); }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .card.bare { border-radius: 0; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 9px 2px; }
-  .row { display: flex; align-items: center; gap: 7px; justify-content: space-between; }
-  .tag {
+  .appbar .who {
+    font-size: 11px; opacity: .7;
     font-family: "IBM Plex Mono", monospace;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--ink-3);
-    letter-spacing: .01em;
   }
-  .ttl { font-size: 12.5px; font-weight: 600; line-height: 1.25; font-family: Archivo, sans-serif; }
-  .meta { font-size: 10.5px; color: var(--ink-3); }
+  .shell { display: grid; grid-template-columns: 178px 1fr; min-height: 380px; }
+  .nav {
+    background: var(--surface-3);
+    border-right: 1px solid var(--line);
+    padding: 12px 0;
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .nav a {
+    padding: 7px 14px; font-size: 12.5px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .nav a.on {
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .nav .grp {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+    padding: 12px 14px 4px; font-weight: 600;
+  }
+  .main { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
+  .crumb {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+  }
+  .crumb b { color: var(--ink-2); font-weight: 500; }
+
+  .pagehead { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; }
+  .pagehead .code {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600;
+    color: var(--accent); background: var(--accent-soft);
+    padding: 3px 8px; border-radius: 3px;
+  }
+  .pagehead h3 { font-size: 20px; font-weight: 600; letter-spacing: -.015em; }
+
+  /* pastillas */
   .pill {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    padding: 3px 6px;
-    border-radius: 3px;
-    white-space: nowrap;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 3px; white-space: nowrap;
   }
   .p-ok { background: var(--ok-soft); color: var(--ok); }
   .p-warn { background: var(--warn-soft); color: var(--warn); }
   .p-bad { background: var(--bad-soft); color: var(--bad); }
-  .p-neutral { background: var(--surface-2); color: var(--ink-2); }
+  .p-n { background: var(--surface-2); color: var(--ink-2); }
 
-  .btn {
-    background: var(--accent);
-    color: #fff;
-    border-radius: 6px;
-    padding: 11px;
-    text-align: center;
-    font-family: Archivo, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: .01em;
-  }
-  .btn.ghost {
-    background: none;
-    border: 1px solid var(--line-2);
-    color: var(--ink-2);
-    font-weight: 500;
-    padding: 9px;
-    font-size: 12px;
-  }
-  .btn.dim { background: var(--surface-2); color: var(--ink-3); }
-
-  .search {
+  /* tarjetas resumen */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 5px;
+    padding: 10px 12px 11px; display: flex; flex-direction: column; gap: 1px;
     background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 11.5px;
-    color: var(--ink-3);
-    display: flex;
-    gap: 6px;
   }
+  .stat .n {
+    font-family: Archivo, sans-serif; font-size: 23px; font-weight: 700;
+    line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .stat .l { font-size: 11px; color: var(--ink-3); line-height: 1.3; }
+  .stat.alert { border-color: var(--warn); background: var(--warn-soft); }
+  .stat.alert .n, .stat.alert .l { color: var(--warn); }
 
-  .seg { display: flex; gap: 5px; }
-  .seg div {
-    flex: 1;
-    text-align: center;
-    font-size: 10.5px;
-    padding: 5px 2px;
-    border-radius: 4px;
-    background: var(--surface-2);
-    color: var(--ink-2);
+  /* rejilla de subsistemas */
+  .subs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+  .sub {
+    border: 1px solid var(--line); border-radius: 5px; padding: 11px 12px 12px;
+    display: flex; flex-direction: column; gap: 6px; background: var(--surface);
   }
-  .seg div.on { background: var(--steel); color: var(--ground); font-weight: 600; }
-
-  .bar { height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
-  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
-
-  .step { display: flex; gap: 8px; align-items: flex-start; }
-  .step .idx {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    font-weight: 600;
-    color: var(--ink-3);
-    background: var(--surface-2);
-    border-radius: 3px;
-    padding: 2px 4px;
-    margin-top: 1px;
-  }
-  .step .txt { flex: 1; font-size: 11.5px; line-height: 1.35; }
-  .step .txt em { font-style: normal; color: var(--ink-3); font-size: 10.5px; display: block; }
-  .toggle {
-    width: 30px; height: 17px; border-radius: 9px;
-    background: var(--ok); position: relative; flex: none; margin-top: 2px;
-  }
-  .toggle::after {
-    content: ""; position: absolute; right: 2px; top: 2px;
-    width: 13px; height: 13px; border-radius: 50%; background: #fff;
-  }
-  .toggle.off { background: var(--line-2); }
-  .toggle.off::after { right: auto; left: 2px; }
-
-  .num-in {
-    border: 1px solid var(--line-2);
-    border-radius: 5px;
-    padding: 5px 7px;
-    background: var(--surface);
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
-    align-items: baseline;
-  }
-  .num-in.alert { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
-  .num-in small { font-weight: 400; font-size: 9.5px; color: var(--ink-3); }
-  .num-in.alert small { color: var(--bad); }
-
-  .photo {
-    background: var(--surface-2);
-    border: 1px dashed var(--line-2);
-    border-radius: 6px;
-    height: 62px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10.5px;
-    color: var(--ink-3);
-    gap: 5px;
-  }
-  .photo.filled {
-    border-style: solid;
-    background: linear-gradient(145deg, #3D525F 0%, #6E8493 55%, #A8B8C2 100%);
-    color: #fff;
-    border-color: var(--line-2);
-    font-weight: 500;
-  }
-  .sign {
-    background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 6px;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Segoe Script", "Brush Script MT", cursive;
-    font-size: 17px;
-    color: var(--ink-2);
-  }
-  .kv { display: flex; justify-content: space-between; font-size: 11px; gap: 8px; }
-  .kv span { color: var(--ink-3); }
-  .kv b { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 11px; }
-  .divider { height: 1px; background: var(--line); }
-  .sect-lbl {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    font-weight: 600;
-  }
-  .tabbar {
-    background: var(--surface);
+  .sub.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .sub .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .sub .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--accent); }
+  .sub h4 { font-size: 13.5px; font-weight: 600; line-height: 1.25; }
+  .sub .foot {
+    display: flex; gap: 10px; font-size: 10.5px; color: var(--ink-3);
+    font-family: "IBM Plex Mono", monospace; padding-top: 3px;
     border-top: 1px solid var(--line);
-    display: flex;
-    padding: 7px 0 9px;
   }
-  .tabbar div {
-    flex: 1;
-    text-align: center;
-    font-size: 9px;
-    color: var(--ink-3);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    align-items: center;
-  }
-  .tabbar div.on { color: var(--accent); font-weight: 600; }
-  .tabbar .g { font-size: 14px; line-height: 1; }
 
-  /* ---------- Tablas y bloques informativos ---------- */
-  .grid3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
+  /* tablas */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 460px; }
+  thead th {
+    background: var(--surface-3); text-align: left;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+    padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
   }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { text-align: right; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  td.cod { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+  td.strong { font-weight: 600; }
+  .doclink { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* pestañas de ficha */
+  .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .tabs div {
+    padding: 7px 13px; font-size: 12.5px; color: var(--ink-3);
+    border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+  }
+  .tabs div.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* pares clave-valor */
+  .kvs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0 26px; }
+  .kv {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px;
+  }
+  .kv span { color: var(--ink-3); }
+  .kv b { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 12px; text-align: right; }
+  .kv b.vacio { color: var(--ink-3); font-weight: 400; font-style: italic; font-family: "IBM Plex Sans", sans-serif; }
+
+  /* nota dentro de pantalla */
+  .nota {
+    background: var(--surface-3); border-left: 3px solid var(--line-2);
+    padding: 9px 12px; font-size: 11.5px; color: var(--ink-3); border-radius: 0 4px 4px 0;
+  }
+
+  /* formulario de edición */
+  .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .field .box {
+    border: 1px solid var(--line-2); border-radius: 4px; padding: 7px 10px;
+    background: var(--surface); font-size: 12.5px; font-family: "IBM Plex Mono", monospace;
+  }
+  .field .box.edit { border-color: var(--accent); background: var(--accent-soft); }
+  .field .box.ro { background: var(--surface-2); color: var(--ink-3); }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    background: var(--accent); color: #fff; border-radius: 4px; padding: 8px 16px;
+    font-family: Archivo, sans-serif; font-size: 12.5px; font-weight: 600;
+  }
+  .btn.ghost { background: none; border: 1px solid var(--line-2); color: var(--ink-2); font-weight: 500; }
+  .audit { display: flex; flex-direction: column; gap: 0; }
+  .audit .ev {
+    display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line);
+    font-size: 11.5px; color: var(--ink-2); align-items: baseline; flex-wrap: wrap;
+  }
+  .audit .ev .t {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    color: var(--ink-3); white-space: nowrap;
+  }
+
+  /* pie de cada maqueta */
+  .cap { margin-top: 12px; display: flex; flex-direction: column; gap: 3px; max-width: 74ch; }
+  .cap .t {
+    font-family: Archivo, sans-serif; font-size: 15px; font-weight: 600;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .cap .t span { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); font-weight: 500; }
+  .cap p { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+  .stack { display: flex; flex-direction: column; gap: 42px; }
+  .duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 42px 26px; align-items: start; }
+  @media (max-width: 760px) { .duo { grid-template-columns: minmax(0, 1fr); } }
+
+  /* bloques informativos */
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
   .block {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    padding: 18px 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 5px;
+    padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px;
   }
   .block h3 { font-size: 15px; font-weight: 600; }
   .block ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 5px; }
   .block li { font-size: 13px; color: var(--ink-2); line-height: 1.45; }
   .block li b { color: var(--ink); font-weight: 600; }
 
+  /* arbol */
+  .arbol {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 5px;
+    padding: 18px 20px; overflow-x: auto;
+  }
+  .arbol pre {
+    margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+    line-height: 1.75; color: var(--ink-2);
+  }
+  .arbol pre b { color: var(--accent); font-weight: 600; }
+
+  /* tabla de comparacion */
+  .cmp { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; }
+  .cmp table { min-width: 420px; font-size: 13px; }
+  .cmp td { padding: 10px 14px; }
+  .cmp td:first-child { color: var(--ink); font-weight: 500; }
+  .cmp td:last-child { color: var(--ink-3); }
+
   .fases { display: flex; flex-direction: column; }
   .fase {
-    display: grid;
-    grid-template-columns: 82px 1fr auto;
-    gap: 16px;
-    align-items: baseline;
-    padding: 14px 4px;
-    border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: 82px 1fr auto; gap: 16px;
+    align-items: baseline; padding: 14px 4px; border-top: 1px solid var(--line);
   }
   .fase:last-child { border-bottom: 1px solid var(--line); }
-  .fase .id {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: .04em;
-  }
+  .fase .id { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: .04em; }
   .fase .d h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 2px; }
   .fase .d p { font-size: 13px; color: var(--ink-2); }
-  .fase .t {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 11.5px;
-    color: var(--ink-3);
-    white-space: nowrap;
-  }
+  .fase .t { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
 
   .aviso {
-    border-left: 3px solid var(--accent);
-    background: var(--accent-soft);
-    padding: 16px 18px;
-    border-radius: 0 5px 5px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+    border-left: 3px solid var(--accent); background: var(--accent-soft);
+    padding: 16px 18px; border-radius: 0 5px 5px 0;
+    display: flex; flex-direction: column; gap: 7px;
   }
   .aviso h3 { font-size: 15px; font-weight: 600; }
-  .aviso p { font-size: 13.5px; color: var(--ink-2); max-width: 72ch; }
-
-  .abiertas { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-  .ab {
-    background: var(--surface);
-    padding: 13px 15px;
-    display: grid;
-    grid-template-columns: 54px 1fr;
-    gap: 14px;
-    align-items: baseline;
-  }
-  .ab .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--bad); }
-  .ab .q { font-size: 13.5px; font-weight: 600; }
-  .ab .w { font-size: 12.5px; color: var(--ink-3); line-height: 1.45; margin-top: 2px; }
+  .aviso p { font-size: 13.5px; color: var(--ink-2); max-width: 74ch; }
 
   footer {
-    margin-top: 56px;
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-    font-size: 12.5px;
-    color: var(--ink-3);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 18px;
-    justify-content: space-between;
+    margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--ink-3);
+    display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between;
   }
-  footer .mono { font-family: "IBM Plex Mono", monospace; font-size: 11px; }
 
-  @media (max-width: 560px) {
+  @media (max-width: 640px) {
+    .shell { grid-template-columns: 1fr; }
+    .nav { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 6px 4px; }
+    .nav .grp { display: none; }
+    .nav a { white-space: nowrap; padding: 6px 11px; }
+    .nav a.on { box-shadow: inset 0 -2px 0 var(--accent); }
     .fase { grid-template-columns: 1fr; gap: 3px; }
-    .ab { grid-template-columns: 1fr; gap: 3px; }
   }
 </style>
 
@@ -552,344 +373,440 @@
 
   <header class="hero">
     <p class="eyebrow">TAMOIN · Repsol — Refinería La Pampilla</p>
-    <h1>Gestión de mantenimiento de monoboyas</h1>
+    <h1>Sistema de monoboya, centralizado</h1>
     <p class="lead">
-      Propuesta de aplicación en Power Apps para planificar, ejecutar y trazar el mantenimiento
-      de la monoboya: desde la frecuencia de cada plan hasta el código de reserva del repuesto y
-      la evidencia fotográfica del trabajo hecho.
+      Propuesta de aplicación en Power Apps que reúne toda la información del sistema de monoboya
+      bajo su codificación de subsistemas: una vista global primero, y desde ahí el desglose hasta
+      el detalle de cada parte, con sus materiales, sus frecuencias de referencia y sus planos.
     </p>
     <div class="chips">
+      <span class="chip">Eje · <b>código de subsistema</b></span>
       <span class="chip">Backend · <b>Dataverse</b></span>
-      <span class="chip">Inventario · <b>autónomo, sin ERP</b></span>
-      <span class="chip">Offline · <b>no requerido</b></span>
-      <span class="chip">Apps · <b>canvas + model-driven</b></span>
-      <span class="chip">Activo · <b>SPM tipo CALM</b></span>
+      <span class="chip">Una sola app · <b>model-driven</b></span>
+      <span class="chip no">órdenes de trabajo</span>
+      <span class="chip no">ejecución en campo</span>
     </div>
   </header>
 
   <section>
     <div class="sec-head">
-      <p class="eyebrow">El circuito</p>
-      <h2>Una sola cadena, de la frecuencia a la evidencia</h2>
+      <p class="eyebrow">El cambio de eje</p>
+      <h2>Informar, no ejecutar</h2>
       <p>
-        Hoy cada eslabón vive en un sitio distinto: las frecuencias en Excel, el stock en almacén,
-        la evidencia en el teléfono de alguien. La aplicación los une en un solo recorrido.
+        La supervisión del trabajo la lleva Repsol. Lo que TAMOIN necesita es que la información
+        del activo esté centralizada, clara y al día. El identificador ya no es una orden de
+        trabajo: es el código del subsistema.
       </p>
     </div>
-    <div class="flujo">
-      <div class="paso"><span class="n">01</span><h4>Frecuencia</h4><p>Cada plan sabe cada cuánto toca y cuándo fue la última vez.</p></div>
-      <div class="paso"><span class="n">02</span><h4>Sistemas</h4><p>12 sistemas, 68 equipos con TAG propio.</p></div>
-      <div class="paso"><span class="n">03</span><h4>Materiales</h4><p>Cada plan declara qué consume y cuánto.</p></div>
-      <div class="paso"><span class="n">04</span><h4>¿Hay stock?</h4><p>La orden nace con semáforo verde, ámbar o rojo.</p></div>
-      <div class="paso"><span class="n">05</span><h4>Reserva</h4><p>Solicitud, aprobación y código de reserva registrado.</p></div>
-      <div class="paso"><span class="n">06</span><h4>Ejecución</h4><p>Checklist, mediciones, fotos y firma en campo.</p></div>
-      <div class="paso"><span class="n">07</span><h4>Historial</h4><p>Reporte en PDF y trazabilidad por equipo.</p></div>
+    <div class="cmp">
+      <table>
+        <tbody>
+          <tr><td>Muestra el árbol completo del sistema por código de subsistema</td><td>No genera órdenes de trabajo</td></tr>
+          <tr><td>Da la ficha técnica de cada parte</td><td>No lleva checklists de ejecución</td></tr>
+          <tr><td>Dice qué repuestos corresponden y si hay existencias</td><td>No registra firmas, horas ni avance físico</td></tr>
+          <tr><td>Informa cada cuánto corresponde mantener, como referencia</td><td>No programa ni dispara mantenimientos</td></tr>
+          <tr><td>Guarda planos y certificados, y avisa de vencimientos</td><td>No valoriza ni factura</td></tr>
+          <tr><td>Permite actualizar materiales, stock y documentos</td><td>No gestiona permisos de trabajo ni HSE</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <section>
     <div class="sec-head">
-      <p class="eyebrow">Prototipo</p>
-      <h2>Las siete pantallas del técnico</h2>
+      <p class="eyebrow">La estructura</p>
+      <h2>Un árbol, no cuatro tablas</h2>
       <p>
-        Esto es lo que ve quien hace el trabajo, en su teléfono. El resto —maestros, planes,
-        inventario, aprobaciones— vive en una aplicación de escritorio que Dataverse genera casi
-        sola. Los datos que aparecen son ejemplos para ilustrar el flujo.
+        La jerarquía se modela como una sola tabla donde cada nodo apunta a su padre. Acepta
+        cualquier profundidad, permite que un subsistema contenga sub-subsistemas, y hace que la
+        vista global y el desglose sean la misma consulta a distinta altura.
+      </p>
+    </div>
+    <div class="arbol"><pre><b>MB-01</b>                                    nivel 1   Monoboya
+ ├─ <b>MB-01.S01</b>  Casco y estructura flotante   nivel 2   Subsistema
+ │   ├─ MB-01.S01.CAS-001  Casco flotante principal        nivel 3   Equipo
+ │   └─ MB-01.S01.CAS-002  Compartimentos estancos         nivel 3   Equipo
+ ├─ <b>MB-01.S02</b>  Rodamiento principal y girador
+ │   ├─ MB-01.S02.ROD-001  Rodamiento principal
+ │   ├─ MB-01.S02.ROD-003  Sistema de lubricación
+ │   └─ MB-01.S02.ROD-005  Sellos del rodamiento
+ └─ <b>MB-01.S06</b>  Mangueras flotantes
+     ├─ MB-01.S06.MGF-001  Manguera flotante tramo 1
+     └─ MB-01.S06.MGF-005  Manguera de acople a buque</pre></div>
+    <p class="cap" style="margin-top:14px"><span style="font-size:13px;color:var(--ink-3)">
+      Los códigos <code class="mono">MB-01.Sxx</code> son <b>provisionales</b>: sostienen la
+      estructura hasta que se cargue la codificación oficial de subsistemas, que es la que la
+      aplicación mostrará.
+    </span></p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Prototipo</p>
+      <h2>De la vista global al detalle</h2>
+      <p>
+        Siete pantallas de una sola aplicación model-driven, que funciona igual en escritorio y en
+        móvil. Los datos son ejemplos para ilustrar la navegación.
       </p>
     </div>
 
-    <div class="fleet">
+    <div class="stack">
 
-      <!-- 1. INICIO -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>07:42</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><h3>Hola, Luis</h3><span class="sub">TÉCNICO · MEC</span></div>
-          <div class="body-s">
-            <div class="tiles">
-              <div class="tile"><span class="num">3</span><span class="lbl">Órdenes para hoy</span></div>
-              <div class="tile hot"><span class="num">1</span><span class="lbl">Vencida</span></div>
-              <div class="tile act"><span class="ico">⚑</span><span class="lbl">Reportar hallazgo</span></div>
-              <div class="tile"><span class="ico">▤</span><span class="lbl">Consultar stock</span></div>
-            </div>
-            <div class="divider"></div>
-            <span class="sect-lbl">Próxima intervención</span>
-            <div class="card">
-              <div class="row"><span class="tag">MB01-ROD-003</span><span class="pill p-ok">Materiales OK</span></div>
-              <p class="ttl">Lubricación del rodamiento principal</p>
-              <p class="meta">Hoy · 4 h estimadas · requiere parada</p>
-            </div>
-            <div class="card">
-              <div class="row"><span class="tag">MB01-ELE-001</span><span class="pill p-neutral">Sin material</span></div>
-              <p class="ttl">Verificación de luces de navegación</p>
-              <p class="meta">Hoy · 1 h estimada</p>
+      <!-- 1. VISTA GLOBAL -->
+      <div>
+        <div class="app">
+          <div class="appbar">
+            <span class="brand">Monoboyas</span>
+            <span class="find">🔍 buscar por código o nombre…</span>
+            <span class="who">M. TORRES · CONSULTA</span>
+          </div>
+          <div class="shell">
+            <nav class="nav">
+              <span class="grp">Activo</span>
+              <a class="on">Vista global</a>
+              <a>Subsistemas</a>
+              <a>Equipos</a>
+              <span class="grp">Información</span>
+              <a>Materiales</a>
+              <a>Documentos</a>
+              <a>Frecuencias</a>
+              <span class="grp">Avisos</span>
+              <a>Vencimientos</a>
+              <a>Stock bajo mínimo</a>
+            </nav>
+            <div class="main">
+              <div class="pagehead">
+                <span class="code">MB-01</span>
+                <h3>Monoboya MB-01</h3>
+                <span class="pill p-ok" style="margin-left:auto">Operativa</span>
+              </div>
+              <div class="stats">
+                <div class="stat"><span class="n">12</span><span class="l">Subsistemas</span></div>
+                <div class="stat"><span class="n">68</span><span class="l">Equipos</span></div>
+                <div class="stat"><span class="n">27</span><span class="l">Materiales</span></div>
+                <div class="stat"><span class="n">26</span><span class="l">Documentos</span></div>
+                <div class="stat alert"><span class="n">3</span><span class="l">Por vencer</span></div>
+              </div>
+              <div class="subs">
+                <div class="sub">
+                  <div class="top"><span class="cod">MB-01.S01</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Casco y estructura flotante</h4>
+                  <div class="foot"><span>6 partes</span><span>3 docs</span></div>
+                </div>
+                <div class="sub sel">
+                  <div class="top"><span class="cod">MB-01.S02</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Rodamiento principal y girador</h4>
+                  <div class="foot"><span>5 partes</span><span>2 docs</span></div>
+                </div>
+                <div class="sub">
+                  <div class="top"><span class="cod">MB-01.S03</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Swivel y tuberías de producto</h4>
+                  <div class="foot"><span>6 partes</span><span>2 docs</span></div>
+                </div>
+                <div class="sub">
+                  <div class="top"><span class="cod">MB-01.S04</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Sistema de amarre de fondeo</h4>
+                  <div class="foot"><span>9 partes</span><span>3 docs</span></div>
+                </div>
+                <div class="sub">
+                  <div class="top"><span class="cod">MB-01.S06</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Mangueras flotantes</h4>
+                  <div class="foot"><span>7 partes</span><span>2 docs</span></div>
+                </div>
+                <div class="sub">
+                  <div class="top"><span class="cod">MB-01.S10</span><span class="pill p-bad">Crítico A</span></div>
+                  <h4>Protección catódica</h4>
+                  <div class="foot"><span>4 partes</span><span>2 docs</span></div>
+                </div>
+              </div>
+              <p class="nota">Se muestran 6 de 12 subsistemas · ordenados por código</p>
             </div>
           </div>
-          <div class="tabbar">
-            <div class="on"><span class="g">⌂</span>Inicio</div>
-            <div><span class="g">☰</span>Órdenes</div>
-            <div><span class="g">▤</span>Stock</div>
-            <div><span class="g">⚑</span>Hallazgos</div>
-          </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Inicio <span>01</span></p>
-          <p>Lo que toca hoy, en la primera pantalla y sin filtrar nada. Un toque para empezar a trabajar.</p>
+        </div>
+        <div class="cap">
+          <p class="t">Vista global <span>01</span></p>
+          <p>La puerta de entrada: todos los subsistemas con su código, su criticidad y cuántas partes contienen. Un clic entra al desglose.</p>
         </div>
       </div>
 
-      <!-- 2. LISTA DE OT -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>07:44</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><h3>Mis órdenes</h3><span class="sub">8 ABIERTAS</span></div>
-          <div class="body-s tight">
-            <div class="seg"><div class="on">Hoy</div><div>Semana</div><div>Vencidas</div><div>Todas</div></div>
-            <div class="card">
-              <div class="row"><span class="tag">OT-00412 · MB01-ROD-003</span><span class="pill p-ok">OK</span></div>
-              <p class="ttl">Lubricación del rodamiento principal</p>
-              <p class="meta">Trimestral · hoy · 4 h · Mecánica</p>
-            </div>
-            <div class="card">
-              <div class="row"><span class="tag">OT-00408 · MB01-MGF-001</span><span class="pill p-warn">Parcial</span></div>
-              <p class="ttl">Inspección visual de mangueras flotantes</p>
-              <p class="meta">Semanal · hoy · 2 h · falta 1 material</p>
-            </div>
-            <div class="card">
-              <div class="row"><span class="tag">OT-00395 · MB01-PCA-004</span><span class="pill p-bad">Vencida</span></div>
-              <p class="ttl">Medición de potencial catódico</p>
-              <p class="meta">Semestral · venció hace 6 días · requiere buzo</p>
-            </div>
-            <div class="card">
-              <div class="row"><span class="tag">OT-00419 · MB01-ELE-004</span><span class="pill p-ok">OK</span></div>
-              <p class="ttl">Mantenimiento de banco de baterías</p>
-              <p class="meta">Mensual · mañana · 2 h · Eléctrica</p>
+      <!-- 2. SUBSISTEMA -->
+      <div>
+        <div class="app">
+          <div class="appbar">
+            <span class="brand">Monoboyas</span>
+            <span class="find">🔍 MB-01.S02</span>
+            <span class="who">M. TORRES · CONSULTA</span>
+          </div>
+          <div class="shell">
+            <nav class="nav">
+              <span class="grp">Activo</span>
+              <a>Vista global</a>
+              <a class="on">Subsistemas</a>
+              <a>Equipos</a>
+              <span class="grp">Información</span>
+              <a>Materiales</a>
+              <a>Documentos</a>
+              <a>Frecuencias</a>
+            </nav>
+            <div class="main">
+              <p class="crumb"><b>MB-01</b> ▸ <b>MB-01.S02</b></p>
+              <div class="pagehead">
+                <span class="code">MB-01.S02</span>
+                <h3>Rodamiento principal y girador</h3>
+                <span class="pill p-bad" style="margin-left:auto">Crítico A</span>
+              </div>
+              <div class="stats">
+                <div class="stat"><span class="n">5</span><span class="l">Partes</span></div>
+                <div class="stat"><span class="n">4</span><span class="l">Materiales</span></div>
+                <div class="stat"><span class="n">2</span><span class="l">Documentos</span></div>
+                <div class="stat"><span class="n">5</span><span class="l">Frecuencias</span></div>
+              </div>
+              <div class="tablewrap">
+                <table>
+                  <thead><tr><th>Código</th><th>Parte</th><th>Ubicación</th><th>Criticidad</th><th>Estado</th></tr></thead>
+                  <tbody>
+                    <tr><td class="cod">…S02.ROD-001</td><td class="strong">Rodamiento principal (main bearing)</td><td>Interior</td><td>A</td><td><span class="pill p-ok">Operativo</span></td></tr>
+                    <tr><td class="cod">…S02.ROD-002</td><td class="strong">Mesa giratoria (turntable)</td><td>Cubierta</td><td>A</td><td><span class="pill p-ok">Operativo</span></td></tr>
+                    <tr><td class="cod">…S02.ROD-003</td><td class="strong">Sistema de lubricación</td><td>Interior</td><td>A</td><td><span class="pill p-ok">Operativo</span></td></tr>
+                    <tr><td class="cod">…S02.ROD-004</td><td class="strong">Pernería de fijación</td><td>Interior</td><td>A</td><td><span class="pill p-ok">Operativo</span></td></tr>
+                    <tr><td class="cod">…S02.ROD-005</td><td class="strong">Sellos del rodamiento</td><td>Interior</td><td>A</td><td><span class="pill p-warn">Degradado</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <div class="tabbar">
-            <div><span class="g">⌂</span>Inicio</div>
-            <div class="on"><span class="g">☰</span>Órdenes</div>
-            <div><span class="g">▤</span>Stock</div>
-            <div><span class="g">⚑</span>Hallazgos</div>
-          </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Lista de órdenes <span>02</span></p>
-          <p>El semáforo de materiales va en la tarjeta: se sabe si se puede trabajar antes de embarcarse.</p>
+        </div>
+        <div class="cap">
+          <p class="t">Subsistema <span>02</span></p>
+          <p>Las partes que lo componen y el resumen de lo que cuelga de él. Desde aquí se baja a la ficha de cualquier equipo, o se salta a sus materiales y documentos.</p>
         </div>
       </div>
 
-      <!-- 3. DETALLE DE OT -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>07:46</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><span class="back">‹</span><h3>OT-00412</h3><span class="sub">LIBERADA</span></div>
-          <div class="body-s tight">
-            <div class="card">
-              <p class="ttl">Lubricación del rodamiento principal</p>
-              <span class="tag">MB01-ROD-003 · Sistema de lubricación</span>
-              <div class="divider" style="margin:3px 0"></div>
-              <div class="kv"><span>Frecuencia</span><b>Cada 3 meses</b></div>
-              <div class="kv"><span>Última ejecución</span><b>2026-06-14</b></div>
+    </div>
+
+    <!-- FICHA: cuatro pestañas -->
+    <div class="duo" style="margin-top:42px">
+
+      <!-- 3. FICHA TECNICO -->
+      <div>
+        <div class="app">
+          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">TÉCNICO</span></div>
+          <div class="main" style="padding:16px 18px 20px">
+            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-001</b></p>
+            <div class="pagehead">
+              <span class="code">…S02.ROD-001</span>
+              <h3 style="font-size:17px">Rodamiento principal</h3>
+            </div>
+            <div class="tabs">
+              <div class="on">Técnico</div><div>Materiales</div><div>Frecuencias</div><div>Documentos</div>
+            </div>
+            <div class="kvs">
+              <div class="kv"><span>Fabricante</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>Modelo</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>N° de serie</span><b class="vacio">por completar</b></div>
+              <div class="kv"><span>Instalación</span><b class="vacio">por completar</b></div>
               <div class="kv"><span>Criticidad</span><b>A</b></div>
-              <div class="kv"><span>Norma</span><b>Manual fabricante</b></div>
+              <div class="kv"><span>Ubicación</span><b>Interior</b></div>
+              <div class="kv"><span>Buzo o ROV</span><b>NO</b></div>
+              <div class="kv"><span>Estado</span><b>Operativo</b></div>
             </div>
-            <span class="sect-lbl">Materiales requeridos</span>
-            <div class="card bare">
-              <div class="row"><div><p class="ttl">Grasa para rodamiento</p><span class="tag">MAT-001 · 25 KG</span></div><span class="pill p-ok">Disponible</span></div>
-            </div>
-            <div class="card bare">
-              <div class="row"><div><p class="ttl">Trapo industrial</p><span class="tag">MAT-023 · 2 KG</span></div><span class="pill p-ok">Disponible</span></div>
-            </div>
-            <div class="card bare">
-              <div class="row"><div><p class="ttl">Arnés de seguridad</p><span class="tag">MAT-032 · 2 JGO</span></div><span class="pill p-ok">Disponible</span></div>
-            </div>
-            <div style="margin-top:auto; display:flex; flex-direction:column; gap:6px">
-              <div class="btn">Iniciar trabajo</div>
-              <div class="btn ghost">Ver historial del equipo</div>
-            </div>
+            <p class="nota">Los campos vacíos se llenan en Fase 0 desde la placa del equipo o el manual del fabricante. La app nunca los rellena sola.</p>
           </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Detalle de la orden <span>03</span></p>
-          <p>Todo lo que hace falta saber antes de subir a la boya, incluida la disponibilidad real de cada material.</p>
+        </div>
+        <div class="cap">
+          <p class="t">Ficha · Técnico <span>03</span></p>
+          <p>Lo que identifica a la parte. Los huecos se muestran como huecos: un dato ausente es información, un dato inventado es un problema.</p>
         </div>
       </div>
 
-      <!-- 4. CHECKLIST -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>09:18</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><span class="back">‹</span><h3>Ejecución</h3><span class="sub">7/10</span></div>
-          <div class="body-s tight">
-            <div class="bar"><i style="width:70%"></i></div>
-            <div class="step">
-              <span class="idx">05</span>
-              <div class="txt">Verificar giro libre de la mesa giratoria<em>Sin puntos duros</em></div>
-              <div class="toggle"></div>
+      <!-- 4. FICHA MATERIALES -->
+      <div>
+        <div class="app">
+          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">MATERIALES</span></div>
+          <div class="main" style="padding:16px 18px 20px">
+            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-003</b></p>
+            <div class="pagehead">
+              <span class="code">…S02.ROD-003</span>
+              <h3 style="font-size:17px">Sistema de lubricación</h3>
             </div>
-            <div class="divider"></div>
-            <div class="step">
-              <span class="idx">06</span>
-              <div class="txt">Verificar ausencia de ruidos anormales</div>
-              <div class="toggle"></div>
+            <div class="tabs">
+              <div>Técnico</div><div class="on">Materiales</div><div>Frecuencias</div><div>Documentos</div>
             </div>
-            <div class="divider"></div>
-            <div class="step">
-              <span class="idx">07</span>
-              <div class="txt" style="display:flex;flex-direction:column;gap:5px">
-                Registrar temperatura de la carcasa
-                <div class="num-in alert"><span>68.4 °C</span><small>máx. 60 · fuera de rango</small></div>
-                <em>Por encima de 60 °C detener y avisar al supervisor</em>
+            <div class="tablewrap">
+              <table>
+                <thead><tr><th>Material</th><th>SAP</th><th class="num">Disp.</th><th class="num">Mín.</th><th>Estado</th></tr></thead>
+                <tbody>
+                  <tr><td class="strong">Grasa para rodamiento<br><span class="cod">MAT-001 · 25 KG ref.</span></td><td class="cod">40021801</td><td class="num">120</td><td class="num">50</td><td><span class="pill p-ok">OK</span></td></tr>
+                  <tr><td class="strong">Juego de sellos<br><span class="cod">MAT-004 · 1 JGO ref.</span></td><td class="cod">40021840</td><td class="num">1</td><td class="num">1</td><td><span class="pill p-warn">En mínimo</span></td></tr>
+                  <tr><td class="strong">Trapo industrial<br><span class="cod">MAT-023 · 2 KG ref.</span></td><td class="cod">40022310</td><td class="num">26</td><td class="num">10</td><td><span class="pill p-ok">OK</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="stats">
+              <div class="stat"><span class="n">SM-00087</span><span class="l">Solicitud abierta</span></div>
+              <div class="stat alert"><span class="n" style="font-size:15px">RES-2026-004512</span><span class="l">Código de reserva</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cap">
+          <p class="t">Ficha · Materiales <span>04</span></p>
+          <p>Qué repuestos corresponden a esta parte y si los hay. El código de reserva de SAP se registra aquí: es el único puente con el ERP mientras no haya integración.</p>
+        </div>
+      </div>
+
+      <!-- 5. FICHA FRECUENCIAS -->
+      <div>
+        <div class="app">
+          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">CONSULTA</span></div>
+          <div class="main" style="padding:16px 18px 20px">
+            <p class="crumb"><b>MB-01</b> ▸ <b>S02</b> ▸ <b>ROD-001</b></p>
+            <div class="pagehead">
+              <span class="code">…S02.ROD-001</span>
+              <h3 style="font-size:17px">Rodamiento principal</h3>
+            </div>
+            <div class="tabs">
+              <div>Técnico</div><div>Materiales</div><div class="on">Frecuencias</div><div>Documentos</div>
+            </div>
+            <div class="tablewrap">
+              <table>
+                <thead><tr><th>Referencia</th><th>Frecuencia</th><th>Última</th><th>Norma</th></tr></thead>
+                <tbody>
+                  <tr><td class="strong">Lubricación del rodamiento</td><td class="cod">Cada 3 meses</td><td class="cod">2026-06-14</td><td class="cod">Manual fabricante</td></tr>
+                  <tr><td class="strong">Torque de pernería</td><td class="cod">Cada 6 meses</td><td class="cod">2026-03-02</td><td class="cod">Manual fabricante</td></tr>
+                  <tr><td class="strong">Overhaul mayor</td><td class="cod">Cada 5 años</td><td class="cod">2023-11-20</td><td class="cod">Manual fabricante</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="nota">Información de referencia. La aplicación <b>no</b> programa ni dispara mantenimientos a partir de estas frecuencias.</p>
+          </div>
+        </div>
+        <div class="cap">
+          <p class="t">Ficha · Frecuencias <span>05</span></p>
+          <p>Cada cuánto corresponde mantener y cuándo fue la última vez, como dato del equipo. Sin botones, sin programación, sin órdenes.</p>
+        </div>
+      </div>
+
+      <!-- 6. FICHA DOCUMENTOS -->
+      <div>
+        <div class="app">
+          <div class="appbar"><span class="brand">Monoboyas</span><span class="who">DOCUMENTACIÓN</span></div>
+          <div class="main" style="padding:16px 18px 20px">
+            <p class="crumb"><b>MB-01</b> ▸ <b>S06</b></p>
+            <div class="pagehead">
+              <span class="code">MB-01.S06</span>
+              <h3 style="font-size:17px">Mangueras flotantes</h3>
+            </div>
+            <div class="tabs">
+              <div>Técnico</div><div>Materiales</div><div>Frecuencias</div><div class="on">Documentos</div>
+            </div>
+            <div class="tablewrap">
+              <table>
+                <thead><tr><th>Documento</th><th>Tipo</th><th>Rev.</th><th>Vence</th><th>Vigencia</th></tr></thead>
+                <tbody>
+                  <tr><td><a class="doclink">Certificado de mangueras (GMPHOM)</a></td><td class="cod">Certificado</td><td class="cod">—</td><td class="cod">2026-11-08</td><td><span class="pill p-warn">Por vencer</span></td></tr>
+                  <tr><td><a class="doclink">Plano del tren de mangueras</a></td><td class="cod">Plano</td><td class="cod">Rev. C</td><td class="cod">—</td><td><span class="pill p-n">No vence</span></td></tr>
+                  <tr><td><a class="doclink">Informe de prueba hidrostática</a></td><td class="cod">Informe</td><td class="cod">—</td><td class="cod">2027-02-14</td><td><span class="pill p-ok">Vigente</span></td></tr>
+                  <tr><td><a class="doclink">Plano del tren de mangueras</a></td><td class="cod">Plano</td><td class="cod">Rev. B</td><td class="cod">—</td><td><span class="pill p-n">Superado</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="btnrow"><span class="btn ghost">Subir documento</span></div>
+          </div>
+        </div>
+        <div class="cap">
+          <p class="t">Ficha · Documentos y planos <span>06</span></p>
+          <p>Planos, manuales y certificados del nodo. El plano guarda su revisión y las anteriores quedan marcadas como superadas, no se borran.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 7. ACTUALIZAR -->
+    <div style="margin-top:42px">
+      <div class="app">
+        <div class="appbar">
+          <span class="brand">Monoboyas</span>
+          <span class="find">🔍 MAT-004</span>
+          <span class="who">J. RAMÍREZ · MATERIALES</span>
+        </div>
+        <div class="shell">
+          <nav class="nav">
+            <span class="grp">Activo</span>
+            <a>Vista global</a>
+            <a>Subsistemas</a>
+            <span class="grp">Información</span>
+            <a class="on">Materiales</a>
+            <a>Documentos</a>
+            <a>Frecuencias</a>
+          </nav>
+          <div class="main">
+            <p class="crumb"><b>Materiales</b> ▸ <b>MAT-004</b></p>
+            <div class="pagehead">
+              <span class="code">MAT-004</span>
+              <h3>Juego de sellos del rodamiento principal</h3>
+              <span class="pill p-warn" style="margin-left:auto">En mínimo</span>
+            </div>
+            <div class="form">
+              <div class="field"><label>Código SAP</label><div class="box ro">40021840</div></div>
+              <div class="field"><label>Almacén</label><div class="box ro">ALM-01 · Central</div></div>
+              <div class="field"><label>Disponible</label><div class="box edit">2</div></div>
+              <div class="field"><label>Reservado</label><div class="box">1</div></div>
+              <div class="field"><label>Stock mínimo</label><div class="box">1</div></div>
+              <div class="field"><label>Plazo de reposición</label><div class="box ro">120 días</div></div>
+              <div class="field"><label>Último inventario</label><div class="box edit">2026-09-16</div></div>
+              <div class="field"><label>Código de reserva</label><div class="box">RES-2026-004512</div></div>
+            </div>
+            <div class="btnrow">
+              <span class="btn">Guardar</span>
+              <span class="btn ghost">Descartar</span>
+            </div>
+            <div>
+              <p class="eyebrow" style="margin-bottom:6px">Historial de cambios</p>
+              <div class="audit">
+                <div class="ev"><span class="t">16 SEP 2026 · 14:22</span><span><b>J. Ramírez</b> cambió <i>Disponible</i> de 1 a 2</span></div>
+                <div class="ev"><span class="t">02 SEP 2026 · 09:10</span><span><b>J. Ramírez</b> registró el código de reserva</span></div>
+                <div class="ev"><span class="t">28 AGO 2026 · 16:45</span><span><b>M. Torres</b> cambió <i>Stock mínimo</i> de 2 a 1</span></div>
               </div>
             </div>
-            <div class="divider"></div>
-            <div class="step">
-              <span class="idx">08</span>
-              <div class="txt" style="display:flex;flex-direction:column;gap:5px">
-                Inspeccionar estado de sellos
-                <div class="photo filled">📷 2 fotos adjuntas</div>
-              </div>
-            </div>
-            <div style="margin-top:auto"><div class="btn dim">Faltan 3 pasos obligatorios</div></div>
           </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Checklist en campo <span>04</span></p>
-          <p>Cada paso con su control: interruptor, número con rango, foto. Si la medición se sale de norma, la app lo dice ahí mismo.</p>
         </div>
       </div>
-
-      <!-- 5. CIERRE -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>12:05</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><span class="back">‹</span><h3>Cerrar orden</h3><span class="sub">OT-00412</span></div>
-          <div class="body-s tight">
-            <div class="card">
-              <div class="kv"><span>Pasos completados</span><b>10 / 10</b></div>
-              <div class="kv"><span>Conformes</span><b>9</b></div>
-              <div class="kv"><span>No conformes</span><b style="color:var(--bad)">1</b></div>
-              <div class="kv"><span>Horas reales</span><b>4.6 h</b></div>
-            </div>
-            <div class="card" style="border-color:var(--warn)">
-              <div class="row"><span class="sect-lbl">Hallazgo generado</span><span class="pill p-warn">Alta</span></div>
-              <p class="ttl">Temperatura de carcasa sobre el límite</p>
-              <p class="meta">Genera OT correctiva al cerrar</p>
-            </div>
-            <span class="sect-lbl">Consumo de materiales</span>
-            <div class="kv"><span>MAT-001 · Grasa</span><b>23 KG</b></div>
-            <div class="kv"><span>MAT-023 · Trapo</span><b>2 KG</b></div>
-            <div class="divider"></div>
-            <span class="sect-lbl">Firma del técnico</span>
-            <div class="sign">Luis Quispe</div>
-            <div style="margin-top:auto"><div class="btn">Cerrar y enviar a supervisor</div></div>
-          </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Cierre de la orden <span>05</span></p>
-          <p>El consumo descuenta stock, el hallazgo abre la correctiva y el PDF queda archivado. Sin doble digitación.</p>
-        </div>
+      <div class="cap">
+        <p class="t">Actualizar información <span>07</span></p>
+        <p>Mantener el dato al día es parte del propósito de la app, no un extra. Cada cambio queda registrado con autor y fecha sin que nadie tenga que anotarlo.</p>
       </div>
-
-      <!-- 6. HALLAZGO -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>10:31</span><span>MB-01 · 4G</span></div>
-          <div class="appbar"><span class="back">‹</span><h3>Nuevo hallazgo</h3></div>
-          <div class="body-s">
-            <div class="photo filled" style="height:118px">📷 Toma una foto</div>
-            <span class="sect-lbl">Equipo</span>
-            <div class="search">MB01-CAS-003 · Cubierta principal</div>
-            <span class="sect-lbl">Severidad</span>
-            <div class="seg">
-              <div>Baja</div><div>Media</div><div class="on">Alta</div><div>Crítica</div>
-            </div>
-            <span class="sect-lbl">¿Qué encontraste?</span>
-            <div class="search" style="height:64px; align-items:flex-start">
-              Corrosión avanzada en el enchape de estribor, cerca de la escotilla de acceso.
-            </div>
-            <div style="margin-top:auto"><div class="btn">Reportar</div></div>
-          </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Reportar un hallazgo <span>06</span></p>
-          <p>Foto, equipo, severidad y una frase. Menos de 30 segundos, o nadie lo reporta.</p>
-        </div>
-      </div>
-
-      <!-- 7. STOCK -->
-      <div class="unit">
-        <div class="phone"><div class="screen">
-          <div class="statusbar"><span>14:20</span><span>Base · WiFi</span></div>
-          <div class="appbar"><h3>Consulta de stock</h3></div>
-          <div class="body-s tight">
-            <div class="search">🔍 anodo</div>
-            <div class="card">
-              <div class="row"><div><p class="ttl">Ánodo de zinc para casco</p><span class="tag">MAT-002 · SAP 40021884</span></div><span class="pill p-bad">Bajo mínimo</span></div>
-              <div class="divider" style="margin:3px 0"></div>
-              <div class="kv"><span>Disponible</span><b>2 UN</b></div>
-              <div class="kv"><span>Mínimo</span><b>4 UN</b></div>
-              <div class="kv"><span>Plazo de reposición</span><b>90 días</b></div>
-              <div class="btn ghost" style="margin-top:4px">Solicitar material</div>
-            </div>
-            <div class="card">
-              <div class="row"><div><p class="ttl">Ánodo para cadena de fondeo</p><span class="tag">MAT-003 · SAP 40021885</span></div><span class="pill p-ok">Disponible</span></div>
-              <div class="divider" style="margin:3px 0"></div>
-              <div class="kv"><span>Disponible</span><b>11 UN</b></div>
-              <div class="kv"><span>Reservado</span><b>6 UN</b></div>
-            </div>
-            <div class="card" style="border-color:var(--warn)">
-              <div class="row"><span class="sect-lbl">Solicitud SM-00087</span><span class="pill p-warn">Reservada</span></div>
-              <div class="kv"><span>Código de reserva</span><b>RES-2026-004512</b></div>
-              <div class="kv"><span>Entrega estimada</span><b>2026-10-28</b></div>
-            </div>
-          </div>
-          <div class="tabbar">
-            <div><span class="g">⌂</span>Inicio</div>
-            <div><span class="g">☰</span>Órdenes</div>
-            <div class="on"><span class="g">▤</span>Stock</div>
-            <div><span class="g">⚑</span>Hallazgos</div>
-          </div>
-        </div></div>
-        <div class="caption">
-          <p class="t">Stock y reservas <span>07</span></p>
-          <p>El código de reserva de SAP se registra aquí: es el único puente con el ERP mientras no haya integración.</p>
-        </div>
-      </div>
-
     </div>
   </section>
 
   <section>
     <div class="sec-head">
       <p class="eyebrow">Debajo de las pantallas</p>
-      <h2>Dieciséis tablas en Dataverse</h2>
-      <p>La jerarquía sigue el estilo de ubicación técnica de SAP —<b>Terminal ▸ Monoboya ▸ Sistema ▸ Equipo</b>— para que resulte familiar al equipo y compatible con una integración futura.</p>
+      <h2>Nueve tablas en Dataverse</h2>
+      <p>La versión anterior necesitaba dieciséis. Al quitar la ejecución, siete desaparecieron.</p>
     </div>
     <div class="grid3">
       <div class="block">
-        <h3>Maestros</h3>
+        <h3>La estructura</h3>
         <ul>
-          <li><b>Terminal, Monoboya, Sistema, Equipo</b> — la jerarquía, con TAG único por equipo</li>
-          <li><b>Material</b> — catálogo con código SAP, plazo de reposición y stock mínimo</li>
-          <li><b>Almacén</b> y <b>Personal</b> — dónde está el stock y quién puede hacer qué</li>
+          <li><b>Monoboya</b> — el activo y su raíz</li>
+          <li><b>Nodo del sistema</b> — auto-referenciada: subsistemas y equipos en un solo árbol de cualquier profundidad</li>
+          <li><b>Atributos técnicos</b> — fabricante, modelo, serie, ubicación</li>
         </ul>
       </div>
       <div class="block">
-        <h3>Planificación</h3>
+        <h3>Materiales</h3>
         <ul>
-          <li><b>Plan de mantenimiento</b> — la frecuencia se guarda como valor + unidad: «cada 3 meses», no «cada 90 días»</li>
-          <li><b>Tarea de plan</b> — los pasos del checklist, con rangos de validación</li>
-          <li><b>Material por plan</b> — la tabla que permite cruzar lo que viene contra lo que hay</li>
+          <li><b>Material</b> — catálogo con código SAP y plazo de reposición</li>
+          <li><b>Material por nodo</b> — qué repuesto corresponde a qué parte</li>
+          <li><b>Stock</b> — editable, con fecha del último inventario</li>
+          <li><b>Solicitud</b> — donde vive el código de reserva</li>
         </ul>
       </div>
       <div class="block">
-        <h3>Transacciones</h3>
+        <h3>Referencia</h3>
         <ul>
-          <li><b>Orden de trabajo</b> y <b>Tarea de OT</b> — el checklist se congela al crearse: si mañana cambia el plan, el historial no se altera</li>
-          <li><b>Movimiento de inventario</b> — solo se inserta, nunca se edita. El stock se deriva de él</li>
-          <li><b>Solicitud de material</b> — donde vive el código de reserva</li>
+          <li><b>Frecuencia de referencia</b> — informativa; no dispara nada</li>
+          <li><b>Documento</b> — planos, manuales, certificados e informes, con revisión y vencimiento</li>
         </ul>
       </div>
     </div>
@@ -898,34 +815,34 @@
   <section>
     <div class="sec-head">
       <p class="eyebrow">Ruta</p>
-      <h2>Seis fases, arrancando por lo que no tenemos</h2>
-      <p>El alcance todavía no está cerrado. Por eso la primera fase no es construir: es levantar la información, con plantillas que el equipo de mantenimiento llena.</p>
+      <h2>Seis fases, arrancando por la codificación</h2>
+      <p>Sin la codificación oficial de subsistemas no hay identificadores sobre los que construir. Es el primer punto del orden del día.</p>
     </div>
     <div class="fases">
       <div class="fase">
         <span class="id">FASE 0</span>
-        <div class="d"><h4>Levantamiento</h4><p>Siete plantillas: jerarquía de sistemas, frecuencias, gamas de tareas, catálogo de materiales. Taller de validación. <b>Bloquea todo lo demás.</b></p></div>
+        <div class="d"><h4>Levantamiento</h4><p><b>La codificación oficial de subsistemas</b> más seis plantillas: árbol del sistema, frecuencias, materiales, documentos y accesos. <b>Bloquea todo lo demás.</b></p></div>
         <span class="t">2–3 sem</span>
       </div>
       <div class="fase">
         <span class="id">FASE 1</span>
-        <div class="d"><h4>Fundación</h4><p>Entornos DEV/UAT/PROD, solución gestionada, tablas de Dataverse, roles de seguridad, carga de maestros.</p></div>
+        <div class="d"><h4>Fundación</h4><p>Entornos DEV/UAT/PROD, solución gestionada, tablas de Dataverse, perfiles de acceso y carga del árbol.</p></div>
         <span class="t">1 sem</span>
       </div>
       <div class="fase">
         <span class="id">FASE 2</span>
-        <div class="d"><h4>MVP de mantenimiento</h4><p>Planes, generación automática de órdenes, app de campo y app de escritorio.</p></div>
-        <span class="t">3–4 sem</span>
-      </div>
-      <div class="fase">
-        <span class="id">FASE 3</span>
-        <div class="d"><h4>Inventario y materiales</h4><p>Stock, movimientos, lista de materiales por plan, solicitudes, código de reserva y aprobaciones.</p></div>
+        <div class="d"><h4>Consulta</h4><p>App model-driven: vista global, desglose por subsistema y fichas completas.</p></div>
         <span class="t">2–3 sem</span>
       </div>
       <div class="fase">
-        <span class="id">FASE 4</span>
-        <div class="d"><h4>Visibilidad y control</h4><p>Tableros en Power BI, control de vencimiento de certificados, hallazgos, reporte en PDF.</p></div>
+        <span class="id">FASE 3</span>
+        <div class="d"><h4>Materiales y documentos</h4><p>Stock, solicitudes, código de reserva y carga de planos y certificados a SharePoint.</p></div>
         <span class="t">2 sem</span>
+      </div>
+      <div class="fase">
+        <span class="id">FASE 4</span>
+        <div class="d"><h4>Alertas y control</h4><p>Avisos de vencimiento y de stock bajo mínimo. Tableros en Power BI, si se quieren.</p></div>
+        <span class="t">1–2 sem</span>
       </div>
       <div class="fase">
         <span class="id">FASE 5</span>
@@ -936,51 +853,35 @@
   </section>
 
   <section>
-    <div class="sec-head">
-      <p class="eyebrow">Antes de empezar</p>
-      <h2>Cuatro preguntas que hay que responder</h2>
-      <p>Ninguna es técnica. Las cuatro cambian el costo o el alcance, y contestarlas tarde sale caro.</p>
-    </div>
-    <div class="abiertas">
-      <div class="ab">
-        <span class="cod">D-01</span>
-        <div><p class="q">¿En qué tenant de Microsoft 365 vive la aplicación: el de TAMOIN o el de Repsol?</p>
-        <p class="w">Define quién paga las licencias, de quién es el dato, si Repsol consulta la app directamente y qué pasa al terminar el contrato. Cambiarlo después es una migración completa.</p></div>
-      </div>
-      <div class="ab">
-        <span class="cod">D-02</span>
-        <div><p class="q">¿Cuántos usuarios y con qué rol?</p>
-        <p class="w">Determina si conviene licenciar por usuario o por aplicación. A partir de cierto número el cálculo se invierte.</p></div>
-      </div>
-      <div class="ab">
-        <span class="cod">D-03</span>
-        <div><p class="q">¿Cuántas monoboyas entran al alcance?</p>
-        <p class="w">Afecta más al esfuerzo de levantamiento que al de desarrollo. La app ya se diseña para varias.</p></div>
-      </div>
-      <div class="ab">
-        <span class="cod">D-04</span>
-        <div><p class="q">¿Existe hoy un plan de mantenimiento documentado?</p>
-        <p class="w">Si lo hay —del fabricante, de Repsol o propio—, la Fase 0 pasa de semanas a días: se transcribe en vez de construirse.</p></div>
-      </div>
+    <div class="aviso">
+      <h3>El riesgo que más vale la pena mirar</h3>
+      <p>
+        Una aplicación de consulta vive o muere por la vigencia de su información. Se carga
+        completa, se usa unos meses, y si nadie la actualiza pasa a ser una foto vieja en la que ya
+        nadie confía. Por eso el diseño incluye edición desde la propia app, recordatorios de
+        inventario y alertas de vencimiento — pero ninguna de las tres funciona sin un
+        <b>responsable nombrado por cada clase de información</b>. Sin dueño, la app se desactualiza
+        aunque tenga todos los avisos del mundo.
+      </p>
     </div>
   </section>
 
   <section>
-    <div class="aviso">
+    <div class="aviso" style="border-left-color: var(--line-2); background: var(--surface-3)">
       <h3>Nada de esto es todavía un dato confirmado</h3>
       <p>
-        Los 12 sistemas, los 68 equipos, los 40 planes y las frecuencias que aparecen aquí son una
-        propuesta armada a partir de la configuración estándar de una monoboya tipo CALM y de las
-        guías del sector (OCIMF SMOG, GMPHOM 2009, MEG4, API RP 2SK). Se entregan precargados
-        porque corregir una lista es mucho más rápido que escribirla desde cero — pero cada línea
-        va marcada como <b>propuesta a validar</b> y ninguna entra a la aplicación sin la firma de
-        quien conoce el activo.
+        Los 12 subsistemas, los 68 equipos, las 40 frecuencias y los 26 documentos que aparecen aquí
+        son una propuesta armada a partir de la configuración estándar de una monoboya tipo CALM y
+        de las guías del sector (OCIMF SMOG, GMPHOM 2009, MEG4, API RP 2SK). Se entregan
+        precargados porque corregir una lista es mucho más rápido que escribirla desde cero — pero
+        cada línea va marcada como <b>propuesta a validar</b>, y los códigos son provisionales hasta
+        que se cargue la codificación oficial.
       </p>
     </div>
   </section>
 
   <footer>
-    <span>Propuesta de solución · Power Platform · v1.0</span>
+    <span>Propuesta de solución · Power Platform · v2.0 — consulta centralizada</span>
     <span class="mono">TAMOIN · 2026</span>
   </footer>
 

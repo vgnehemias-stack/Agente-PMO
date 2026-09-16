@@ -1,0 +1,82 @@
+codigo_oficial,codigo_provisional,codigo_padre,nivel,tipo_nodo,nombre,criticidad,fabricante,modelo,n_serie,fecha_instalacion,ubicacion_fisica,requiere_buzo_rov,estado,observaciones
+,MB-01,,1,Monoboya,Monoboya MB-01,A,,,,,,NO,Operativa,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01,MB-01,2,Subsistema,Casco y estructura flotante,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02,MB-01,2,Subsistema,Rodamiento principal y girador,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03,MB-01,2,Subsistema,Swivel y tuberias de producto,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04,MB-01,2,Subsistema,Sistema de amarre de fondeo,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05,MB-01,2,Subsistema,Sistema de amarre de buque,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06,MB-01,2,Subsistema,Mangueras flotantes,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07,MB-01,2,Subsistema,Mangueras submarinas,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S08,MB-01,2,Subsistema,PLEM y valvulas submarinas,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09,MB-01,2,Subsistema,Sistema electrico y ayudas a la navegacion,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S10,MB-01,2,Subsistema,Proteccion catodica,A,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S11,MB-01,2,Subsistema,Seguridad y contraincendio,B,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S12,MB-01,2,Subsistema,Accesos y defensas,B,,,,,,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-001,MB-01.S01,3,Equipo,Casco flotante principal,A,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-002,MB-01.S01,3,Equipo,Compartimentos estancos de flotabilidad,A,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-003,MB-01.S01,3,Equipo,Cubierta principal y enchapado,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-004,MB-01.S01,3,Equipo,Escotillas de acceso a compartimentos,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-005,MB-01.S01,3,Equipo,Barandas y pasamanos,C,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S01.CAS-006,MB-01.S01,3,Equipo,Recubrimiento anticorrosivo,B,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02.ROD-001,MB-01.S02,3,Equipo,Rodamiento principal (main bearing),A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02.ROD-002,MB-01.S02,3,Equipo,Mesa giratoria (turntable),A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02.ROD-003,MB-01.S02,3,Equipo,Sistema de lubricacion del rodamiento,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02.ROD-004,MB-01.S02,3,Equipo,Perneria de fijacion del rodamiento,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S02.ROD-005,MB-01.S02,3,Equipo,Sellos del rodamiento principal,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-001,MB-01.S03,3,Equipo,Swivel de producto,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-002,MB-01.S03,3,Equipo,Sellos del swivel,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-003,MB-01.S03,3,Equipo,Tuberia interna de producto,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-004,MB-01.S03,3,Equipo,Manifold de cubierta,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-005,MB-01.S03,3,Equipo,Valvulas de bola de producto,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S03.SWV-006,MB-01.S03,3,Equipo,Bridas y empaquetaduras de producto,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-001,MB-01.S04,3,Equipo,Cadena de fondeo linea 1,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-002,MB-01.S04,3,Equipo,Cadena de fondeo linea 2,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-003,MB-01.S04,3,Equipo,Cadena de fondeo linea 3,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-004,MB-01.S04,3,Equipo,Cadena de fondeo linea 4,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-005,MB-01.S04,3,Equipo,Cadena de fondeo linea 5,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-006,MB-01.S04,3,Equipo,Cadena de fondeo linea 6,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-007,MB-01.S04,3,Equipo,Grilletes y conectores de fondeo,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-008,MB-01.S04,3,Equipo,Chain stoppers de fondeo,A,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S04.FON-009,MB-01.S04,3,Equipo,Anclas o pilotes de fondeo,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-001,MB-01.S05,3,Equipo,Hawser principal de amarre,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-002,MB-01.S05,3,Equipo,Hawser de reserva,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-003,MB-01.S05,3,Equipo,Chafe chain (cadena de roce),A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-004,MB-01.S05,3,Equipo,Grilletes de amarre de buque,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-005,MB-01.S05,3,Equipo,Pick-up rope y boya de recogida,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S05.AMB-006,MB-01.S05,3,Equipo,Chain stopper de amarre de buque,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-001,MB-01.S06,3,Equipo,Manguera flotante tramo 1 (rail end),A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-002,MB-01.S06,3,Equipo,Manguera flotante tramo 2,A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-003,MB-01.S06,3,Equipo,Manguera flotante tramo 3,A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-004,MB-01.S06,3,Equipo,Manguera flotante tramo 4,A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-005,MB-01.S06,3,Equipo,Manguera de acople a buque (tail hose),A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-006,MB-01.S06,3,Equipo,Acople de rotura controlada (MBC),A,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S06.MGF-007,MB-01.S06,3,Equipo,Bridas y perneria de mangueras flotantes,B,,,,,Superficie,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07.MGS-001,MB-01.S07,3,Equipo,Manguera submarina tramo 1,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07.MGS-002,MB-01.S07,3,Equipo,Manguera submarina tramo 2,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07.MGS-003,MB-01.S07,3,Equipo,Manguera submarina tramo 3,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07.MGS-004,MB-01.S07,3,Equipo,Manguera submarina tramo 4,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S07.MGS-005,MB-01.S07,3,Equipo,Boyas de flotacion de mangueras submarinas,B,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S08.PLM-001,MB-01.S08,3,Equipo,Estructura del PLEM,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S08.PLM-002,MB-01.S08,3,Equipo,Valvulas submarinas del PLEM,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S08.PLM-003,MB-01.S08,3,Equipo,Bridas y conexiones del PLEM,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S08.PLM-004,MB-01.S08,3,Equipo,Tuberia submarina de conexion a tierra,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-001,MB-01.S09,3,Equipo,Luz de navegacion principal,A,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-002,MB-01.S09,3,Equipo,Luces de navegacion secundarias,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-003,MB-01.S09,3,Equipo,Panel solar,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-004,MB-01.S09,3,Equipo,Banco de baterias,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-005,MB-01.S09,3,Equipo,Tablero electrico y controlador de carga,A,,,,,Interior,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-006,MB-01.S09,3,Equipo,Racon o reflector radar,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-007,MB-01.S09,3,Equipo,Senal sonora de niebla,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S09.ELE-008,MB-01.S09,3,Equipo,Sistema de telemetria y monitoreo remoto,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S10.PCA-001,MB-01.S10,3,Equipo,Anodos de sacrificio del casco,A,,,,,Casco,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S10.PCA-002,MB-01.S10,3,Equipo,Anodos de cadenas de fondeo,A,,,,,Submarino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S10.PCA-003,MB-01.S10,3,Equipo,Anodos del PLEM,A,,,,,Fondo marino,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S10.PCA-004,MB-01.S10,3,Equipo,Puntos de medicion de potencial,B,,,,,Casco,SI,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S11.SEG-001,MB-01.S11,3,Equipo,Extintores portatiles,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S11.SEG-002,MB-01.S11,3,Equipo,Aros salvavidas,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S11.SEG-003,MB-01.S11,3,Equipo,Detector de gas portatil,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S11.SEG-004,MB-01.S11,3,Equipo,Senalizacion de seguridad,C,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S12.ACC-001,MB-01.S12,3,Equipo,Boat landing,B,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S12.ACC-002,MB-01.S12,3,Equipo,Defensas perimetrales,B,,,,,Casco,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S12.ACC-003,MB-01.S12,3,Equipo,Escalas de acceso,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL
+,MB-01.S12.ACC-004,MB-01.S12,3,Equipo,Pescante o grua de izaje,B,,,,,Cubierta,NO,Operativo,PROPUESTA - VALIDAR / FALTA CODIGO OFICIAL

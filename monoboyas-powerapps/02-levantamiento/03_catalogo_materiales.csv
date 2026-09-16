@@ -1,0 +1,28 @@
+codigo_interno,codigo_sap,descripcion,unidad,categoria,criticidad,lead_time_dias,stock_minimo,stock_maximo,almacen,observaciones
+MAT-001,,Grasa para rodamiento principal segun especificacion del fabricante,KG,Consumible,Critico,45,50,200,ALM-01,PROPUESTA - VALIDAR ESPECIFICACION
+MAT-002,,Anodo de sacrificio de zinc para casco,UN,Repuesto,Critico,90,4,12,ALM-01,PROPUESTA - VALIDAR TIPO Y PESO
+MAT-003,,Anodo de sacrificio para cadena de fondeo,UN,Repuesto,Critico,90,6,18,ALM-01,PROPUESTA - VALIDAR
+MAT-004,,Juego de sellos del rodamiento principal,JGO,Repuesto,Critico,120,1,2,ALM-01,PROPUESTA - VALIDAR
+MAT-005,,Juego de sellos del swivel de producto,JGO,Repuesto,Critico,150,1,2,ALM-01,PROPUESTA - VALIDAR
+MAT-006,,Manguera flotante de 16 pulgadas tramo estandar,UN,Repuesto,Critico,180,1,2,ALM-01,PROPUESTA - VALIDAR DIAMETRO
+MAT-007,,Manguera submarina de 16 pulgadas tramo estandar,UN,Repuesto,Critico,180,1,2,ALM-01,PROPUESTA - VALIDAR DIAMETRO
+MAT-008,,Empaquetadura de brida de 16 pulgadas,UN,Consumible,Critico,30,20,60,ALM-01,PROPUESTA - VALIDAR DIAMETRO Y NORMA
+MAT-009,,Perno de brida de acero inoxidable,UN,Consumible,Normal,30,100,400,ALM-01,PROPUESTA - VALIDAR MEDIDA
+MAT-010,,Tuerca de acero inoxidable,UN,Consumible,Normal,30,100,400,ALM-01,PROPUESTA - VALIDAR MEDIDA
+MAT-011,,Hawser de amarre segun especificacion OCIMF,UN,Repuesto,Critico,120,1,2,ALM-01,PROPUESTA - VALIDAR LONGITUD Y CARGA
+MAT-012,,Chafe chain de amarre,UN,Repuesto,Critico,150,1,1,ALM-01,PROPUESTA - VALIDAR
+MAT-013,,Grillete de alta resistencia para amarre,UN,Repuesto,Critico,90,4,10,ALM-01,PROPUESTA - VALIDAR CAPACIDAD
+MAT-014,,Pick-up rope con boya de recogida,JGO,Repuesto,Normal,60,1,3,ALM-01,PROPUESTA - VALIDAR
+MAT-015,,Bateria de ciclo profundo para sistema de navegacion,UN,Repuesto,Critico,45,2,6,ALM-01,PROPUESTA - VALIDAR CAPACIDAD
+MAT-016,,Luminaria de navegacion marina LED,UN,Repuesto,Critico,60,1,2,ALM-01,PROPUESTA - VALIDAR CARACTERISTICA DICAPI
+MAT-017,,Panel solar fotovoltaico marino,UN,Repuesto,Normal,60,1,2,ALM-01,PROPUESTA - VALIDAR POTENCIA
+MAT-018,,Controlador de carga solar,UN,Repuesto,Normal,45,1,2,ALM-01,PROPUESTA - VALIDAR
+MAT-019,,Pintura epoxica anticorrosiva marina,L,Consumible,Normal,30,40,160,ALM-01,PROPUESTA - VALIDAR SISTEMA DE PINTURA
+MAT-020,,Pintura de acabado poliuretano marino,L,Consumible,Normal,30,20,80,ALM-01,PROPUESTA - VALIDAR
+MAT-021,,Disolvente para sistema de pintura,L,Consumible,Normal,15,20,60,ALM-01,PROPUESTA - VALIDAR
+MAT-022,,Disco abrasivo para preparacion de superficie,UN,Consumible,Normal,15,30,100,ALM-01,PROPUESTA - VALIDAR
+MAT-023,,Trapo industrial,KG,Consumible,Normal,7,10,40,ALM-01,
+MAT-024,,Desengrasante industrial,L,Consumible,Normal,15,10,40,ALM-01,
+MAT-025,,Cinta de senalizacion,M,Consumible,Normal,7,50,200,ALM-01,
+MAT-026,,Extintor portatil de polvo quimico seco,UN,Repuesto,Normal,30,2,6,ALM-01,PROPUESTA - VALIDAR CAPACIDAD
+MAT-027,,Aro salvavidas con rabiza,UN,Repuesto,Normal,30,2,4,ALM-01,PROPUESTA - VALIDAR

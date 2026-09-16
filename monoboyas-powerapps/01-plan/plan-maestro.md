@@ -1,248 +1,218 @@
-# Plan maestro — Aplicación Power Apps para gestión de mantenimiento de Monoboyas
+# Plan maestro — Aplicación Power Apps de consulta centralizada de Monoboyas
 
 **Cliente final:** Repsol — Refinería La Pampilla
 **Ejecutor:** TAMOIN
 **Activo:** Monoboya (SPM — *Single Point Mooring*, configuración tipo CALM)
-**Versión:** 1.0 — propuesta inicial, sujeta a validación en Fase 0
+**Versión:** 2.0 — reorientada a consulta. Sujeta a validación en Fase 0
 
 ---
 
-## 1. Problema y objetivo
+## 1. Qué es esta aplicación, y qué no es
 
-TAMOIN presta mantenimiento integral de equipos oil & gas a Repsol y debe gestionar el
-mantenimiento de las monoboyas. Hoy esa gestión no tiene soporte digital: no existe una fuente
-única que diga **qué se mantiene, cada cuánto, con qué materiales y con qué evidencia**. Eso se
-traduce en tres problemas concretos:
+> **Es un repositorio navegable del sistema de monoboya.** Centraliza y muestra con claridad la
+> información del activo, organizada por la codificación de subsistemas que ya existe: una vista
+> global primero, y desde ahí se desglosa hasta el detalle de cada parte.
 
-1. **Trazabilidad**: no hay historial consultable por equipo. Ante una auditoría de Repsol, DICAPI
-   o una certificadora, la evidencia hay que reconstruirla a mano.
-2. **Planificación**: las frecuencias viven en Excel y en la cabeza de las personas. Se detectan
-   los vencimientos tarde.
-3. **Materiales**: se descubre que falta el repuesto el día de la intervención, no semanas antes.
-   En una monoboya, donde la ventana operativa depende del mar y de la programación de buques,
-   perder una ventana cuesta mucho.
+**No es una aplicación de ejecución.** No genera órdenes de trabajo, no lleva checklists, no
+registra firmas ni avances. La supervisión del trabajo la lleva Repsol; lo que TAMOIN necesita es
+tener la información del sistema centralizada, clara y actualizada.
 
-**Objetivo:** una aplicación Power Apps *user friendly* para el equipo de mantenimiento que haga la
-gestión **eficiente y trazable**, cubriendo el circuito completo:
+| La app **sí** | La app **no** |
+|---|---|
+| Muestra el árbol completo del sistema por código de subsistema | Genera órdenes de trabajo |
+| Da la ficha técnica de cada parte | Lleva checklists de ejecución |
+| Dice qué repuestos corresponden a cada subsistema y si hay stock | Registra firmas, horas ni avance físico |
+| Informa cada cuánto corresponde mantener, como dato de referencia | Programa ni dispara mantenimientos |
+| Guarda planos, manuales y certificados, y avisa de vencimientos | Gestiona permisos de trabajo ni HSE |
+| Permite **actualizar** materiales, stock y documentos | Valoriza ni factura |
 
-```
-frecuencia de mantenimiento
-   → sistemas planificados a mantener
-      → materiales que requiere cada intervención
-         → ¿hay stock?
-            → solicitud y código de reserva
-               → ejecución en campo con evidencia
-                  → cierre, historial y reporte
-```
+### El problema que resuelve
 
-### Qué significa "user friendly" aquí
+La información del sistema de monoboya está dispersa: los planos en una carpeta, los certificados
+en otra, el catálogo de repuestos en un Excel, las características de cada equipo en la memoria de
+quien lleva años en el activo. Cuando alguien necesita saber algo concreto de un subsistema —qué
+modelo es, qué repuesto le corresponde, dónde está el plano, si el certificado sigue vigente—
+tiene que buscarlo en cuatro sitios y preguntar a dos personas.
 
-No es un adjetivo decorativo. Para este equipo significa:
-
-- El técnico abre la app y en **un toque** ve lo que le toca hoy.
-- **No escribe lo que puede seleccionar.** Nada de teclear TAGs ni códigos de material.
-- La foto es el registro principal. Es más rápido fotografiar una brida corroída que describirla.
-- La app **nunca pierde trabajo**: cada paso del checklist se guarda al completarse, no al final.
-- Si algo falta (un material, una firma), la app lo dice **antes**, no al intentar cerrar.
+La aplicación pone todo eso detrás de un único código de subsistema.
 
 ---
 
-## 2. Decisiones de arquitectura ya tomadas
+## 2. Decisiones de arquitectura
 
-| Decisión | Elección | Justificación y consecuencia |
+| Decisión | Elección | Justificación |
 |---|---|---|
-| **Backend de datos** | Dataverse | Relaciones reales entre 16 tablas, seguridad por rol y por registro, auditoría nativa (quién cambió qué y cuándo — indispensable para trazabilidad). Habilita la app *model-driven*, que se genera casi sola. **Costo:** requiere licencia Power Apps Premium. |
-| **Inventario / ERP** | App autónoma, sin integración SAP | La app gestiona su propio catálogo, stock y solicitudes. El **código de reserva** de SAP se registra manualmente como campo de trazabilidad. Evita depender de TI de Repsol para arrancar. El modelo queda preparado para integrar después sin rehacer tablas. |
-| **Offline** | No requerido | Sin caché local ni cola de sincronización. Simplifica sustancialmente la app de campo. Si el piloto revela zonas sin señal, se agrega como cambio de alcance (ver Riesgo 7). |
-| **Número de apps** | Dos | Canvas para campo, model-driven para back-office. Ver §4. |
+| **Eje de identificación** | El **código de subsistema** de la codificación existente | Es como el equipo ya piensa el activo. Nada de identificadores nuevos |
+| **Backend** | Dataverse | Jerarquía real, seguridad por rol, auditoría nativa de cada cambio. Requiere licencia Power Apps Premium |
+| **Tipo de aplicación** | **Una sola app model-driven** | Ver §3 |
+| **Inventario / ERP** | Autónomo, sin integración SAP | El código de reserva se registra a mano como campo de trazabilidad |
+| **Offline** | No requerido | Simplifica sustancialmente la aplicación |
+| **Vista sinóptica gráfica** | No se construye | Descartada explícitamente |
 
 ---
 
-## 3. Alcance funcional
+## 3. Por qué una sola aplicación, y por qué model-driven
 
-### Dentro de alcance
+La versión anterior de este plan proponía dos apps: una *canvas* para el técnico en campo y una
+*model-driven* para el back-office. **Al desaparecer la ejecución, desaparece la razón de ser de
+la canvas**: ya no hay nadie llenando un checklist con guantes puestos.
 
-- Jerarquía de activos de la monoboya en 4 niveles, con TAG por equipo.
-- Planes de mantenimiento con frecuencia (preventivo, predictivo, inspección legal).
-- Gamas de tareas (checklists) por plan, con tipos de registro tipados.
-- Generación automática de órdenes de trabajo según frecuencia.
-- Lista de materiales por plan (BOM) y verificación anticipada de stock.
-- Catálogo de materiales, stock por almacén y movimientos de inventario.
-- Solicitudes de material con flujo de aprobación y registro del código de reserva.
-- Ejecución en campo: checklist, mediciones, fotos, firmas.
-- Hallazgos y generación de órdenes correctivas.
-- Certificados y documentos con control de vencimiento.
-- Tableros de control en Power BI y reporte PDF por orden cerrada.
+Lo que queda —navegar una jerarquía, leer fichas, abrir planos, adjuntar documentos, corregir un
+stock— es exactamente lo que una app *model-driven* de Dataverse hace de fábrica:
 
-### Fuera de alcance (explícito)
+- **Navegación jerárquica y búsqueda global** sin construir una sola pantalla.
+- **Formularios con pestañas** generados desde las tablas.
+- **Edición con permisos por rol** y auditoría automática de quién cambió qué y cuándo.
+- **La misma app funciona en escritorio y en móvil**, sin desarrollo aparte.
+- **Vistas filtrables y exportables a Excel** sin desarrollo.
 
-- Integración con SAP (decidida como no incluida — ver §8, Fase 6 opcional).
-- Modo offline.
-- Gestión de permisos de trabajo (PTW), HSE y planificación de embarcaciones.
-- Gestión de costos, horas-hombre valorizadas y facturación.
-- Mantenimiento de otros activos del terminal (se diseña para escalar, no se implementa).
-
----
-
-## 4. Arquitectura
+Construir esto en canvas significaría replicar a mano, durante semanas, lo que Dataverse regala.
 
 ```
-┌─ App CANVAS (móvil/tablet) ──────┐   ┌─ App MODEL-DRIVEN (escritorio) ─┐
-│  Técnico de campo                │   │  Planificador / Supervisor      │
-│  · Mis órdenes de trabajo        │   │  · Maestros: activos, sistemas  │
-│  · Ejecutar checklist + fotos    │   │  · Planes y gamas               │
-│  · Reportar hallazgo             │   │  · Inventario y solicitudes     │
-│  · Consultar stock               │   │  · Aprobaciones                 │
-└──────────────┬───────────────────┘   └───────────────┬─────────────────┘
-               └───────────────┬───────────────────────┘
-                     ┌─────────▼──────────┐
-                     │     DATAVERSE      │   16 tablas
-                     └─────────┬──────────┘
-          ┌────────────────────┼────────────────────┐
-┌─────────▼────────┐  ┌────────▼─────────┐  ┌───────▼────────┐
-│ POWER AUTOMATE   │  │  POWER BI        │  │ SHAREPOINT     │
-│ · Generar OT     │  │ · Cumplimiento   │  │ · Fotos, PDF   │
-│ · Chequear stock │  │ · Backlog        │  │ · Certificados │
-│ · Aprobaciones   │  │ · Consumo rep.   │  │                │
-│ · Alertas Teams  │  │ · Vencimientos   │  │                │
-└──────────────────┘  └──────────────────┘  └────────────────┘
+┌──── APP MODEL-DRIVEN (escritorio y móvil) ────────────────┐
+│                                                            │
+│  Vista global      →   Subsistema    →   Equipo/Componente │
+│  (subsistemas           (sus partes       (ficha completa  │
+│   con su código)         y resumen)        en pestañas)    │
+│                                                            │
+│  Ficha = Técnico · Materiales · Frecuencias · Documentos   │
+└─────────────────────────┬──────────────────────────────────┘
+                ┌─────────▼──────────┐
+                │     DATAVERSE      │   9 tablas
+                └─────────┬──────────┘
+        ┌─────────────────┼─────────────────┐
+┌───────▼────────┐ ┌──────▼───────┐ ┌───────▼────────┐
+│ POWER AUTOMATE │ │  SHAREPOINT  │ │   POWER BI     │
+│ · Stock        │ │ · Planos     │ │ · Inventario   │
+│ · Alertas de   │ │ · Manuales   │ │ · Vencimientos │
+│   vencimiento  │ │ · Certific.  │ │   (opcional)   │
+└────────────────┘ └──────────────┘ └────────────────┘
 ```
 
-### Por qué dos aplicaciones
-
-La app *model-driven* se genera automáticamente a partir de las tablas de Dataverse: formularios,
-vistas, búsquedas y filtros salen sin escribir una pantalla. Resuelve todo el back-office
-(maestros, planes, inventario, aprobaciones) con un esfuerzo marginal.
-
-La app *canvas* se reserva para donde el diseño realmente importa: el técnico en campo, con
-guantes, en movimiento, posiblemente bajo sol directo. Ahí cada toque cuenta.
-
-Construir el back-office en canvas sería semanas de trabajo desperdiciadas replicando a mano lo
-que Dataverse regala.
+> Si más adelante se quiere una portada más visual que una lista, se agrega **una** pantalla canvas
+> embebida con tarjetas por subsistema. No hace falta para arrancar.
 
 ### Almacenamiento de archivos
 
-Las fotos y los PDF van a **SharePoint**, no a Dataverse. La capacidad de archivos en Dataverse es
-cara, y las fotos de inspección de mangueras, cadenas y protección catódica se acumulan rápido.
-Dataverse guarda solo el enlace.
+Los planos, manuales y certificados van a **SharePoint**, no a Dataverse. La capacidad de archivos
+en Dataverse es cara, y un plano en DWG o un informe de inspección subacuática con fotos pesan.
+Dataverse guarda el enlace y los metadatos: tipo, emisor, fechas y de qué nodo cuelga.
 
 ---
 
-## 5. Modelo de datos
+## 4. El árbol del sistema
 
-Detalle completo de tablas, campos y relaciones en [`modelo-datos.md`](modelo-datos.md).
+Detalle completo del modelo en [`modelo-datos.md`](modelo-datos.md).
 
-Resumen de la jerarquía de activos, al estilo de *ubicación técnica* de SAP para que resulte
-familiar al equipo y compatible con una futura integración:
+La jerarquía **no** se modela con una tabla por nivel, sino con **una sola tabla auto-referenciada**
+donde cada nodo apunta a su padre:
 
 ```
-Terminal ▸ Monoboya ▸ Sistema ▸ Equipo/Componente (TAG)
+Monoboya MB-01                         nivel 1
+ ├─ Casco y estructura flotante        nivel 2   ← subsistema
+ │   ├─ Casco flotante principal       nivel 3   ← equipo
+ │   └─ Compartimentos estancos        nivel 3
+ └─ Rodamiento principal y girador     nivel 2
+     ├─ Rodamiento principal           nivel 3
+     └─ Sistema de lubricación         nivel 3
 ```
 
-Las 16 tablas se agrupan en tres bloques:
-
-- **Maestras** (7): Terminal, Monoboya, Sistema, Equipo, Material, Almacén, Personal.
-- **Planificación** (3): Plan de mantenimiento, Tarea de plan (gama), Material por plan (BOM).
-- **Transaccionales** (6): Orden de Trabajo, Tarea de OT, Hallazgo, Movimiento de inventario,
-  Stock, Solicitud de material. Más dos auxiliares: Medición y Documento/Certificado.
-
-La tabla **Material por plan (BOM)** es la pieza que hace posible la pregunta central del
-proyecto: *"¿tengo los repuestos para los mantenimientos del próximo mes?"*. Sin ella, la app
-sabe qué mantener y sabe qué hay en almacén, pero no puede cruzar ambas cosas.
+**Por qué importa:** la codificación real de subsistemas todavía no la tenemos, y puede tener más
+niveles de los que supusimos. Un árbol acepta cualquier profundidad, permite que un subsistema
+contenga sub-subsistemas, y hace que la vista global y el desglose sean **la misma consulta a
+distinta altura**. Es también lo que permite arrancar el modelo hoy sin esperar a ver la
+codificación.
 
 ---
 
-## 6. Automatizaciones (Power Automate)
+## 5. Qué se puede actualizar desde la aplicación
 
-| Flujo | Disparador | Qué hace |
+La app no es solo de lectura: mantener la información al día es parte de su propósito.
+
+| Información | ¿Editable? | Perfil |
 |---|---|---|
-| **Generador de OT** | Diario, programado | Recorre planes activos; donde `fecha próxima ≤ hoy + horizonte`, crea la OT y copia la gama a `Tarea de OT`. Control de duplicados por plan + fecha programada. |
-| **Verificación de materiales** | Al crear una OT | Lee el BOM del plan, contrasta contra `Stock`, marca el semáforo de la OT (Completo / Parcial / Sin stock) y crea `Solicitud de material` en borrador por lo faltante. |
-| **Aprobación de solicitudes** | Al pasar a *Solicitada* | Aprobación al supervisor vía Teams/correo. Al aprobar, queda a la espera del código de reserva. |
-| **Recálculo de stock** | Al crear un movimiento | Recalcula disponible / reservado del material en ese almacén. |
-| **Alertas** | Diario | OT vencidas, stock bajo mínimo, certificados por vencer (60/30/7 días). A Teams y correo. |
-| **Reporte de OT cerrada** | Al cerrar una OT | Genera PDF con checklist, mediciones, fotos y firmas; lo archiva en SharePoint. |
+| Materiales asociados a un nodo y cantidades | **Sí** | Materiales, Administrador |
+| Stock disponible y reservado | **Sí** | Materiales, Administrador |
+| Solicitudes de material y **código de reserva** | **Sí** | Materiales, Administrador |
+| Documentos, planos y certificados: alta, reemplazo, fechas | **Sí** | Documentación, Administrador |
+| Atributos técnicos del nodo | **Sí** | Técnico, Administrador |
+| Frecuencias de referencia | **Sí** | Técnico, Administrador |
+| Jerarquía y códigos de subsistema | **No** desde la app | Carga controlada |
 
-**Regla de integridad:** la tabla `Stock` **nunca se edita a mano**. Se deriva de los
-`Movimiento de inventario` por flujo. Así el saldo siempre es auditable contra sus movimientos —
-si alguien cuestiona una cifra, se puede reconstruir.
+Dataverse audita cada cambio con usuario y fecha sin desarrollo adicional. La jerarquía queda
+fuera de la edición a propósito: es la columna vertebral del sistema y un cambio accidental
+rompería todas las referencias.
 
 ---
 
-## 7. Pantallas de la app canvas
+## 6. Las pantallas
 
 Prototipo navegable en [`../03-mockups/mockup-pantallas.html`](../03-mockups/mockup-pantallas.html).
 
-| # | Pantalla | Propósito |
+| # | Pantalla | Qué muestra |
 |---|---|---|
-| 1 | **Inicio** | Cuatro tarjetas grandes con contadores: *OT de hoy*, *Vencidas*, *Reportar hallazgo*, *Consultar stock*. |
-| 2 | **Lista de OT** | Filtro por estado / monoboya / fecha. Cada tarjeta: TAG, sistema, fecha, semáforo de materiales. |
-| 3 | **Detalle de OT** | Datos del equipo, materiales requeridos con disponibilidad, botón *Iniciar*. |
-| 4 | **Ejecución de checklist** | Un control por tipo de registro (toggle, numérico con validación de rango, cámara, texto). Barra de progreso. Bloquea el cierre con pasos obligatorios pendientes. |
-| 5 | **Cierre de OT** | Resumen, horas reales, consumo de materiales, firma de técnico y supervisor. |
-| 6 | **Hallazgo** | Foto + severidad + descripción en menos de 30 segundos. |
-| 7 | **Consulta de stock** | Búsqueda por código o descripción, disponibilidad por almacén, botón *Solicitar*. |
+| 1 | **Vista global** | Los subsistemas de la monoboya con su código oficial, nombre, criticidad y número de partes. Búsqueda por código. Es la puerta de entrada |
+| 2 | **Subsistema** | Su código y descripción, las partes que lo componen, y accesos directos a sus materiales y documentos |
+| 3 | **Ficha — Técnico** | Fabricante, modelo, n° de serie, fecha de instalación, criticidad, ubicación física |
+| 4 | **Ficha — Materiales** | Repuestos del nodo con stock disponible, mínimo, plazo de reposición y código de reserva. Editable |
+| 5 | **Ficha — Frecuencias** | Cada cuánto corresponde mantener, última vez registrada y norma aplicable. Informativo |
+| 6 | **Ficha — Documentos y planos** | Planos, manuales, certificados e informes con su vigencia. Se abren y se suben desde aquí |
+| 7 | **Actualizar información** | Formulario de edición con el rastro de auditoría visible |
 
-### Reglas de UX de obligado cumplimiento
+Sin botones de *iniciar*, sin firmas, sin checklists, sin estados de trabajo.
 
-- Objetivos táctiles ≥ 44 px — el técnico usa guantes.
-- Máximo dos niveles de navegación desde el inicio.
-- Estados comunicados con **color y texto**, nunca solo color (hay daltonismo, y hay sol directo).
-- Contraste alto: la pantalla se lee a la intemperie.
-- Guardado incremental por paso.
-- Mensajes de error que dicen **qué hacer**, no qué falló.
+### Reglas de presentación
+
+- El **código del nodo** es lo primero que se lee en cualquier pantalla.
+- Los estados se comunican con **color y texto**, nunca solo color.
+- Las cifras que se comparan entre sí van alineadas por dígito.
+- Un documento vencido se ve como vencido antes de tener que leerlo.
 
 ---
 
-## 8. Fases de ejecución
+## 7. Fases de ejecución
 
 | Fase | Duración est. | Entregable | Bloqueante |
 |---|---|---|---|
-| **0. Levantamiento** | 2–3 sem | Plantillas llenas: jerarquía de sistemas, frecuencias, gamas, catálogo de materiales. Taller de validación. | **Sí** |
-| **1. Fundación** | 1 sem | Entornos DEV/UAT/PROD, solución gestionada, tablas Dataverse, roles de seguridad, carga de maestros. | — |
-| **2. MVP de mantenimiento** | 3–4 sem | Planes + generador de OT + app canvas de ejecución + app model-driven. | — |
-| **3. Inventario y materiales** | 2–3 sem | Stock, movimientos, BOM, solicitudes, código de reserva, aprobaciones. | — |
-| **4. Visibilidad y control** | 2 sem | Power BI, certificados y vencimientos, hallazgos, reporte PDF. | — |
-| **5. Piloto y go-live** | 2 sem | Piloto con una monoboya, capacitación, manual, paso a producción. | — |
-| **6. Integración SAP** *(opcional)* | por definir | Sincronización de stock y creación automática de reservas. | — |
+| **0. Levantamiento** | 2–3 sem | **La codificación oficial de subsistemas** + las seis plantillas llenas. Taller de validación | **Sí** |
+| **1. Fundación** | 1 sem | Entornos DEV/UAT/PROD, solución gestionada, tablas Dataverse, perfiles de acceso, carga del árbol | — |
+| **2. Consulta** | 2–3 sem | App model-driven: vista global, desglose y fichas completas | — |
+| **3. Materiales y documentos** | 2 sem | Stock, solicitudes, código de reserva, carga de planos y certificados a SharePoint | — |
+| **4. Alertas y control** | 1–2 sem | Avisos de vencimiento y de stock bajo mínimo. Tableros en Power BI (opcional) | — |
+| **5. Piloto y puesta en marcha** | 2 sem | Piloto con una monoboya, capacitación, manual, paso a producción | — |
 
-Las fases 2 y 3 se pueden solapar parcialmente. **La Fase 0 es bloqueante**: sin la jerarquía de
-sistemas y sin las gamas de tareas no hay nada que planificar, y construir la app antes de
-tenerlas garantiza retrabajo.
+**La Fase 0 es bloqueante**, y dentro de ella lo primero es la codificación: sin ella no hay
+identificadores sobre los que construir.
 
 ### Gobierno y ALM
 
 - Tres entornos: **DEV → UAT → PROD**, con despliegue por **solución gestionada**.
-- La app y los flujos son propiedad de una **cuenta de servicio**, nunca de una persona. Si esa
-  persona deja la empresa, la app no se cae.
-- Conexiones compartidas explícitamente, no heredadas.
-- Política DLP aplicada al entorno.
-- Control de versiones de la solución exportada.
+- La app y los flujos son propiedad de una **cuenta de servicio**, nunca de una persona.
+- Política DLP aplicada al entorno y control de versiones de la solución exportada.
 
 ---
 
-## 9. Riesgos y puntos abiertos
+## 8. Riesgos y puntos abiertos
 
 Detalle y seguimiento en [`decisiones-abiertas.md`](decisiones-abiertas.md).
 
 | # | Riesgo / Pregunta | Impacto | Acción |
 |---|---|---|---|
-| 1 | **¿En qué tenant vive la app: TAMOIN o Repsol?** Define licencias, propiedad del dato y visibilidad para el cliente. | **Alto** | Resolver **antes** de Fase 1 |
-| 2 | Licenciamiento Premium de Power Apps para todos los técnicos | Alto (costo) | Evaluar plan *por aplicación* vs *por usuario* según headcount real |
-| 3 | Fase 0 se demora o llega incompleta | Alto (bloquea todo) | Plantillas precargadas + taller presencial + responsable nombrado por sistema |
-| 4 | Códigos de reserva ingresados a mano → error de tipeo, desfase con SAP | Medio | Validación de formato, campo obligatorio para cerrar la solicitud, integración en Fase 6 |
-| 5 | Stock de la app diverge del stock real de almacén | Medio | Inventario cíclico obligatorio + reporte de diferencias en Power BI |
-| 6 | Adopción: el técnico sigue usando papel | Alto | Piloto acotado, retroalimentación, el papel se retira solo cuando la app ya funciona |
-| 7 | Conectividad en la monoboya peor de lo previsto | Medio | Offline descartado. Si aparece en el piloto, se agrega caché local como cambio de alcance |
-| 8 | Requisitos regulatorios (DICAPI, OCIMF, auditoría Repsol) no considerados | Medio | Confirmar en Fase 0 qué evidencia exige cada auditoría y modelarla desde el inicio |
+| 1 | **La codificación oficial de subsistemas aún no está en nuestras manos** | **Alto** | Solicitarla ya. Bloquea la carga |
+| 2 | **¿En qué tenant vive la app: TAMOIN o Repsol?** | **Alto** | Resolver antes de Fase 1 |
+| 3 | Licenciamiento Premium de Power Apps | Alto (costo) | Evaluar plan *por aplicación* vs *por usuario* |
+| 4 | La información se carga y luego se desactualiza | **Alto** | Es el riesgo principal de una app de consulta. Responsable nombrado por tipo de información e inventario cíclico |
+| 5 | Los planos y manuales no existen en digital | Medio | Inventariar en Fase 0 qué hay y qué falta digitalizar |
+| 6 | Códigos de reserva ingresados a mano → desfase con SAP | Medio | Validación de formato y campo auditado |
+| 7 | La codificación real tiene más niveles de los previstos | Bajo | Ya mitigado: el árbol acepta cualquier profundidad |
 
 ---
 
-## 10. Principio de trabajo
+## 9. Principio de trabajo
 
-**No se inventan datos.** Todo lo que este paquete propone sobre la monoboya —sistemas, equipos,
-frecuencias, materiales— está marcado como **propuesta a validar**, no como dato confirmado. El
-equipo de mantenimiento de TAMOIN corrige, elimina lo que no aplica y agrega lo que falta.
+**No se inventan datos.** Todo lo que este paquete propone sobre la monoboya —subsistemas, equipos,
+frecuencias, materiales, documentos— está marcado como **propuesta a validar**, nunca como dato
+confirmado. El equipo de TAMOIN corrige, elimina lo que no aplica y agrega lo que falta.
 
 Se entrega precargado porque es mucho más rápido corregir una lista que partir de una hoja en
 blanco. Pero nada de lo precargado entra a la aplicación sin la firma de quien conoce el activo.

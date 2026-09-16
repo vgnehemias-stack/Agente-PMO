@@ -1,183 +1,163 @@
 # Plantillas de levantamiento — Instrucciones
 
-Estas siete plantillas recogen la información que la aplicación necesita para funcionar. Son el
-**entregable de la Fase 0** y son bloqueantes: sin ellas no hay nada que planificar.
+Seis plantillas que recogen la información que la aplicación va a centralizar. Son el entregable
+de la **Fase 0** y son bloqueantes: sin ellas no hay nada que mostrar.
+
+La aplicación es de **consulta e información**, no de ejecución. Estas plantillas describen
+*qué es* el sistema de monoboya, no *cómo se trabaja* en él.
 
 ---
 
-## ⚠️ Lo primero que tienes que saber
+## 🔴 Lo primero: la codificación oficial
 
-Las plantillas vienen **precargadas con una propuesta**, no con datos reales. Todo lo precargado
-está marcado en la columna `observaciones` con **`PROPUESTA - VALIDAR`**.
+Toda la estructura gira alrededor del **código de subsistema**. Ese código ya existe del lado de
+ustedes y todavía no lo tenemos.
 
-**Nada de eso es dato confirmado.** Es una monoboya tipo CALM genérica, armada a partir de la
-configuración estándar del sector. Sirve para que no partas de una hoja en blanco — corregir una
-lista es mucho más rápido que inventarla.
+Por eso cada nodo del archivo `01` tiene **dos columnas de código**:
 
-Tu trabajo es:
-
-1. **Corregir** lo que está mal.
-2. **Borrar** las filas que no aplican a nuestra monoboya.
-3. **Agregar** lo que falta.
-4. **Vaciar la columna `observaciones`** de cada fila que ya validaste. Cuando no quede ningún
-   `PROPUESTA - VALIDAR` en el archivo, ese archivo está listo.
-
-Esa última regla es la que nos permite medir el avance sin preguntar.
-
----
-
-## Orden de llenado
-
-Hay dependencias entre archivos. Llénalos en este orden:
-
-```
-1. 01_jerarquia_activos.csv      ──► define los TAG
-2. 04_catalogo_materiales.csv    ──► define los códigos de material
-3. 02_planes_mantenimiento.csv   ──► usa los TAG de (1)
-4. 03_gamas_tareas.csv           ──► usa los planes de (3)
-5. 05_materiales_por_plan.csv    ──► usa (3) y (2)
-6. 06_personal_roles.csv         ──► independiente
-7. 07_documentos_certificados.csv──► usa los TAG de (1)
-```
-
----
-
-## Archivo por archivo
-
-### 1. `01_jerarquia_activos.csv` — La base de todo
-
-Define la jerarquía `Terminal ▸ Monoboya ▸ Sistema ▸ Equipo`. **68 equipos precargados en 12
-sistemas.**
-
-| Columna | Qué poner |
-|---|---|
-| `tag_equipo` | **El campo más importante del proyecto.** Identificador único del equipo. Si ya existe una convención de TAG en uso, úsala y avísanos — la propuesta `MB01-XXX-000` es solo un punto de partida |
-| `criticidad_equipo` | `A` = su falla para la operación · `B` = la degrada · `C` = no la afecta |
-| `ubicacion_fisica` | `Cubierta` / `Casco` / `Interior` / `Superficie` / `Submarino` / `Fondo marino` |
-| `requiere_buzo_rov` | `SI` / `NO`. Determina la logística y el costo de cada intervención |
-| `fabricante`, `modelo`, `n_serie` | Sácalo de la placa del equipo o del manual. Si no lo hay, déjalo vacío — **no lo inventes** |
-
-> **Decisión pendiente:** el número de líneas de fondeo (precargamos 6) y de tramos de manguera
-> flotante (precargamos 4 + tail hose) es una suposición. Corrígelo según la configuración real.
-
-### 2. `04_catalogo_materiales.csv` — Qué se consume
-
-**36 materiales precargados.**
-
-| Columna | Qué poner |
-|---|---|
-| `codigo_sap` | **Crítico.** Es el único puente con SAP, ya que no hay integración automática. Si no lo tienes a mano, pídelo a almacén antes de cerrar el archivo |
-| `lead_time_dias` | Días desde que se pide hasta que llega. Manguera importada ≠ trapo industrial. Es lo que permite avisar con tiempo |
-| `stock_minimo` | Por debajo de este número salta la alerta. Regla práctica: consumo durante el `lead_time` + un margen |
-| `categoria` | `Repuesto` / `Consumible` / `Herramienta` / `EPP` / `Servicio` |
-
-> Los `Servicio` (embarcación, cuadrilla de buceo) van con stock 0: no se almacenan, se contratan
-> por evento. Están en el catálogo para poder planificarlos y costearlos.
-
-### 3. `02_planes_mantenimiento.csv` — Frecuencias
-
-**40 planes precargados.** Este archivo responde *"¿qué se mantiene y cada cuánto?"*.
-
-| Columna | Qué poner |
-|---|---|
-| `frecuencia_valor` + `frecuencia_unidad` | Separados a propósito: "cada 3 `Meses`", no "cada 90 días". Así respetamos el mes calendario, que es como lo piensa el equipo |
-| `tipo` | `Preventivo` / `Predictivo` / `Inspeccion legal` / `Lubricacion` / `Limpieza` |
-| `requiere_parada` | ¿Obliga a detener la operación de carga/descarga? Cambia por completo la planificación |
-| `norma_referencia` | OCIMF SMOG, GMPHOM 2009, MEG4, API RP 2SK, DICAPI, manual del fabricante… Déjalo vacío si no hay norma |
-| `fecha_ultima_ejecucion` | Si la sabes, ponla: la app calcula la próxima a partir de ahí. Si no, la app arrancará desde la fecha de carga |
-
-> **Las frecuencias precargadas son las típicas del sector, no las nuestras.** Es lo que más hay
-> que revisar de todo el paquete. Si Repsol o el fabricante exigen otra frecuencia, manda esa.
-
-### 4. `03_gamas_tareas.csv` — Los checklists
-
-**49 pasos precargados, pero solo para 6 planes de ejemplo** (PM-001, PM-002, PM-003, PM-011,
-PM-018, PM-024). Están elegidos para mostrar todos los tipos de registro. **Faltan los otros 34
-planes** — esa es la parte gruesa del trabajo.
-
-| `tipo_registro` | Qué muestra la app | Cuándo usarlo |
+| Columna | Quién la llena | Para qué |
 |---|---|---|
-| `OK/NO OK` | Un interruptor | Verificaciones de sí o no |
-| `Numerico` | Teclado numérico con validación de rango | Mediciones. Llena `valor_minimo`, `valor_maximo` y `unidad` |
-| `Texto` | Campo de texto | Observaciones |
-| `Foto` | Cámara | Evidencia gráfica |
-| `Firma` | Panel de firma | Cierre de responsabilidad |
-| `Seleccion` | Lista desplegable | Opciones fijas. Escríbelas en `ayuda` |
+| `codigo_provisional` | Ya viene llena | Un código temporal (`MB-01.S02.ROD-001`) que sostiene el árbol mientras tanto. **No lo modifiques**: los otros cinco archivos apuntan a él |
+| `codigo_oficial` | **Ustedes** | El código real de la codificación de subsistemas. Es el que la app va a mostrar |
 
-**Consejos para escribir una buena gama:**
+Cuando la columna `codigo_oficial` esté completa, nosotros reemplazamos las referencias en todos
+los archivos de una sola pasada. **Hasta entonces no se carga nada a la aplicación.**
 
-- Un paso = una acción verificable. Si el paso dice "revisar todo", no sirve.
-- Los rangos (`valor_minimo` / `valor_maximo`) son los que hacen que la app avise sola cuando algo
-  está fuera de norma. Vale la pena el esfuerzo de definirlos.
-- Usa `ayuda` para lo que un técnico nuevo necesitaría preguntar. Es la memoria del equipo.
-- `obligatorio = SI` bloquea el cierre de la orden. Úsalo con criterio: si todo es obligatorio, el
-  técnico se queda trabado en campo por una tontería.
+Si la codificación real tiene más niveles de los que propusimos (por ejemplo, un subsistema que se
+divide en sub-subsistemas), **agrega las filas que hagan falta**: el modelo es un árbol y acepta
+cualquier profundidad.
 
-### 5. `05_materiales_por_plan.csv` — La pieza clave
+---
 
-**54 líneas precargadas para 25 de los 40 planes.**
+## ⚠️ Lo precargado es una propuesta, no un dato
 
-Este archivo es el que hace posible la pregunta central del proyecto:
+Todo lo que viene lleno está marcado con **`PROPUESTA - VALIDAR`** en la columna `observaciones`.
+Es una monoboya tipo CALM genérica, armada con la configuración estándar del sector.
 
-> *"¿Tengo los repuestos para los mantenimientos del próximo mes?"*
+Tu trabajo es **corregir**, **borrar lo que no aplica**, **agregar lo que falta** y **vaciar la
+columna `observaciones`** de cada fila validada. Cuando no quede ningún `PROPUESTA - VALIDAR`, el
+archivo está cerrado.
 
-Sin él, la app sabe qué mantener y sabe qué hay en almacén, pero **no puede cruzar ambas cosas**.
-Es el archivo que más valor aporta por línea llenada.
+---
 
-- `cantidad_por_ejecucion`: lo que se consume **cada vez** que se ejecuta el plan.
-- Si un material solo se usa a veces (p. ej. se reemplaza un perno solo si está dañado), ponlo con
-  cantidad `0` y `obligatorio = NO`. Queda registrado como material posible sin bloquear la orden.
-- `obligatorio = SI` significa que **sin ese material la orden no se libera**.
+## Los seis archivos
 
-### 6. `06_personal_roles.csv` — Quién usa la app
+### `01_jerarquia_subsistemas.csv` — El árbol del sistema ⭐
 
-Viene **vacío**, solo con la estructura de roles. Se necesita el correo corporativo de Microsoft
-365 de cada persona: es lo que vincula a la persona con su identidad y con sus permisos.
+**81 nodos: 1 monoboya + 12 subsistemas + 68 equipos.** Es la base de todo; los otros cinco
+archivos cuelgan de aquí.
 
-| Rol | Qué puede hacer |
+Cada fila es un nodo del árbol y apunta a su padre:
+
+```
+MB-01                          nivel 1   Monoboya
+ └─ MB-01.S02                  nivel 2   Rodamiento principal y girador
+     └─ MB-01.S02.ROD-001      nivel 3   Rodamiento principal (main bearing)
+```
+
+| Columna | Qué poner |
 |---|---|
-| `Tecnico` | Ejecuta sus órdenes, reporta hallazgos, solicita materiales |
-| `Supervisor` | Libera y cierra órdenes, aprueba solicitudes, firma |
-| `Planificador` | Crea y edita planes, gamas y BOM |
-| `Almacenero` | Registra movimientos de inventario y códigos de reserva |
-| `Administrador` | Todo |
+| `codigo_oficial` | **El código real de su codificación.** Obligatorio antes de cargar |
+| `codigo_provisional` | Ya viene. No tocar |
+| `codigo_padre` | El `codigo_provisional` del nodo que lo contiene. La raíz lo lleva vacío |
+| `nivel` | 1 monoboya · 2 subsistema · 3 equipo · 4 componente, si hiciera falta |
+| `tipo_nodo` | `Monoboya` / `Subsistema` / `Equipo` / `Componente` |
+| `criticidad` | `A` = su falla para la operación · `B` = la degrada · `C` = no la afecta |
+| `fabricante`, `modelo`, `n_serie`, `fecha_instalacion` | De la placa del equipo o del manual. Si no hay, déjalo vacío — **no lo inventes** |
+| `ubicacion_fisica` | `Cubierta` / `Casco` / `Interior` / `Superficie` / `Submarino` / `Fondo marino` |
+| `requiere_buzo_rov` | `SI` / `NO` |
 
-### 7. `07_documentos_certificados.csv` — Vencimientos
+> **Puntos a confirmar:** precargamos 6 líneas de fondeo y 4 tramos de manguera flotante más el
+> tramo de acople. Corrígelo según la configuración real.
 
-**12 documentos precargados.** La columna que importa es `fecha_vencimiento`: la app avisa a 60,
-30 y 7 días. Es lo que evita descubrir un certificado vencido durante una auditoría.
+### `02_frecuencias_referencia.csv` — Cada cuánto corresponde mantener
+
+**40 frecuencias precargadas.** Es **información de referencia**: la app la muestra en la ficha del
+nodo, no genera órdenes ni programa nada.
+
+| Columna | Qué poner |
+|---|---|
+| `codigo_nodo` | A qué parte del árbol corresponde |
+| `frecuencia_valor` + `frecuencia_unidad` | Separados a propósito: «cada 3 `Meses`», no «cada 90 días» |
+| `tipo` | `Preventivo` / `Predictivo` / `Inspeccion legal` / `Lubricacion` / `Limpieza` |
+| `fecha_ultima_ejecucion` | Cuándo se hizo por última vez, si se sabe |
+| `norma_referencia` | OCIMF SMOG, GMPHOM 2009, MEG4, API RP 2SK, DICAPI, manual del fabricante |
+
+> **Las frecuencias precargadas son las típicas del sector, no las de ustedes.** Es lo que más hay
+> que revisar de todo el paquete.
+
+### `03_catalogo_materiales.csv` — Repuestos y consumibles
+
+**27 materiales.** Solo repuestos y consumibles: lo que forma parte del sistema o se consume en él.
+Herramientas, EPP y servicios quedaron fuera, porque pertenecen a la ejecución del trabajo.
+
+| Columna | Qué poner |
+|---|---|
+| `codigo_sap` | **Crítico.** Es el único puente con SAP, ya que no hay integración automática |
+| `lead_time_dias` | Días desde que se pide hasta que llega. Manguera importada ≠ trapo industrial |
+| `stock_minimo` | Por debajo de este número la app avisa |
+
+### `04_materiales_por_nodo.csv` — Qué repuesto corresponde a qué parte
+
+**26 asociaciones precargadas.** Es lo que permite que al abrir un subsistema se vea de inmediato
+qué repuestos le corresponden y si hay existencias.
+
+- `cantidad_referencial`: cuánto se suele necesitar. Es una referencia, no un compromiso.
+- Un mismo material puede colgar de varios nodos.
+
+### `05_documentos_planos.csv` — Planos, manuales y certificados
+
+**26 documentos, de los cuales 13 son planos.** La columna clave es `fecha_vencimiento`: la app
+avisa a 60, 30 y 7 días. Es lo que evita descubrir un certificado vencido en plena auditoría.
+
+Tipos: `Plano` · `Manual` · `Memoria tecnica` · `Certificado de manguera` · `Certificado DICAPI` ·
+`Certificado de fabricacion` · `Informe de inspeccion` · `Procedimiento`.
+
+El archivo en sí (PDF, DWG) se sube después desde la aplicación; aquí solo se declara qué
+documentos deben existir y de qué nodo cuelgan.
+
+### `06_personal_accesos.csv` — Quién consulta y quién actualiza
+
+Viene **vacío**, solo con la estructura de perfiles. Se necesita el correo corporativo de Microsoft
+365 de cada persona.
+
+| Perfil | Puede actualizar |
+|---|---|
+| `Consulta` | Nada. Solo lee |
+| `Materiales` | Materiales asociados y stock |
+| `Documentacion` | Documentos, planos y certificados |
+| `Tecnico` | Atributos técnicos y frecuencias de referencia |
+| `Administrador` | Todo, incluida la jerarquía |
 
 ---
 
 ## Reglas de llenado
 
-1. **No inventes datos.** Si no lo sabes, déjalo vacío y anótalo en `observaciones`. Un campo
-   vacío es honesto; un dato inventado contamina la app desde el día uno.
+1. **No inventes datos.** Si no lo sabes, déjalo vacío y anótalo en `observaciones`.
 2. **No cambies los nombres de las columnas** ni el orden. La carga a Dataverse los usa.
-3. **No uses comas dentro de los campos** — son archivos CSV separados por coma. Si necesitas
-   separar ideas, usa un guion.
-4. **Sin tildes ni ñ en códigos y TAG.** En el texto descriptivo sí, sin problema.
-5. **Fechas en formato `AAAA-MM-DD`** (ejemplo: `2026-03-15`).
-6. **Sí/No siempre como `SI` / `NO`** en mayúsculas.
-7. Si abres los archivos en Excel, **guárdalos como CSV UTF-8**, no como `.xlsx`.
+3. **No modifiques `codigo_provisional` ni `codigo_padre`** — sostienen el árbol. Si agregas un
+   nodo nuevo, invéntale un provisional que siga el mismo patrón y apúntalo a su padre.
+4. **No uses comas dentro de los campos** — son CSV separados por coma. Usa un guion.
+5. **Sin tildes ni ñ en los códigos.** En el texto descriptivo sí, sin problema.
+6. **Fechas en formato `AAAA-MM-DD`.** Sí/No siempre como `SI` / `NO` en mayúsculas.
+7. Si los abres en Excel, **guárdalos como CSV UTF-8**, no como `.xlsx`.
 
 ---
 
 ## Cómo sabemos que está listo
 
-Un archivo está cerrado cuando:
-
+- [ ] La columna `codigo_oficial` está completa en `01`
 - [ ] No queda ninguna celda con `PROPUESTA - VALIDAR`
-- [ ] Tiene un responsable nombrado que lo firma
-- [ ] Los códigos cruzados existen (los TAG de los planes están en la jerarquía, los materiales del
-      BOM están en el catálogo)
+- [ ] Cada archivo tiene un responsable nombrado que lo firma
+- [ ] El árbol cierra: todo `codigo_padre` existe, sin ciclos, con una sola raíz
 
-El último punto lo verificamos nosotros automáticamente al recibir los archivos. Si algo no cruza,
-te lo devolvemos indicando exactamente qué fila y qué código falta.
+Los dos últimos puntos los verificamos nosotros automáticamente al recibir los archivos (el
+comando está en el `README.md` del paquete). Si algo no cruza, te devolvemos exactamente qué fila
+y qué código falta.
 
 ---
 
 ## Dudas
 
-Todo lo que no esté claro, anótalo en la columna `observaciones` de la fila correspondiente en vez
-de resolverlo por tu cuenta. Lo revisamos juntos en el taller de cierre de Fase 0.
+Anótalas en la columna `observaciones` de la fila correspondiente en vez de resolverlas por tu
+cuenta. Las revisamos juntos en el taller de cierre de Fase 0.

@@ -1,0 +1,27 @@
+codigo_nodo,nombre_documento,tipo,entidad_emisora,n_documento,fecha_emision,fecha_vencimiento,enlace,observaciones
+MB-01,Plano general de fondeo,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01,Plano de disposicion general,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01,Certificado de operacion de la monoboya,Certificado DICAPI,DICAPI,,,,,PROPUESTA - VALIDAR
+MB-01,Memoria descriptiva del sistema,Memoria tecnica,,,,,,PROPUESTA - VALIDAR
+MB-01.S01,Plano estructural del casco,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S01,Informe de medicion de espesores,Informe de inspeccion,,,,,,PROPUESTA - VALIDAR
+MB-01.S02,Manual del fabricante del rodamiento,Manual,,,,,,PROPUESTA - VALIDAR
+MB-01.S02,Plano de montaje del rodamiento,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S03,Manual del fabricante del swivel,Manual,,,,,,PROPUESTA - VALIDAR
+MB-01.S03,Plano isometrico de tuberias de producto,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S04,Plano de configuracion de lineas de fondeo,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S04,Informe de inspeccion subacuatica de cadenas,Informe de inspeccion,,,,,,PROPUESTA - VALIDAR
+MB-01.S04,Certificado de cadenas de fondeo,Certificado de fabricacion,,,,,,PROPUESTA - VALIDAR
+MB-01.S05,Certificado del hawser de amarre,Certificado de fabricacion,,,,,,PROPUESTA - VALIDAR
+MB-01.S06,Certificado de mangueras flotantes (GMPHOM),Certificado de manguera,,,,,,PROPUESTA - VALIDAR
+MB-01.S06,Plano de configuracion del tren de mangueras,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S07,Certificado de mangueras submarinas (GMPHOM),Certificado de manguera,,,,,,PROPUESTA - VALIDAR
+MB-01.S07,Plano de configuracion submarina,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S08,Plano del PLEM,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S08,Informe de inspeccion subacuatica del PLEM,Informe de inspeccion,,,,,,PROPUESTA - VALIDAR
+MB-01.S09,Plano unifilar electrico,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S09,Autorizacion de ayudas a la navegacion,Certificado DICAPI,DICAPI,,,,,PROPUESTA - VALIDAR
+MB-01.S10,Informe de medicion de proteccion catodica,Informe de inspeccion,,,,,,PROPUESTA - VALIDAR
+MB-01.S10,Plano de distribucion de anodos,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S11,Plano de equipos de seguridad,Plano,,,,,,PROPUESTA - VALIDAR
+MB-01.S12,Plano de boat landing y accesos,Plano,,,,,,PROPUESTA - VALIDAR

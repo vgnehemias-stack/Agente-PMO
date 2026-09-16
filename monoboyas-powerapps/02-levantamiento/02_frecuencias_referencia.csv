@@ -1,0 +1,41 @@
+codigo_referencia,codigo_nodo,descripcion,tipo,frecuencia_valor,frecuencia_unidad,fecha_ultima_ejecucion,norma_referencia,requiere_buzo_rov,observaciones
+FR-001,MB-01.S01.CAS-001,Inspeccion visual general de la monoboya,Inspeccion legal,1,Semanas,,OCIMF SMOG,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-002,MB-01.S06.MGF-001,Inspeccion visual de mangueras flotantes,Inspeccion legal,1,Semanas,,OCIMF GMPHOM 2009,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-003,MB-01.S09.ELE-001,Verificacion de luces de navegacion,Preventivo,1,Semanas,,DICAPI,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-004,MB-01.S01.CAS-003,Inspeccion de cubierta y barandas,Preventivo,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-005,MB-01.S01.CAS-002,Verificacion de estanqueidad de compartimentos,Preventivo,1,Meses,,OCIMF SMOG,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-006,MB-01.S09.ELE-004,Mantenimiento de banco de baterias,Preventivo,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-007,MB-01.S09.ELE-003,Limpieza de panel solar,Limpieza,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-008,MB-01.S11.SEG-001,Inspeccion de extintores portatiles,Inspeccion legal,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-009,MB-01.S11.SEG-002,Inspeccion de aros salvavidas y senalizacion,Inspeccion legal,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-010,MB-01.S12.ACC-001,Inspeccion de boat landing y defensas,Preventivo,1,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-011,MB-01.S02.ROD-003,Lubricacion del rodamiento principal,Lubricacion,3,Meses,,Manual del fabricante,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-012,MB-01.S03.SWV-005,Operacion y engrase de valvulas de producto,Preventivo,3,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-013,MB-01.S04.FON-008,Inspeccion de chain stoppers de fondeo,Preventivo,3,Meses,,OCIMF MEG4,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-014,MB-01.S05.AMB-001,Inspeccion de hawser y chafe chain,Inspeccion legal,3,Meses,,OCIMF MEG4,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-015,MB-01.S02.ROD-002,Inspeccion de mesa giratoria y sellos,Preventivo,3,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-016,MB-01.S09.ELE-005,Mantenimiento de tablero electrico,Preventivo,6,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-017,MB-01.S02.ROD-004,Verificacion de torque de perneria del rodamiento,Preventivo,6,Meses,,Manual del fabricante,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-018,MB-01.S10.PCA-004,Medicion de potencial de proteccion catodica,Predictivo,6,Meses,,,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-019,MB-01.S10.PCA-001,Inspeccion subacuatica de anodos del casco,Inspeccion legal,6,Meses,,,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-020,MB-01.S01.CAS-006,Retoque de recubrimiento anticorrosivo,Preventivo,6,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-021,MB-01.S04.FON-001,Inspeccion subacuatica de cadenas de fondeo,Inspeccion legal,12,Meses,,API RP 2SK,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-022,MB-01.S07.MGS-001,Inspeccion subacuatica de mangueras submarinas,Inspeccion legal,12,Meses,,OCIMF GMPHOM 2009,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-023,MB-01.S08.PLM-001,Inspeccion subacuatica del PLEM,Inspeccion legal,12,Meses,,,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-024,MB-01.S06.MGF-001,Prueba hidrostatica de mangueras flotantes,Inspeccion legal,12,Meses,,OCIMF GMPHOM 2009,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-025,MB-01.S03.SWV-001,Inspeccion y prueba del swivel de producto,Inspeccion legal,12,Meses,,Manual del fabricante,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-026,MB-01.S01.CAS-002,Ensayo de estanqueidad de compartimentos,Inspeccion legal,12,Meses,,OCIMF SMOG,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-027,MB-01.S01.CAS-001,Medicion de espesores del casco,Predictivo,12,Meses,,,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-028,MB-01.S01.CAS-001,Renovacion de certificacion DICAPI,Inspeccion legal,12,Meses,,DICAPI,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-029,MB-01.S03.SWV-003,Inspeccion de tuberia interna de producto,Predictivo,12,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-030,MB-01.S10.PCA-001,Reemplazo de anodos de sacrificio del casco,Preventivo,24,Meses,,,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-031,MB-01.S05.AMB-001,Reemplazo de hawser principal,Preventivo,24,Meses,,OCIMF MEG4,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-032,MB-01.S06.MGF-001,Rotacion de mangueras flotantes,Preventivo,24,Meses,,OCIMF GMPHOM 2009,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-033,MB-01.S04.FON-001,Medicion de desgaste de cadenas de fondeo,Predictivo,36,Meses,,API RP 2SK,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-034,MB-01.S03.SWV-002,Reemplazo de sellos del swivel,Preventivo,60,Meses,,Manual del fabricante,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-035,MB-01.S02.ROD-001,Overhaul del rodamiento principal,Preventivo,60,Meses,,Manual del fabricante,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-036,MB-01.S06.MGF-001,Reemplazo de mangueras flotantes,Preventivo,60,Meses,,OCIMF GMPHOM 2009,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-037,MB-01.S07.MGS-001,Reemplazo de mangueras submarinas,Preventivo,60,Meses,,OCIMF GMPHOM 2009,SI,PROPUESTA - VALIDAR FRECUENCIA
+FR-038,MB-01.S09.ELE-006,Inspeccion de racon y senal sonora,Preventivo,3,Meses,,DICAPI,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-039,MB-01.S09.ELE-008,Verificacion del sistema de telemetria,Preventivo,3,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
+FR-040,MB-01.S12.ACC-004,Inspeccion del pescante de izaje,Inspeccion legal,12,Meses,,,NO,PROPUESTA - VALIDAR FRECUENCIA
