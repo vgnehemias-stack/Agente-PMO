@@ -666,34 +666,95 @@
   html { scroll-behavior: smooth; }
   [id] { scroll-margin-top: calc(var(--barra) + 14px); }
 
-  /* ===== Impresion y PDF =====
-     Un contenedor con desplazamiento no se desplaza al imprimir: se RECORTA.
-     Por eso aqui se le devuelve el desbordamiento visible a las tablas anchas
-     y a los bloques de codigo, o perderian sus ultimas columnas sin avisar. */
+  /* ===== Impresion y PDF · formato ejecutivo =====
+     Tres cosas que este bloque resuelve, y que no son obvias:
+
+     1. Chromium IGNORA `break-inside: avoid` dentro de contenedores flex y
+        grid. Por eso los mockups salian cortados entre hojas aunque caben de
+        sobra: viven dentro de un .stack (flex) y un .duo (grid). Al pasarlos a
+        bloque en impresion, la paginacion normal vuelve a respetarlos.
+     2. Un contenedor con desplazamiento no se desplaza al imprimir: se RECORTA.
+        Hay que devolverle el desbordamiento visible a tablas y codigo.
+     3. El PDF es un documento ejecutivo, no la pagina web impresa: tipografia
+        mas densa y fuera la prosa que ya dicen las tablas y los mockups. */
   @media print {
     :root { --barra: 0px; }
     .barra, .mando { display: none !important; }
-    body { padding-top: 0; }
+    body { padding-top: 0; font-size: 12.5px; line-height: 1.5; }
     .wrap { max-width: none; padding-inline: 0; }
 
-    /* recuperar lo que se recortaria */
+    /* --- 1. Paginacion ---
+       Chromium no fragmenta bien dentro de flex ni grid: los contenedores que
+       tienen que poder cortarse entre hojas pasan a bloque. */
+    .stack, .duo, .fleet, .check, .niveles, .need, .fases, .abiertas { display: block; }
+    .stack > *, .duo > * { margin-bottom: 26px; }
+    .check > *, .niveles > *, .abiertas > * { border-bottom: 1px solid var(--line); }
+
+    /* Lo que nunca debe partirse: cabe de sobra en una hoja */
+    .app, .frag, figure, .arbol,
+    .nivel, .din, .ck, .nd, .fase, .gl, .block, .aviso, .sub, .stat, .toc > * {
+      break-inside: avoid;
+    }
+    .app { break-after: avoid; }          /* el pie se queda con su mockup */
+
+    /* Un mockup no puede partirse, asi que cuanto mas alto sea, mas a menudo no
+       cabe en lo que resta de hoja y deja un cuarto de pagina en blanco. Se le
+       quita el alto minimo de pantalla y se aprieta por dentro: en papel no
+       hace falta el aire que pide una interfaz de uso. */
+    .app .shell { min-height: 0; }
+    .app .main { padding: 13px 15px 15px; gap: 11px; }
+    .app .nav { padding: 8px 0; }
+    .app .nav a { padding: 5px 13px; }
+    .app .nav .grp { padding: 9px 13px 3px; }
+    .app .stat { padding: 7px 10px 8px; }
+    .app .tarjeta { padding: 9px 11px 10px; }
+    .app .li { padding: 5px 9px; }
+    .app tbody td { padding: 6px 10px; }
+    .app .kv { padding: 6px 0; }
+    .app .pestanas button, .app .tabs div { padding: 6px 12px; }
+    .cap { break-before: avoid; break-inside: avoid; }
+
+    /* Las tablas largas SI se parten entre hojas, repitiendo su cabecera.
+       Forzarlas enteras era lo que dejaba un tercio de pagina en blanco. */
+    .tablewrap, .cmp, .dec { break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+
+    /* Ningun rotulo ni titulo se queda solo al pie de una hoja */
+    .sec-head { break-inside: avoid; break-after: avoid; }
+    h2, h3, h4, .eyebrow { break-after: avoid; }
+
+    /* --- 2. Recuperar lo que se recortaria --- */
     .tablewrap, pre, .listcol { overflow: visible; }
     table { min-width: 0; }
     .listcol { max-height: none; }
 
-    /* nada que quede a caballo entre dos paginas */
-    .app, .frag, figure, .nivel, .din, .ck, .nd, .fase, .sub,
-    .stat, .block, .gl, .aviso, .paso, .unit, .cap { break-inside: avoid; }
-    .cap, .sec-head { break-after: avoid; }
-
-    /* Flujo continuo: el contenido corre y las paginas cortan donde caen.
-       Nada de un apartado por hoja, que lee como diapositivas impresas. */
-    section { padding-block: 26px 0; }
-    .sec-head { break-after: avoid; }
-    /* Los 6 apartados en una sola fila: cuadra la rejilla y no deja hueco */
+    /* --- 3. Densidad ejecutiva --- */
+    section { padding-block: 22px 0; }
+    .sec-head { margin-bottom: 16px; }
+    header.hero { padding-block: 0 26px; }
+    header.hero h1 { font-size: 30px; }
+    header.hero .lead { font-size: 13.5px; max-width: 78ch; }
+    .sec-head h2 { font-size: 18px; }
+    .sec-head p { font-size: 12.5px; max-width: 86ch; }
     .toc { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .cap { margin-top: 8px; }
+    .cap .t { font-size: 13px; }
+    .cap p { font-size: 11.5px; }
+    table { font-size: 11.5px; }
+    tbody td { padding: 6px 10px; }
+    thead th { padding: 6px 10px; }
+    .aviso { padding: 12px 14px; }
+    .aviso p { font-size: 12px; }
+    .din p, .gl p, .block li, .nivel p, .nd p, .ck p { font-size: 11.5px; }
 
-    /* el PDF se pide en claro: se fuerza aqui ademas de en el guion */
+    /* Fuera lo que repite lo que ya dicen las tablas y los mockups.
+       Los bloques marcados data-pdf="omitir" son pantallas redundantes en
+       papel: la tercera vista del esquema y las pestanas sueltas de la ficha.
+       En la version interactiva siguen estando. */
+    .nota, figcaption, .niveles .cost, [data-pdf="omitir"] { display: none; }
+
+    /* --- Paleta clara forzada, ademas del tema que fija el guion --- */
     :root, :root[data-theme="dark"] {
       --ground: #F2F1EE; --surface: #FFFFFF; --surface-2: #E9E8E4; --surface-3: #F7F6F4;
       --ink: #1B2228; --ink-2: #4A555E; --ink-3: #7A858E;
@@ -1109,7 +1170,7 @@
         </div>
       </div>
 
-      <div>
+      <div data-pdf="omitir">
         <div class="app">
           <div class="appbar">
             <span class="brand">Monoboyas</span>
@@ -1331,7 +1392,7 @@
     </div>
 
     <!-- 4-6. LAS OTRAS TRES PESTAÑAS -->
-    <div style="margin-top:38px">
+    <div style="margin-top:38px" data-pdf="omitir">
       <p class="eyebrow" style="margin-bottom:6px">Pantallas 06 a 08</p>
       <h3 style="font-size:19px;font-weight:600;letter-spacing:-.012em">Las otras tres pestañas de esa misma ficha</h3>
       <p style="color:var(--ink-2);margin-top:6px;max-width:70ch">

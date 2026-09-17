@@ -57,7 +57,7 @@ const { chromium } = require('%(playwright)s');
     format: '%(formato)s',
     scale: %(escala)s,
     printBackground: true,                            // sin esto saldria todo en blanco
-    margin: { top: '14mm', bottom: '14mm', left: '12mm', right: '12mm' },
+    margin: { top: '18mm', bottom: '18mm', left: '18mm', right: '18mm' },
     preferCSSPageSize: false
   });
 
