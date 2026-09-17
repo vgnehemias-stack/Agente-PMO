@@ -686,9 +686,12 @@
     .stat, .block, .gl, .aviso, .paso, .unit, .cap { break-inside: avoid; }
     .cap, .sec-head { break-after: avoid; }
 
-    /* cada apartado empieza en su hoja */
-    section { break-before: page; padding-block: 0; }
-    header.hero { break-after: page; }
+    /* Flujo continuo: el contenido corre y las paginas cortan donde caen.
+       Nada de un apartado por hoja, que lee como diapositivas impresas. */
+    section { padding-block: 26px 0; }
+    .sec-head { break-after: avoid; }
+    /* Los 6 apartados en una sola fila: cuadra la rejilla y no deja hueco */
+    .toc { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 
     /* el PDF se pide en claro: se fuerza aqui ademas de en el guion */
     :root, :root[data-theme="dark"] {

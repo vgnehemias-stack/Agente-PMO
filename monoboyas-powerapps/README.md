@@ -160,8 +160,9 @@ Pesa 470 KB: se envía por correo sin problema.
 ### Y en PDF: `propuesta-monoboyas.pdf`
 
 [`03-mockups/propuesta-monoboyas.pdf`](03-mockups/propuesta-monoboyas.pdf) — el mismo documento en
-**A3 vertical y tema claro**, 20 páginas. Cada apartado empieza en su hoja y ningún mockup queda
-partido entre dos páginas.
+**A3 vertical y tema claro**, 11 páginas. El contenido corre en flujo continuo —varios apartados
+por hoja, como un documento y no como una presentación impresa— y ningún mockup queda partido
+entre dos páginas.
 
 Se eligió A3 porque el diseño mide 1180 px de ancho: en A4 habría que encogerlo a dos tercios y los
 mockups quedarían ilegibles. Para papel corriente, `python3 generar-pdf.py --a4`.
