@@ -666,12 +666,43 @@
   html { scroll-behavior: smooth; }
   [id] { scroll-margin-top: calc(var(--barra) + 14px); }
 
-  /* ===== Impresion ===== */
+  /* ===== Impresion y PDF =====
+     Un contenedor con desplazamiento no se desplaza al imprimir: se RECORTA.
+     Por eso aqui se le devuelve el desbordamiento visible a las tablas anchas
+     y a los bloques de codigo, o perderian sus ultimas columnas sin avisar. */
   @media print {
     :root { --barra: 0px; }
     .barra, .mando { display: none !important; }
     body { padding-top: 0; }
-    .app, .frag, figure { break-inside: avoid; }
+    .wrap { max-width: none; padding-inline: 0; }
+
+    /* recuperar lo que se recortaria */
+    .tablewrap, pre, .listcol { overflow: visible; }
+    table { min-width: 0; }
+    .listcol { max-height: none; }
+
+    /* nada que quede a caballo entre dos paginas */
+    .app, .frag, figure, .nivel, .din, .ck, .nd, .fase, .sub,
+    .stat, .block, .gl, .aviso, .paso, .unit, .cap { break-inside: avoid; }
+    .cap, .sec-head { break-after: avoid; }
+
+    /* cada apartado empieza en su hoja */
+    section { break-before: page; padding-block: 0; }
+    header.hero { break-after: page; }
+
+    /* el PDF se pide en claro: se fuerza aqui ademas de en el guion */
+    :root, :root[data-theme="dark"] {
+      --ground: #F2F1EE; --surface: #FFFFFF; --surface-2: #E9E8E4; --surface-3: #F7F6F4;
+      --ink: #1B2228; --ink-2: #4A555E; --ink-3: #7A858E;
+      --line: #D6D5D0; --line-2: #C2C1BB;
+      --accent: #D2570D; --accent-soft: #FBEEE4; --steel: #2B3A45; --steel-ink: #F2F1EE;
+      --ok: #1C6E48; --ok-soft: #E2F0E8; --warn: #9B6A05; --warn-soft: #F8EED6;
+      --bad: #A8291F; --bad-soft: #F8E5E2;
+      --sky: #E4EBF0; --sea: #BBD2E0; --sea-deep: #9DBBCD; --bed: #D8D2C4;
+      --hull: #43535F; --linea: #6C7F8C;
+      --shadow: none;
+    }
+    .app { box-shadow: none; }
   }
 
   </style>

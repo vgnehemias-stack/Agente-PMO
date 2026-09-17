@@ -139,10 +139,21 @@ lleva a la reunión.** Es el mismo documento, convertido en un HTML completo y a
 
 Pesa 470 KB: se envía por correo sin problema.
 
-**Se genera, no se edita a mano.** Si cambia la propuesta, se vuelve a ejecutar:
+### Y en PDF: `propuesta-monoboyas.pdf`
+
+[`03-mockups/propuesta-monoboyas.pdf`](03-mockups/propuesta-monoboyas.pdf) — el mismo documento en
+**A3 vertical y tema claro**, 20 páginas. Cada apartado empieza en su hoja y ningún mockup queda
+partido entre dos páginas.
+
+Se eligió A3 porque el diseño mide 1180 px de ancho: en A4 habría que encogerlo a dos tercios y los
+mockups quedarían ilegibles. Para papel corriente, `python3 generar-pdf.py --a4`.
+
+**Se genera, no se edita a mano.** Si cambia la propuesta, se vuelven a ejecutar los dos, en orden:
 
 ```bash
-cd monoboyas-powerapps/03-mockups && python3 exportar.py
+cd monoboyas-powerapps/03-mockups
+python3 exportar.py        # el HTML autónomo
+python3 generar-pdf.py     # el PDF, a partir del HTML
 ```
 
 Así el artifact publicado y el archivo para presentar no se separan nunca. La fuente sigue siendo
