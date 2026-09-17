@@ -1,0 +1,42 @@
+<svg id="esquema" viewBox="0 0 660 380" role="img" aria-label="Esquema de la monoboya tipo CALM: a la izquierda la costa y la tuberia de fondo hasta el PLEM, de ahi las mangueras submarinas suben a la boya, que se sujeta al fondo por cadenas de fondeo; desde la boya salen la estacha de amarre y el tren de mangueras flotantes hasta el buque. Doce puntos numerados marcan cada subsistema sobre la parte que le corresponde.">
+        <rect x="0" y="0" width="660" height="165" fill="var(--sky)"/>
+        <rect x="0" y="165" width="660" height="165" fill="var(--sea)"/>
+        <rect x="0" y="278" width="660" height="52" fill="var(--sea-deep)" opacity=".45"/>
+        <rect x="0" y="330" width="660" height="50" fill="var(--bed)"/>
+        <line x1="0" y1="165" x2="660" y2="165" stroke="var(--linea)" stroke-width="1.5"/>
+        <!-- tierra y tuberia a la refineria -->
+        <rect x="0" y="140" width="56" height="26" fill="var(--bed)"/>
+        <rect x="8" y="122" width="17" height="18" rx="1.5" fill="var(--hull)"/>
+        <rect x="31" y="127" width="14" height="13" rx="1.5" fill="var(--hull)"/>
+        <path d="M26,166 L26,329 L188,329" fill="none" stroke="var(--linea)" stroke-width="3"/>
+        <!-- PLEM -->
+        <rect x="188" y="322" width="38" height="14" rx="2" fill="var(--hull)"/>
+        <!-- mangueras submarinas -->
+        <path d="M250,202 C312,240 316,300 210,325" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+        <!-- cadenas de fondeo -->
+        <path d="M208,200 L96,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M232,203 L170,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <path d="M292,200 L404,331" fill="none" stroke="var(--linea)" stroke-width="1.6" stroke-dasharray="4 2.5"/>
+        <!-- boya -->
+        <rect x="180" y="156" width="15" height="28" rx="1.5" fill="var(--linea)"/>
+        <rect x="195" y="150" width="110" height="52" rx="5" fill="var(--hull)"/>
+        <rect x="200" y="142" width="102" height="9" rx="1.5" fill="var(--linea)"/>
+        <rect x="231" y="124" width="38" height="20" rx="2" fill="var(--linea)"/>
+        <rect x="208" y="132" width="20" height="12" rx="1.5" fill="var(--linea)"/>
+        <rect x="271" y="127" width="18" height="17" rx="1.5" fill="var(--linea)"/>
+        <line x1="250" y1="124" x2="250" y2="110" stroke="var(--hull)" stroke-width="2.5"/>
+        <circle cx="250" cy="106" r="5" fill="var(--warn)"/>
+        <!-- estacha de amarre -->
+        <path d="M302,146 Q374,110 446,138" fill="none" stroke="var(--hull)" stroke-width="2.5"/>
+        <!-- mangueras flotantes -->
+        <path d="M305,160 C345,184 420,186 496,146" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/>
+        <!-- buque -->
+        <path d="M430,150 L648,142 L648,176 L452,176 Z" fill="var(--hull)"/>
+        <rect x="604" y="118" width="34" height="24" rx="1.5" fill="var(--linea)"/>
+        <rect x="496" y="134" width="16" height="9" rx="1" fill="var(--linea)"/>
+        <text class="mk-lbl" x="4" y="116">TIERRA</text>
+        <text class="mk-lbl" x="222" y="224">BOYA</text>
+        <text class="mk-lbl" x="190" y="352">PLEM</text>
+        <text class="mk-lbl" x="520" y="196">BUQUE</text>
+        <text class="mk-lbl" x="430" y="352">FONDO MARINO</text>
+      </svg>

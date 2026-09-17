@@ -1,0 +1,733 @@
+<title>Prototipo de Monoboyas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F2F1EE; --surface: #FFFFFF; --surface-2: #E9E8E4; --surface-3: #F7F6F4;
+    --ink: #1B2228; --ink-2: #4A555E; --ink-3: #7A858E;
+    --line: #D6D5D0; --line-2: #C2C1BB;
+    --accent: #D2570D; --accent-soft: #FBEEE4;
+    --steel: #2B3A45; --steel-ink: #F2F1EE;
+    --ok: #1C6E48; --ok-soft: #E2F0E8;
+    --warn: #9B6A05; --warn-soft: #F8EED6;
+    --bad: #A8291F; --bad-soft: #F8E5E2;
+    --sky: #E4EBF0; --sea: #BBD2E0; --sea-deep: #9DBBCD; --bed: #D8D2C4;
+    --hull: #43535F; --linea: #6C7F8C;
+    --shadow: 0 1px 2px rgba(27,34,40,.07), 0 10px 30px rgba(27,34,40,.09);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14191D; --surface: #1D242A; --surface-2: #262E35; --surface-3: #212930;
+      --ink: #E9EDEF; --ink-2: #AFBAC2; --ink-3: #7D8993;
+      --line: #313B43; --line-2: #3E4952;
+      --accent: #F5843D; --accent-soft: #33231A;
+      --steel: #101519; --steel-ink: #D8E0E5;
+      --ok: #6FC79A; --ok-soft: #1A2E25;
+      --warn: #E0B25C; --warn-soft: #302819;
+      --bad: #EE8C80; --bad-soft: #33201D;
+      --sky: #1E262C; --sea: #22343F; --sea-deep: #1A2A33; --bed: #2E2B25;
+      --hull: #8FA3B0; --linea: #7A8D9A;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #14191D; --surface: #1D242A; --surface-2: #262E35; --surface-3: #212930;
+    --ink: #E9EDEF; --ink-2: #AFBAC2; --ink-3: #7D8993;
+    --line: #313B43; --line-2: #3E4952;
+    --accent: #F5843D; --accent-soft: #33231A;
+    --steel: #101519; --steel-ink: #D8E0E5;
+    --ok: #6FC79A; --ok-soft: #1A2E25;
+    --warn: #E0B25C; --warn-soft: #302819;
+    --bad: #EE8C80; --bad-soft: #33201D;
+    --sky: #1E262C; --sea: #22343F; --sea-deep: #1A2A33; --bed: #2E2B25;
+    --hull: #8FA3B0; --linea: #7A8D9A;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: Archivo, system-ui, sans-serif; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  button { font: inherit; cursor: pointer; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  /* ---------- Marco de la app ---------- */
+  .apli { display: flex; flex-direction: column; height: 100%; min-height: 100%; }
+  .appbar {
+    background: var(--steel); color: var(--steel-ink);
+    padding: 9px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-top: calc(9px + env(safe-area-inset-top, 0px));
+  }
+  .appbar .marca { font-family: Archivo, sans-serif; font-weight: 700; letter-spacing: -.01em; font-size: 15px; }
+  .appbar .etq {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .1em; padding: 3px 7px; border-radius: 3px;
+    background: var(--accent); color: #fff;
+  }
+  .buscador {
+    margin-left: auto; display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,.13); border-radius: 5px; padding: 5px 10px;
+    min-width: 180px; flex: 0 1 300px;
+  }
+  .buscador input {
+    background: none; border: 0; outline: none; color: inherit; width: 100%;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+  }
+  .buscador input::placeholder { color: rgba(255,255,255,.5); }
+  .appbar .btn-bar {
+    background: rgba(255,255,255,.13); color: inherit; border: 0;
+    border-radius: 5px; padding: 6px 11px; font-size: 12px; white-space: nowrap;
+  }
+  .appbar .btn-bar:hover { background: rgba(255,255,255,.24); }
+  .appbar .btn-bar.on { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .shell { display: grid; grid-template-columns: 186px 1fr; flex: 1; min-height: 0; }
+  .nav {
+    background: var(--surface-3); border-right: 1px solid var(--line);
+    padding: 12px 0; display: flex; flex-direction: column; gap: 1px; overflow-y: auto;
+  }
+  .nav .grp {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+    padding: 13px 15px 4px;
+  }
+  .nav button {
+    background: none; border: 0; text-align: left; width: 100%;
+    padding: 8px 15px; font-size: 13px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav button:hover { background: var(--surface-2); color: var(--ink); }
+  .nav button.on {
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .nav .cuenta {
+    margin-left: auto; font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px; color: var(--ink-3);
+  }
+  .vista { padding: 18px 22px 40px; overflow-y: auto; min-width: 0; }
+
+  /* ---------- Piezas ---------- */
+  .miga {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3);
+    display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 10px;
+  }
+  .miga button {
+    background: none; border: 0; padding: 0; color: var(--accent);
+    font-family: inherit; font-size: inherit; text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .cabecera { display: flex; flex-wrap: wrap; gap: 9px 15px; align-items: baseline; margin-bottom: 16px; }
+  .cabecera .cod {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600;
+    color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 3px;
+  }
+  .cabecera h2 { font-size: 21px; font-weight: 600; letter-spacing: -.015em; }
+
+  .pill {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 3px; white-space: nowrap;
+  }
+  .p-ok { background: var(--ok-soft); color: var(--ok); }
+  .p-warn { background: var(--warn-soft); color: var(--warn); }
+  .p-bad { background: var(--bad-soft); color: var(--bad); }
+  .p-n { background: var(--surface-2); color: var(--ink-2); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px 11px;
+    background: var(--surface); display: flex; flex-direction: column; gap: 1px;
+  }
+  .stat .n {
+    font-family: Archivo, sans-serif; font-size: 23px; font-weight: 700; line-height: 1.1;
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .stat .l { font-size: 11px; color: var(--ink-3); line-height: 1.3; }
+  .stat.alerta { border-color: var(--warn); background: var(--warn-soft); }
+  .stat.alerta .n, .stat.alerta .l { color: var(--warn); }
+
+  .selector { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .selector .et {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .conmutador { display: inline-flex; border: 1px solid var(--line-2); border-radius: 5px; overflow: hidden; }
+  .conmutador button {
+    border: 0; padding: 6px 14px; font-size: 12.5px; color: var(--ink-2); background: var(--surface);
+  }
+  .conmutador button + button { border-left: 1px solid var(--line-2); }
+  .conmutador button.on { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(226px, 1fr)); gap: 11px; }
+  .tarjeta {
+    border: 1px solid var(--line); border-radius: 6px; padding: 12px 13px 13px;
+    background: var(--surface); text-align: left; width: 100%;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tarjeta:hover { border-color: var(--accent); }
+  .tarjeta .fila { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tarjeta .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--accent); }
+  .tarjeta h4 { font-size: 13.5px; font-weight: 600; line-height: 1.28; }
+  .tarjeta .pie {
+    display: flex; gap: 10px; font-size: 10.5px; color: var(--ink-3);
+    font-family: "IBM Plex Mono", monospace; padding-top: 4px; border-top: 1px solid var(--line);
+  }
+
+  /* panel dividido: lista + esquema */
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
+  .listado { display: flex; flex-direction: column; gap: 4px; }
+  .li {
+    display: flex; align-items: center; gap: 9px; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 5px; font-size: 12.5px;
+    background: var(--surface); text-align: left; width: 100%; color: inherit;
+  }
+  .li:hover { border-color: var(--accent); }
+  .li.on { border-color: var(--accent); background: var(--accent-soft); }
+  .li .n {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    background: var(--accent); color: #fff; border-radius: 3px;
+    width: 20px; text-align: center; padding: 2px 0; flex: none;
+  }
+  .li.avisa .n { background: var(--warn); }
+  .li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .marco { border: 1px solid var(--line); border-radius: 6px; padding: 9px; background: var(--surface); }
+  #esquema { width: 100%; max-width: 100%; height: auto; display: block; border-radius: 4px; }
+  #esquema text { font-family: "IBM Plex Mono", monospace; }
+  .mk-lbl { font-size: 10px; fill: var(--ink-3); }
+  .marcador circle { fill: var(--accent); stroke: #fff; stroke-width: 1.5; transition: r .12s ease; }
+  .marcador.avisa circle { fill: var(--warn); }
+  .marcador text { font-size: 9px; font-weight: 600; fill: #fff; pointer-events: none; }
+  .marcador { cursor: pointer; }
+  .marcador:hover circle { stroke-width: 2.5; }
+  .marcador.sel circle { stroke-width: 3; }
+  .marcador.apagado { opacity: .35; }
+
+  .ficha-sel {
+    margin-top: 10px; border: 1px solid var(--accent); border-radius: 6px;
+    padding: 11px 13px; background: var(--surface); display: flex;
+    flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .ficha-sel .txt { flex: 1; min-width: 150px; }
+  .ficha-sel h4 { font-size: 14px; font-weight: 600; }
+  .ficha-sel .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3); }
+
+  /* pestañas */
+  .pestanas { display: flex; gap: 2px; border-bottom: 1px solid var(--line); flex-wrap: wrap; margin-bottom: 16px; }
+  .pestanas button {
+    background: none; border: 0; padding: 8px 14px; font-size: 13px; color: var(--ink-3);
+    border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+  }
+  .pestanas button:hover { color: var(--ink); }
+  .pestanas button.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .pestanas .cuenta { font-family: "IBM Plex Mono", monospace; font-size: 10px; opacity: .75; margin-left: 5px; }
+
+  /* tablas */
+  .tabla { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 420px; }
+  thead th {
+    background: var(--surface-3); text-align: left;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+    padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr.clic:hover { background: var(--accent-soft); cursor: pointer; }
+  td.cod { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+  td.num { text-align: right; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  td.fuerte { font-weight: 600; }
+
+  /* pares clave-valor */
+  .kvs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 26px; }
+  .kv {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 12.5px;
+  }
+  .kv span { color: var(--ink-3); }
+  .kv b { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 12px; text-align: right; }
+  .kv b.vacio { color: var(--ink-3); font-weight: 400; font-style: italic; font-family: "IBM Plex Sans", sans-serif; }
+
+  .vacio-msg {
+    border: 1px dashed var(--line-2); border-radius: 6px; padding: 18px;
+    text-align: center; color: var(--ink-3); font-size: 13px; background: var(--surface-3);
+  }
+  .vacio-msg b { color: var(--ink-2); font-weight: 600; }
+
+  .nota {
+    background: var(--surface-3); border-left: 3px solid var(--line-2);
+    padding: 9px 12px; font-size: 12px; color: var(--ink-3);
+    border-radius: 0 4px 4px 0; margin-top: 14px;
+  }
+
+  /* panel de información */
+  .velo {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 90;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal {
+    background: var(--surface); border-radius: 8px; max-width: 480px; width: 100%;
+    padding: 22px 24px 24px; box-shadow: var(--shadow); max-height: 86vh; overflow-y: auto;
+  }
+  .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+  .modal ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .modal li { font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+  .modal li b { color: var(--ink); font-weight: 600; }
+  .modal .cerrar {
+    margin-top: 18px; background: var(--accent); color: #fff; border: 0;
+    border-radius: 5px; padding: 9px 18px; font-size: 13px; font-weight: 600;
+  }
+
+  @media (max-width: 720px) {
+    .shell { grid-template-columns: 1fr; }
+    .nav {
+      flex-direction: row; overflow-x: auto; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 6px 4px;
+    }
+    .nav .grp { display: none; }
+    .nav button { white-space: nowrap; padding: 7px 12px; width: auto; }
+    .nav button.on { box-shadow: inset 0 -2px 0 var(--accent); }
+    .nav .cuenta { display: none; }
+    .split { grid-template-columns: minmax(0, 1fr); }
+    .vista { padding: 14px 16px 40px; }
+  }
+</style>
+
+<div class="apli">
+  <div class="appbar">
+    <span class="marca">Monoboyas</span>
+    <span class="etq">PROTOTIPO</span>
+    <span class="buscador">
+      <span aria-hidden="true">🔍</span>
+      <input id="q" type="search" placeholder="buscar por código o nombre…" aria-label="Buscar">
+    </span>
+    <button class="btn-bar" id="btn-ejemplo" type="button" aria-pressed="false">Datos de ejemplo</button>
+    <button class="btn-bar" id="btn-info" type="button">Qué es esto</button>
+  </div>
+  <div class="shell">
+    <nav class="nav" id="nav" aria-label="Menú"></nav>
+    <main class="vista" id="vista" tabindex="-1"></main>
+  </div>
+</div>
+
+<script>
+const DATOS = /*DATOS*/;
+
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------ *
+   * Estado y utilidades
+   * ------------------------------------------------------------------ */
+  const E = { seccion: "global", nodo: null, vista: "lista", pestana: null, sel: null, ejemplo: false, q: "" };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const NODOS = DATOS.nodos;
+  const porCod = Object.fromEntries(NODOS.map((n) => [n.c, n]));
+  const hijos = (c) => NODOS.filter((n) => n.p === c);
+  const subsistemas = () => NODOS.filter((n) => n.niv === 2);
+  const equipos = () => NODOS.filter((n) => n.niv === 3);
+  const raiz = () => NODOS.find((n) => n.niv === 1);
+
+  // Un nodo "cubre" a otro si es el mismo o un ancestro suyo
+  const ruta = (c) => { const r = []; let x = porCod[c]; while (x) { r.unshift(x); x = porCod[x.p]; } return r; };
+  const bajo = (raizC, c) => ruta(c).some((n) => n.c === raizC);
+
+  const materialesDe = (c) => DATOS.matNodo.filter((m) => bajo(c, m.nodo));
+  const frecuenciasDe = (c) => DATOS.frecuencias.filter((f) => bajo(c, f.nodo));
+  const documentosDe = (c) => DATOS.documentos.filter((d) => bajo(c, d.nodo));
+
+  /* Datos de ejemplo: solo cuando el conmutador está activo. Nunca se mezclan
+     con los del levantamiento sin avisar. */
+  const ej = () => (E.ejemplo ? DATOS.ejemplo : null);
+  const tecnicoDe = (c) => (ej() && DATOS.ejemplo.tecnico[c]) || null;
+  const stockDe = (m) => (ej() && DATOS.ejemplo.stock[m]) || null;
+  const venceDe = (k) => (ej() && DATOS.ejemplo.vence[k]) || null;
+
+  function vigencia(fecha) {
+    if (!fecha) return { txt: "Sin fecha", cls: "p-n" };
+    const dias = Math.round((new Date(fecha) - new Date(DATOS.hoy)) / 86400000);
+    if (dias < 0) return { txt: "Vencido", cls: "p-bad", dias };
+    if (dias <= 60) return { txt: "Por vencer", cls: "p-warn", dias };
+    return { txt: "Vigente", cls: "p-ok", dias };
+  }
+
+  // Un subsistema avisa si alguno de sus documentos está vencido o por vencer
+  function avisa(c) {
+    if (!ej()) return false;
+    return documentosDe(c).some((d) => {
+      const f = venceDe(d.k);
+      return f && vigencia(f).cls !== "p-ok";
+    });
+  }
+  const conAviso = () => (ej() ? subsistemas().filter((s) => avisa(s.c)).length : 0);
+
+  /* ------------------------------------------------------------------ *
+   * Menú lateral
+   * ------------------------------------------------------------------ */
+  const MENU = [
+    { grp: "Activo" },
+    { id: "global", txt: "Vista global" },
+    { id: "subsistemas", txt: "Subsistemas", n: () => subsistemas().length },
+    { id: "equipos", txt: "Equipos", n: () => equipos().length },
+    { grp: "Información" },
+    { id: "materiales", txt: "Materiales", n: () => Object.keys(DATOS.materiales).length },
+    { id: "documentos", txt: "Documentos", n: () => DATOS.documentos.length },
+    { id: "frecuencias", txt: "Frecuencias", n: () => DATOS.frecuencias.length }
+  ];
+
+  function pintarMenu() {
+    $("nav").innerHTML = MENU.map((m) => {
+      if (m.grp) return '<span class="grp">' + esc(m.grp) + "</span>";
+      const activo = E.seccion === m.id || (m.id === "global" && E.seccion === "nodo");
+      return '<button type="button" data-ir="' + m.id + '"' + (activo ? ' class="on"' : "") + ">" +
+        esc(m.txt) + (m.n ? '<span class="cuenta">' + m.n() + "</span>" : "") + "</button>";
+    }).join("");
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Pantallas
+   * ------------------------------------------------------------------ */
+  function pintar() {
+    pintarMenu();
+    const v = $("vista");
+    if (E.q.trim()) v.innerHTML = pantallaBusqueda();
+    else if (E.seccion === "nodo") v.innerHTML = pantallaNodo();
+    else if (E.seccion === "global") v.innerHTML = pantallaGlobal();
+    else v.innerHTML = pantallaTabla(E.seccion);
+    if (E.seccion === "global" && E.vista === "esquema" && !E.q.trim()) pintarMarcadores();
+    v.scrollTop = 0;
+  }
+
+  /* --- Vista global --- */
+  function pantallaGlobal() {
+    const r = raiz();
+    const stats = [
+      [subsistemas().length, "Subsistemas"],
+      [equipos().length, "Equipos"],
+      [Object.keys(DATOS.materiales).length, "Materiales"],
+      [DATOS.documentos.length, "Documentos"]
+    ].map((s) => '<div class="stat"><span class="n">' + s[0] + '</span><span class="l">' + s[1] + "</span></div>").join("");
+    const aviso = conAviso()
+      ? '<div class="stat alerta"><span class="n">' + conAviso() + '</span><span class="l">Con documentos por vencer</span></div>'
+      : "";
+
+    return '<div class="cabecera"><span class="cod">' + esc(r.c) + "</span><h2>" + esc(r.n) + "</h2>" +
+      '<span class="pill p-ok" style="margin-left:auto">Operativa</span></div>' +
+      '<div class="stats">' + stats + aviso + "</div>" +
+      '<div class="selector"><span class="et">Ver como</span><div class="conmutador">' +
+        '<button type="button" data-vista="lista"' + (E.vista === "lista" ? ' class="on"' : "") + ">▤ Lista</button>" +
+        '<button type="button" data-vista="esquema"' + (E.vista === "esquema" ? ' class="on"' : "") + ">◈ Esquema</button>" +
+      "</div></div>" +
+      (E.vista === "lista" ? vistaLista() : vistaEsquema());
+  }
+
+  function vistaLista() {
+    return '<div class="tarjetas">' + subsistemas().map((s) => {
+      const d = documentosDe(s.c).length;
+      return '<button class="tarjeta" type="button" data-nodo="' + esc(s.c) + '">' +
+        '<div class="fila"><span class="cod">' + esc(s.c) + "</span>" +
+        '<span class="pill ' + (avisa(s.c) ? "p-warn" : critCls(s.crit)) + '">' +
+          (avisa(s.c) ? "Revisar" : "Crítico " + esc(s.crit)) + "</span></div>" +
+        "<h4>" + esc(s.n) + "</h4>" +
+        '<div class="pie"><span>' + hijos(s.c).length + " partes</span><span>" + d + " docs</span></div></button>";
+    }).join("") + "</div>";
+  }
+
+  function vistaEsquema() {
+    const lista = subsistemas().map((s, i) =>
+      '<button class="li ' + (E.sel === s.c ? "on " : "") + (avisa(s.c) ? "avisa" : "") +
+      '" type="button" data-sel="' + esc(s.c) + '"><span class="n">' + pad(i + 1) +
+      '</span><span class="t">' + esc(s.n) + "</span></button>").join("");
+
+    const sel = E.sel ? porCod[E.sel] : null;
+    const fichaSel = sel
+      ? '<div class="ficha-sel"><div class="txt"><h4>' + esc(sel.n) + "</h4>" +
+        '<span class="cod">' + esc(sel.c) + " · " + hijos(sel.c).length + " partes · " +
+        documentosDe(sel.c).length + " documentos</span></div>" +
+        '<button class="btn-abrir" type="button" data-nodo="' + esc(sel.c) + '" ' +
+        'style="background:var(--accent);color:#fff;border:0;border-radius:5px;padding:8px 16px;font-weight:600;font-size:12.5px">Abrir</button></div>'
+      : '<p class="nota">Toca un punto del esquema o un subsistema de la lista.</p>';
+
+    return '<div class="split"><div class="listado">' + lista + "</div>" +
+      '<div><div class="marco">' + DATOS.escena + "</div>" + fichaSel + "</div></div>";
+  }
+
+  function pintarMarcadores() {
+    const svg = $("esquema");
+    if (!svg) return;
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    subsistemas().forEach((s, i) => {
+      if (s.x == null || s.y == null) return;
+      const x = s.x * 6.6, y = s.y * 3.8;
+      const sel = E.sel === s.c;
+      const nodo = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      nodo.setAttribute("class", "marcador" + (avisa(s.c) ? " avisa" : "") +
+        (sel ? " sel" : E.sel ? " apagado" : ""));
+      nodo.setAttribute("data-sel", s.c);
+      nodo.setAttribute("tabindex", "0");
+      nodo.setAttribute("role", "button");
+      nodo.setAttribute("aria-label", s.n);
+      nodo.innerHTML = '<circle cx="' + x + '" cy="' + y + '" r="' + (sel ? 12 : 9.5) + '"></circle>' +
+        '<text x="' + x + '" y="' + y + '" text-anchor="middle" dominant-baseline="central">' + pad(i + 1) + "</text>";
+      g.appendChild(nodo);
+    });
+    svg.appendChild(g);
+  }
+
+  /* --- Ficha de un nodo (subsistema o equipo) --- */
+  function pantallaNodo() {
+    const n = porCod[E.nodo];
+    if (!n) return '<p class="vacio-msg">Nodo no encontrado.</p>';
+
+    const partes = hijos(n.c), mats = materialesDe(n.c),
+          frecs = frecuenciasDe(n.c), docs = documentosDe(n.c);
+
+    const tabs = [];
+    if (partes.length) tabs.push(["partes", "Partes", partes.length]);
+    tabs.push(["tecnico", "Técnico", null]);
+    tabs.push(["materiales", "Materiales", mats.length]);
+    tabs.push(["frecuencias", "Frecuencias", frecs.length]);
+    tabs.push(["documentos", "Documentos", docs.length]);
+    if (!tabs.some((t) => t[0] === E.pestana)) E.pestana = tabs[0][0];
+
+    const migas = ruta(n.c).map((x, i, a) => i === a.length - 1
+      ? "<b>" + esc(x.c) + "</b>"
+      : '<button type="button" data-nodo="' + esc(x.c) + '">' + esc(x.c) + "</button>").join(" ▸ ");
+
+    const cuerpo = { partes: tabPartes, tecnico: tabTecnico, materiales: tabMateriales,
+                     frecuencias: tabFrecuencias, documentos: tabDocumentos }[E.pestana](n, { partes, mats, frecs, docs });
+
+    return '<p class="miga">' + migas + "</p>" +
+      '<div class="cabecera"><span class="cod">' + esc(n.c) + "</span><h2>" + esc(n.n) + "</h2>" +
+      '<span class="pill ' + critCls(n.crit) + '" style="margin-left:auto">Crítico ' + esc(n.crit) + "</span></div>" +
+      '<div class="pestanas">' + tabs.map((t) =>
+        '<button type="button" data-pestana="' + t[0] + '"' + (E.pestana === t[0] ? ' class="on"' : "") + ">" +
+        esc(t[1]) + (t[2] != null ? '<span class="cuenta">' + t[2] + "</span>" : "") + "</button>").join("") + "</div>" +
+      cuerpo;
+  }
+
+  function tabPartes(n, d) {
+    return tabla(["Código", "Parte", "Ubicación", "Criticidad", "Estado"],
+      d.partes.map((p) => ({
+        clic: p.c,
+        celdas: ['<td class="cod">' + esc(p.c) + "</td>",
+                 '<td class="fuerte">' + esc(p.n) + "</td>",
+                 "<td>" + esc(p.ubi || "—") + "</td>",
+                 "<td>" + esc(p.crit) + "</td>",
+                 '<td><span class="pill ' + (p.est === "Degradado" ? "p-warn" : "p-ok") + '">' + esc(p.est) + "</span></td>"]
+      })));
+  }
+
+  function tabTecnico(n) {
+    const t = tecnicoDe(n.c);
+    const campo = (k, v) => '<div class="kv"><span>' + k + "</span>" +
+      (v ? "<b>" + esc(v) + "</b>" : '<b class="vacio">por completar</b>') + "</div>";
+    return '<div class="kvs">' +
+      campo("Fabricante", t && t.fab) + campo("Criticidad", n.crit) +
+      campo("Modelo", t && t.mod) + campo("Ubicación física", n.ubi) +
+      campo("N° de serie", t && t.ser) + campo("Requiere buzo o ROV", n.buzo) +
+      campo("Fecha de instalación", t && t.inst) + campo("Estado", n.est) +
+      "</div>" +
+      (t ? "" : '<p class="nota">Los campos vacíos los llena la Fase 0, desde la placa del equipo o el manual. La app nunca los rellena sola.</p>');
+  }
+
+  function tabMateriales(n, d) {
+    if (!d.mats.length) return vacio("Sin materiales asociados");
+    return tabla(["Material", "Código SAP", "Cant. ref.", "Disponible", "Estado"],
+      d.mats.map((mn) => {
+        const m = DATOS.materiales[mn.mat] || {};
+        const st = stockDe(mn.mat);
+        const bajo = st && st.disp < m.min;
+        return { celdas: [
+          '<td class="fuerte">' + esc(m.desc || mn.mat) + '<br><span class="cod">' + esc(mn.mat) + "</span></td>",
+          '<td class="cod">' + esc(m.sap || "—") + "</td>",
+          '<td class="num">' + esc(mn.cant) + " " + esc(m.un || "") + "</td>",
+          '<td class="num">' + (st ? st.disp : "—") + "</td>",
+          "<td>" + (st ? '<span class="pill ' + (bajo ? "p-warn" : "p-ok") + '">' + (bajo ? "Bajo mínimo" : "OK") + "</span>"
+                       : '<span class="pill p-n">Sin cargar</span>') + "</td>"
+        ] };
+      })) + (ej() ? "" : '<p class="nota">El stock se carga en la Fase 3. Activa «Datos de ejemplo» para ver cómo se vería.</p>');
+  }
+
+  function tabFrecuencias(n, d) {
+    if (!d.frecs.length) return vacio("Sin frecuencias de referencia");
+    return tabla(["Referencia", "Tipo", "Frecuencia", "Última", "Norma"],
+      d.frecs.map((f) => ({ celdas: [
+        '<td class="fuerte">' + esc(f.desc) + "</td>",
+        "<td>" + esc(f.tipo) + "</td>",
+        '<td class="cod">Cada ' + esc(f.val) + " " + esc(f.uni.toLowerCase()) + "</td>",
+        '<td class="cod">' + esc(f.ultima || "—") + "</td>",
+        '<td class="cod">' + esc(f.norma || "—") + "</td>"
+      ] }))) +
+      '<p class="nota">Información de referencia: la aplicación no programa ni dispara mantenimientos.</p>';
+  }
+
+  function tabDocumentos(n, d) {
+    if (!d.docs.length) return vacio("Sin documentos asociados");
+    return tabla(["Documento", "Tipo", "Emisor", "Vence", "Vigencia"],
+      d.docs.map((doc) => {
+        const f = venceDe(doc.k), v = vigencia(f);
+        return { celdas: [
+          '<td class="fuerte">' + esc(doc.nombre) + "</td>",
+          '<td class="cod">' + esc(doc.tipo) + "</td>",
+          '<td class="cod">' + esc(doc.emisor || "—") + "</td>",
+          '<td class="cod">' + esc(f || "—") + "</td>",
+          '<td><span class="pill ' + v.cls + '">' + v.txt + "</span></td>"
+        ] };
+      }));
+  }
+
+  /* --- Listados del menú --- */
+  function pantallaTabla(sec) {
+    const P = {
+      subsistemas: () => ["Subsistemas", ["Código", "Subsistema", "Partes", "Docs", "Criticidad"],
+        subsistemas().map((s) => ({ clic: s.c, celdas: [
+          '<td class="cod">' + esc(s.c) + "</td>", '<td class="fuerte">' + esc(s.n) + "</td>",
+          '<td class="num">' + hijos(s.c).length + "</td>",
+          '<td class="num">' + documentosDe(s.c).length + "</td>",
+          '<td><span class="pill ' + critCls(s.crit) + '">' + esc(s.crit) + "</span></td>"] }))],
+      equipos: () => ["Equipos", ["Código", "Equipo", "Subsistema", "Ubicación", "Estado"],
+        equipos().map((e) => ({ clic: e.c, celdas: [
+          '<td class="cod">' + esc(e.c) + "</td>", '<td class="fuerte">' + esc(e.n) + "</td>",
+          '<td class="cod">' + esc((porCod[e.p] || {}).n || "") + "</td>",
+          "<td>" + esc(e.ubi || "—") + "</td>",
+          '<td><span class="pill ' + (e.est === "Degradado" ? "p-warn" : "p-ok") + '">' + esc(e.est) + "</span></td>"] }))],
+      materiales: () => ["Catálogo de materiales", ["Código", "Descripción", "SAP", "Unidad", "Mín.", "Plazo"],
+        Object.entries(DATOS.materiales).map(([k, m]) => ({ celdas: [
+          '<td class="cod">' + esc(k) + "</td>", '<td class="fuerte">' + esc(m.desc) + "</td>",
+          '<td class="cod">' + esc(m.sap || "—") + "</td>", "<td>" + esc(m.un) + "</td>",
+          '<td class="num">' + esc(m.min) + "</td>",
+          '<td class="num">' + esc(m.lead) + " d</td>"] }))],
+      documentos: () => ["Documentos y planos", ["Documento", "Tipo", "Nodo", "Vence", "Vigencia"],
+        DATOS.documentos.map((d) => {
+          const f = venceDe(d.k), v = vigencia(f);
+          return { clic: d.nodo, celdas: [
+            '<td class="fuerte">' + esc(d.nombre) + "</td>", '<td class="cod">' + esc(d.tipo) + "</td>",
+            '<td class="cod">' + esc(d.nodo) + "</td>", '<td class="cod">' + esc(f || "—") + "</td>",
+            '<td><span class="pill ' + v.cls + '">' + v.txt + "</span></td>"] };
+        })],
+      frecuencias: () => ["Frecuencias de referencia", ["Referencia", "Nodo", "Tipo", "Frecuencia", "Norma"],
+        DATOS.frecuencias.map((f) => ({ clic: f.nodo, celdas: [
+          '<td class="fuerte">' + esc(f.desc) + "</td>", '<td class="cod">' + esc(f.nodo) + "</td>",
+          "<td>" + esc(f.tipo) + "</td>",
+          '<td class="cod">Cada ' + esc(f.val) + " " + esc(f.uni.toLowerCase()) + "</td>",
+          '<td class="cod">' + esc(f.norma || "—") + "</td>"] }))]
+    }[sec]();
+
+    return '<div class="cabecera"><h2>' + esc(P[0]) + '</h2><span class="pill p-n" style="margin-left:auto">' +
+      P[2].length + " registros</span></div>" + tabla(P[1], P[2]);
+  }
+
+  /* --- Búsqueda --- */
+  function pantallaBusqueda() {
+    const q = E.q.trim().toLowerCase();
+    const res = NODOS.filter((n) => n.c.toLowerCase().includes(q) || n.n.toLowerCase().includes(q));
+    if (!res.length) return '<div class="cabecera"><h2>Sin resultados</h2></div>' +
+      vacio("Nada coincide con «" + esc(E.q) + "»");
+    return '<div class="cabecera"><h2>Resultados</h2><span class="pill p-n" style="margin-left:auto">' +
+      res.length + "</span></div>" +
+      tabla(["Código", "Nombre", "Tipo", "Criticidad"], res.map((n) => ({ clic: n.c, celdas: [
+        '<td class="cod">' + esc(n.c) + "</td>", '<td class="fuerte">' + esc(n.n) + "</td>",
+        "<td>" + esc(n.tipo) + "</td>", "<td>" + esc(n.crit) + "</td>"] })));
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Piezas de presentación
+   * ------------------------------------------------------------------ */
+  const pad = (i) => (i < 10 ? "0" : "") + i;
+  const critCls = (c) => (c === "A" ? "p-bad" : c === "B" ? "p-warn" : "p-n");
+  const vacio = (t) => '<div class="vacio-msg"><b>' + esc(t) + "</b><br>Se carga en la Fase 0.</div>";
+
+  function tabla(cabeceras, filas) {
+    return '<div class="tabla"><table><thead><tr>' +
+      cabeceras.map((c) => "<th>" + esc(c) + "</th>").join("") + "</tr></thead><tbody>" +
+      filas.map((f) => "<tr" + (f.clic ? ' class="clic" data-nodo="' + esc(f.clic) + '"' : "") + ">" +
+        f.celdas.join("") + "</tr>").join("") + "</tbody></table></div>";
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Navegación e interacción
+   * ------------------------------------------------------------------ */
+  function irA(c) {
+    // La raiz no tiene ficha propia: su ficha es la vista global
+    const n = porCod[c];
+    if (n && n.niv === 1) { E.seccion = "global"; E.sel = null; }
+    else { E.seccion = "nodo"; E.nodo = c; E.pestana = null; }
+    E.q = ""; $("q").value = "";
+    guardar();
+  }
+  function guardar() { location.hash = E.seccion === "nodo" ? "#/n/" + E.nodo : "#/" + E.seccion; }
+
+  function desdeHash() {
+    const h = location.hash.replace(/^#\//, "");
+    if (h.startsWith("n/")) {
+      const c = decodeURIComponent(h.slice(2));
+      if (porCod[c]) { E.seccion = "nodo"; E.nodo = c; return; }
+    }
+    E.seccion = ["global", "subsistemas", "equipos", "materiales", "documentos", "frecuencias"]
+      .includes(h) ? h : "global";
+  }
+
+  document.addEventListener("click", (ev) => {
+    const t = ev.target.closest("[data-nodo],[data-sel],[data-vista],[data-pestana],[data-ir]");
+    if (!t) return;
+    if (t.dataset.nodo) { irA(t.dataset.nodo); pintar(); }
+    else if (t.dataset.sel) { E.sel = E.sel === t.dataset.sel ? null : t.dataset.sel; pintar(); }
+    else if (t.dataset.vista) { E.vista = t.dataset.vista; E.sel = null; pintar(); }
+    else if (t.dataset.pestana) { E.pestana = t.dataset.pestana; pintar(); }
+    else if (t.dataset.ir) { E.seccion = t.dataset.ir; E.sel = null; E.q = ""; $("q").value = ""; guardar(); pintar(); }
+  });
+
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    const t = ev.target.closest(".marcador");
+    if (!t) return;
+    ev.preventDefault();
+    E.sel = E.sel === t.dataset.sel ? null : t.dataset.sel;
+    pintar();
+  });
+
+  $("q").addEventListener("input", (ev) => { E.q = ev.target.value; pintar(); });
+
+  $("btn-ejemplo").addEventListener("click", () => {
+    E.ejemplo = !E.ejemplo;
+    const b = $("btn-ejemplo");
+    b.classList.toggle("on", E.ejemplo);
+    b.setAttribute("aria-pressed", String(E.ejemplo));
+    pintar();
+  });
+
+  $("btn-info").addEventListener("click", abrirInfo);
+  window.addEventListener("hashchange", () => { desdeHash(); pintar(); });
+
+  function abrirInfo() {
+    const velo = document.createElement("div");
+    velo.className = "velo";
+    velo.innerHTML = '<div class="modal" role="dialog" aria-modal="true" aria-label="Qué es esto">' +
+      "<h3>Qué es esto</h3><ul>" +
+      "<li>Un <b>prototipo navegable</b> de la aplicación propuesta. Sirve para ver cómo se verá y cómo se moverá uno por ella, no para trabajar.</li>" +
+      "<li>Los datos son los <b>del levantamiento real</b>: " + subsistemas().length + " subsistemas y " +
+        equipos().length + " equipos, con sus materiales, frecuencias y documentos.</li>" +
+      "<li>Los campos técnicos salen <b>vacíos a propósito</b>: es lo que falta por llenar en la Fase 0.</li>" +
+      "<li><b>Datos de ejemplo</b> añade fechas y stock inventados para ver los avisos y el semáforo. Nunca se mezclan con los reales.</li>" +
+      "<li>Los códigos son <b>provisionales</b> hasta que se cargue la codificación oficial de subsistemas.</li>" +
+      "</ul><button class='cerrar' type='button'>Entendido</button></div>";
+    velo.addEventListener("click", (ev) => {
+      if (ev.target === velo || ev.target.classList.contains("cerrar")) velo.remove();
+    });
+    document.body.appendChild(velo);
+    velo.querySelector(".cerrar").focus();
+  }
+
+  desdeHash();
+  pintar();
+})();
+</script>

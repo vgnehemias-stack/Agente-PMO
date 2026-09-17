@@ -1,0 +1,733 @@
+<title>Prototipo de Monoboyas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F2F1EE; --surface: #FFFFFF; --surface-2: #E9E8E4; --surface-3: #F7F6F4;
+    --ink: #1B2228; --ink-2: #4A555E; --ink-3: #7A858E;
+    --line: #D6D5D0; --line-2: #C2C1BB;
+    --accent: #D2570D; --accent-soft: #FBEEE4;
+    --steel: #2B3A45; --steel-ink: #F2F1EE;
+    --ok: #1C6E48; --ok-soft: #E2F0E8;
+    --warn: #9B6A05; --warn-soft: #F8EED6;
+    --bad: #A8291F; --bad-soft: #F8E5E2;
+    --sky: #E4EBF0; --sea: #BBD2E0; --sea-deep: #9DBBCD; --bed: #D8D2C4;
+    --hull: #43535F; --linea: #6C7F8C;
+    --shadow: 0 1px 2px rgba(27,34,40,.07), 0 10px 30px rgba(27,34,40,.09);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14191D; --surface: #1D242A; --surface-2: #262E35; --surface-3: #212930;
+      --ink: #E9EDEF; --ink-2: #AFBAC2; --ink-3: #7D8993;
+      --line: #313B43; --line-2: #3E4952;
+      --accent: #F5843D; --accent-soft: #33231A;
+      --steel: #101519; --steel-ink: #D8E0E5;
+      --ok: #6FC79A; --ok-soft: #1A2E25;
+      --warn: #E0B25C; --warn-soft: #302819;
+      --bad: #EE8C80; --bad-soft: #33201D;
+      --sky: #1E262C; --sea: #22343F; --sea-deep: #1A2A33; --bed: #2E2B25;
+      --hull: #8FA3B0; --linea: #7A8D9A;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #14191D; --surface: #1D242A; --surface-2: #262E35; --surface-3: #212930;
+    --ink: #E9EDEF; --ink-2: #AFBAC2; --ink-3: #7D8993;
+    --line: #313B43; --line-2: #3E4952;
+    --accent: #F5843D; --accent-soft: #33231A;
+    --steel: #101519; --steel-ink: #D8E0E5;
+    --ok: #6FC79A; --ok-soft: #1A2E25;
+    --warn: #E0B25C; --warn-soft: #302819;
+    --bad: #EE8C80; --bad-soft: #33201D;
+    --sky: #1E262C; --sea: #22343F; --sea-deep: #1A2A33; --bed: #2E2B25;
+    --hull: #8FA3B0; --linea: #7A8D9A;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: Archivo, system-ui, sans-serif; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  button { font: inherit; cursor: pointer; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  /* ---------- Marco de la app ---------- */
+  .apli { display: flex; flex-direction: column; height: 100%; min-height: 100%; }
+  .appbar {
+    background: var(--steel); color: var(--steel-ink);
+    padding: 9px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-top: calc(9px + env(safe-area-inset-top, 0px));
+  }
+  .appbar .marca { font-family: Archivo, sans-serif; font-weight: 700; letter-spacing: -.01em; font-size: 15px; }
+  .appbar .etq {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .1em; padding: 3px 7px; border-radius: 3px;
+    background: var(--accent); color: #fff;
+  }
+  .buscador {
+    margin-left: auto; display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,.13); border-radius: 5px; padding: 5px 10px;
+    min-width: 180px; flex: 0 1 300px;
+  }
+  .buscador input {
+    background: none; border: 0; outline: none; color: inherit; width: 100%;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+  }
+  .buscador input::placeholder { color: rgba(255,255,255,.5); }
+  .appbar .btn-bar {
+    background: rgba(255,255,255,.13); color: inherit; border: 0;
+    border-radius: 5px; padding: 6px 11px; font-size: 12px; white-space: nowrap;
+  }
+  .appbar .btn-bar:hover { background: rgba(255,255,255,.24); }
+  .appbar .btn-bar.on { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .shell { display: grid; grid-template-columns: 186px 1fr; flex: 1; min-height: 0; }
+  .nav {
+    background: var(--surface-3); border-right: 1px solid var(--line);
+    padding: 12px 0; display: flex; flex-direction: column; gap: 1px; overflow-y: auto;
+  }
+  .nav .grp {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+    padding: 13px 15px 4px;
+  }
+  .nav button {
+    background: none; border: 0; text-align: left; width: 100%;
+    padding: 8px 15px; font-size: 13px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav button:hover { background: var(--surface-2); color: var(--ink); }
+  .nav button.on {
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .nav .cuenta {
+    margin-left: auto; font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px; color: var(--ink-3);
+  }
+  .vista { padding: 18px 22px 40px; overflow-y: auto; min-width: 0; }
+
+  /* ---------- Piezas ---------- */
+  .miga {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3);
+    display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 10px;
+  }
+  .miga button {
+    background: none; border: 0; padding: 0; color: var(--accent);
+    font-family: inherit; font-size: inherit; text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .cabecera { display: flex; flex-wrap: wrap; gap: 9px 15px; align-items: baseline; margin-bottom: 16px; }
+  .cabecera .cod {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600;
+    color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 3px;
+  }
+  .cabecera h2 { font-size: 21px; font-weight: 600; letter-spacing: -.015em; }
+
+  .pill {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 3px; white-space: nowrap;
+  }
+  .p-ok { background: var(--ok-soft); color: var(--ok); }
+  .p-warn { background: var(--warn-soft); color: var(--warn); }
+  .p-bad { background: var(--bad-soft); color: var(--bad); }
+  .p-n { background: var(--surface-2); color: var(--ink-2); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px 11px;
+    background: var(--surface); display: flex; flex-direction: column; gap: 1px;
+  }
+  .stat .n {
+    font-family: Archivo, sans-serif; font-size: 23px; font-weight: 700; line-height: 1.1;
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .stat .l { font-size: 11px; color: var(--ink-3); line-height: 1.3; }
+  .stat.alerta { border-color: var(--warn); background: var(--warn-soft); }
+  .stat.alerta .n, .stat.alerta .l { color: var(--warn); }
+
+  .selector { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .selector .et {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .conmutador { display: inline-flex; border: 1px solid var(--line-2); border-radius: 5px; overflow: hidden; }
+  .conmutador button {
+    border: 0; padding: 6px 14px; font-size: 12.5px; color: var(--ink-2); background: var(--surface);
+  }
+  .conmutador button + button { border-left: 1px solid var(--line-2); }
+  .conmutador button.on { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(226px, 1fr)); gap: 11px; }
+  .tarjeta {
+    border: 1px solid var(--line); border-radius: 6px; padding: 12px 13px 13px;
+    background: var(--surface); text-align: left; width: 100%;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tarjeta:hover { border-color: var(--accent); }
+  .tarjeta .fila { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tarjeta .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; color: var(--accent); }
+  .tarjeta h4 { font-size: 13.5px; font-weight: 600; line-height: 1.28; }
+  .tarjeta .pie {
+    display: flex; gap: 10px; font-size: 10.5px; color: var(--ink-3);
+    font-family: "IBM Plex Mono", monospace; padding-top: 4px; border-top: 1px solid var(--line);
+  }
+
+  /* panel dividido: lista + esquema */
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
+  .listado { display: flex; flex-direction: column; gap: 4px; }
+  .li {
+    display: flex; align-items: center; gap: 9px; padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 5px; font-size: 12.5px;
+    background: var(--surface); text-align: left; width: 100%; color: inherit;
+  }
+  .li:hover { border-color: var(--accent); }
+  .li.on { border-color: var(--accent); background: var(--accent-soft); }
+  .li .n {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    background: var(--accent); color: #fff; border-radius: 3px;
+    width: 20px; text-align: center; padding: 2px 0; flex: none;
+  }
+  .li.avisa .n { background: var(--warn); }
+  .li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .marco { border: 1px solid var(--line); border-radius: 6px; padding: 9px; background: var(--surface); }
+  #esquema { width: 100%; max-width: 100%; height: auto; display: block; border-radius: 4px; }
+  #esquema text { font-family: "IBM Plex Mono", monospace; }
+  .mk-lbl { font-size: 10px; fill: var(--ink-3); }
+  .marcador circle { fill: var(--accent); stroke: #fff; stroke-width: 1.5; transition: r .12s ease; }
+  .marcador.avisa circle { fill: var(--warn); }
+  .marcador text { font-size: 9px; font-weight: 600; fill: #fff; pointer-events: none; }
+  .marcador { cursor: pointer; }
+  .marcador:hover circle { stroke-width: 2.5; }
+  .marcador.sel circle { stroke-width: 3; }
+  .marcador.apagado { opacity: .35; }
+
+  .ficha-sel {
+    margin-top: 10px; border: 1px solid var(--accent); border-radius: 6px;
+    padding: 11px 13px; background: var(--surface); display: flex;
+    flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .ficha-sel .txt { flex: 1; min-width: 150px; }
+  .ficha-sel h4 { font-size: 14px; font-weight: 600; }
+  .ficha-sel .cod { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3); }
+
+  /* pestañas */
+  .pestanas { display: flex; gap: 2px; border-bottom: 1px solid var(--line); flex-wrap: wrap; margin-bottom: 16px; }
+  .pestanas button {
+    background: none; border: 0; padding: 8px 14px; font-size: 13px; color: var(--ink-3);
+    border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+  }
+  .pestanas button:hover { color: var(--ink); }
+  .pestanas button.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .pestanas .cuenta { font-family: "IBM Plex Mono", monospace; font-size: 10px; opacity: .75; margin-left: 5px; }
+
+  /* tablas */
+  .tabla { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 420px; }
+  thead th {
+    background: var(--surface-3); text-align: left;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+    padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr.clic:hover { background: var(--accent-soft); cursor: pointer; }
+  td.cod { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+  td.num { text-align: right; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  td.fuerte { font-weight: 600; }
+
+  /* pares clave-valor */
+  .kvs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 26px; }
+  .kv {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 12.5px;
+  }
+  .kv span { color: var(--ink-3); }
+  .kv b { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 12px; text-align: right; }
+  .kv b.vacio { color: var(--ink-3); font-weight: 400; font-style: italic; font-family: "IBM Plex Sans", sans-serif; }
+
+  .vacio-msg {
+    border: 1px dashed var(--line-2); border-radius: 6px; padding: 18px;
+    text-align: center; color: var(--ink-3); font-size: 13px; background: var(--surface-3);
+  }
+  .vacio-msg b { color: var(--ink-2); font-weight: 600; }
+
+  .nota {
+    background: var(--surface-3); border-left: 3px solid var(--line-2);
+    padding: 9px 12px; font-size: 12px; color: var(--ink-3);
+    border-radius: 0 4px 4px 0; margin-top: 14px;
+  }
+
+  /* panel de información */
+  .velo {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 90;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal {
+    background: var(--surface); border-radius: 8px; max-width: 480px; width: 100%;
+    padding: 22px 24px 24px; box-shadow: var(--shadow); max-height: 86vh; overflow-y: auto;
+  }
+  .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+  .modal ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .modal li { font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+  .modal li b { color: var(--ink); font-weight: 600; }
+  .modal .cerrar {
+    margin-top: 18px; background: var(--accent); color: #fff; border: 0;
+    border-radius: 5px; padding: 9px 18px; font-size: 13px; font-weight: 600;
+  }
+
+  @media (max-width: 720px) {
+    .shell { grid-template-columns: 1fr; }
+    .nav {
+      flex-direction: row; overflow-x: auto; border-right: 0;
+      border-bottom: 1px solid var(--line); padding: 6px 4px;
+    }
+    .nav .grp { display: none; }
+    .nav button { white-space: nowrap; padding: 7px 12px; width: auto; }
+    .nav button.on { box-shadow: inset 0 -2px 0 var(--accent); }
+    .nav .cuenta { display: none; }
+    .split { grid-template-columns: minmax(0, 1fr); }
+    .vista { padding: 14px 16px 40px; }
+  }
+</style>
+
+<div class="apli">
+  <div class="appbar">
+    <span class="marca">Monoboyas</span>
+    <span class="etq">PROTOTIPO</span>
+    <span class="buscador">
+      <span aria-hidden="true">🔍</span>
+      <input id="q" type="search" placeholder="buscar por código o nombre…" aria-label="Buscar">
+    </span>
+    <button class="btn-bar" id="btn-ejemplo" type="button" aria-pressed="false">Datos de ejemplo</button>
+    <button class="btn-bar" id="btn-info" type="button">Qué es esto</button>
+  </div>
+  <div class="shell">
+    <nav class="nav" id="nav" aria-label="Menú"></nav>
+    <main class="vista" id="vista" tabindex="-1"></main>
+  </div>
+</div>
+
+<script>
+const DATOS = {"hoy": "2026-09-17", "escena": "<svg id=\"esquema\" viewBox=\"0 0 660 380\" role=\"img\" aria-label=\"Esquema de la monoboya tipo CALM: a la izquierda la costa y la tuberia de fondo hasta el PLEM, de ahi las mangueras submarinas suben a la boya, que se sujeta al fondo por cadenas de fondeo; desde la boya salen la estacha de amarre y el tren de mangueras flotantes hasta el buque. Doce puntos numerados marcan cada subsistema sobre la parte que le corresponde.\">\n        <rect x=\"0\" y=\"0\" width=\"660\" height=\"165\" fill=\"var(--sky)\"/>\n        <rect x=\"0\" y=\"165\" width=\"660\" height=\"165\" fill=\"var(--sea)\"/>\n        <rect x=\"0\" y=\"278\" width=\"660\" height=\"52\" fill=\"var(--sea-deep)\" opacity=\".45\"/>\n        <rect x=\"0\" y=\"330\" width=\"660\" height=\"50\" fill=\"var(--bed)\"/>\n        <line x1=\"0\" y1=\"165\" x2=\"660\" y2=\"165\" stroke=\"var(--linea)\" stroke-width=\"1.5\"/>\n        <!-- tierra y tuberia a la refineria -->\n        <rect x=\"0\" y=\"140\" width=\"56\" height=\"26\" fill=\"var(--bed)\"/>\n        <rect x=\"8\" y=\"122\" width=\"17\" height=\"18\" rx=\"1.5\" fill=\"var(--hull)\"/>\n        <rect x=\"31\" y=\"127\" width=\"14\" height=\"13\" rx=\"1.5\" fill=\"var(--hull)\"/>\n        <path d=\"M26,166 L26,329 L188,329\" fill=\"none\" stroke=\"var(--linea)\" stroke-width=\"3\"/>\n        <!-- PLEM -->\n        <rect x=\"188\" y=\"322\" width=\"38\" height=\"14\" rx=\"2\" fill=\"var(--hull)\"/>\n        <!-- mangueras submarinas -->\n        <path d=\"M250,202 C312,240 316,300 210,325\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"3.5\" stroke-linecap=\"round\" opacity=\".75\"/>\n        <!-- cadenas de fondeo -->\n        <path d=\"M208,200 L96,331\" fill=\"none\" stroke=\"var(--linea)\" stroke-width=\"1.6\" stroke-dasharray=\"4 2.5\"/>\n        <path d=\"M232,203 L170,331\" fill=\"none\" stroke=\"var(--linea)\" stroke-width=\"1.6\" stroke-dasharray=\"4 2.5\"/>\n        <path d=\"M292,200 L404,331\" fill=\"none\" stroke=\"var(--linea)\" stroke-width=\"1.6\" stroke-dasharray=\"4 2.5\"/>\n        <!-- boya -->\n        <rect x=\"180\" y=\"156\" width=\"15\" height=\"28\" rx=\"1.5\" fill=\"var(--linea)\"/>\n        <rect x=\"195\" y=\"150\" width=\"110\" height=\"52\" rx=\"5\" fill=\"var(--hull)\"/>\n        <rect x=\"200\" y=\"142\" width=\"102\" height=\"9\" rx=\"1.5\" fill=\"var(--linea)\"/>\n        <rect x=\"231\" y=\"124\" width=\"38\" height=\"20\" rx=\"2\" fill=\"var(--linea)\"/>\n        <rect x=\"208\" y=\"132\" width=\"20\" height=\"12\" rx=\"1.5\" fill=\"var(--linea)\"/>\n        <rect x=\"271\" y=\"127\" width=\"18\" height=\"17\" rx=\"1.5\" fill=\"var(--linea)\"/>\n        <line x1=\"250\" y1=\"124\" x2=\"250\" y2=\"110\" stroke=\"var(--hull)\" stroke-width=\"2.5\"/>\n        <circle cx=\"250\" cy=\"106\" r=\"5\" fill=\"var(--warn)\"/>\n        <!-- estacha de amarre -->\n        <path d=\"M302,146 Q374,110 446,138\" fill=\"none\" stroke=\"var(--hull)\" stroke-width=\"2.5\"/>\n        <!-- mangueras flotantes -->\n        <path d=\"M305,160 C345,184 420,186 496,146\" fill=\"none\" stroke=\"var(--accent)\" stroke-width=\"4.5\" stroke-linecap=\"round\"/>\n        <!-- buque -->\n        <path d=\"M430,150 L648,142 L648,176 L452,176 Z\" fill=\"var(--hull)\"/>\n        <rect x=\"604\" y=\"118\" width=\"34\" height=\"24\" rx=\"1.5\" fill=\"var(--linea)\"/>\n        <rect x=\"496\" y=\"134\" width=\"16\" height=\"9\" rx=\"1\" fill=\"var(--linea)\"/>\n        <text class=\"mk-lbl\" x=\"4\" y=\"116\">TIERRA</text>\n        <text class=\"mk-lbl\" x=\"222\" y=\"224\">BOYA</text>\n        <text class=\"mk-lbl\" x=\"190\" y=\"352\">PLEM</text>\n        <text class=\"mk-lbl\" x=\"520\" y=\"196\">BUQUE</text>\n        <text class=\"mk-lbl\" x=\"430\" y=\"352\">FONDO MARINO</text>\n      </svg>", "nodos": [{"c": "MB-01", "n": "Monoboya MB-01", "p": "", "niv": 1, "tipo": "Monoboya", "crit": "A", "est": "Operativa", "ubi": "", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01", "n": "Casco y estructura flotante", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 37.9, "y": 46.3}, {"c": "MB-01.S02", "n": "Rodamiento principal y girador", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 37.9, "y": 36.1}, {"c": "MB-01.S03", "n": "Swivel y tuberias de producto", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 42.1, "y": 34.7}, {"c": "MB-01.S04", "n": "Sistema de amarre de fondeo", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 24.2, "y": 68.4}, {"c": "MB-01.S05", "n": "Sistema de amarre de buque", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 56.1, "y": 32.9}, {"c": "MB-01.S06", "n": "Mangueras flotantes", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 58.8, "y": 45.3}, {"c": "MB-01.S07", "n": "Mangueras submarinas", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 44.1, "y": 70.8}, {"c": "MB-01.S08", "n": "PLEM y valvulas submarinas", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 31.1, "y": 84.7}, {"c": "MB-01.S09", "n": "Sistema electrico y ayudas a la navegacion", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 37.9, "y": 28.4}, {"c": "MB-01.S10", "n": "Proteccion catodica", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "A", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 44.8, "y": 50.5}, {"c": "MB-01.S11", "n": "Seguridad y contraincendio", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "B", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 33.0, "y": 36.8}, {"c": "MB-01.S12", "n": "Accesos y defensas", "p": "MB-01", "niv": 2, "tipo": "Subsistema", "crit": "B", "est": "Operativo", "ubi": "", "buzo": "NO", "x": 29.7, "y": 47.4}, {"c": "MB-01.S01.CAS-001", "n": "Casco flotante principal", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01.CAS-002", "n": "Compartimentos estancos de flotabilidad", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01.CAS-003", "n": "Cubierta principal y enchapado", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01.CAS-004", "n": "Escotillas de acceso a compartimentos", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01.CAS-005", "n": "Barandas y pasamanos", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "C", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S01.CAS-006", "n": "Recubrimiento anticorrosivo", "p": "MB-01.S01", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S02.ROD-001", "n": "Rodamiento principal (main bearing)", "p": "MB-01.S02", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S02.ROD-002", "n": "Mesa giratoria (turntable)", "p": "MB-01.S02", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S02.ROD-003", "n": "Sistema de lubricacion del rodamiento", "p": "MB-01.S02", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S02.ROD-004", "n": "Perneria de fijacion del rodamiento", "p": "MB-01.S02", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S02.ROD-005", "n": "Sellos del rodamiento principal", "p": "MB-01.S02", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-001", "n": "Swivel de producto", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-002", "n": "Sellos del swivel", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-003", "n": "Tuberia interna de producto", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-004", "n": "Manifold de cubierta", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-005", "n": "Valvulas de bola de producto", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S03.SWV-006", "n": "Bridas y empaquetaduras de producto", "p": "MB-01.S03", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S04.FON-001", "n": "Cadena de fondeo linea 1", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-002", "n": "Cadena de fondeo linea 2", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-003", "n": "Cadena de fondeo linea 3", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-004", "n": "Cadena de fondeo linea 4", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-005", "n": "Cadena de fondeo linea 5", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-006", "n": "Cadena de fondeo linea 6", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-007", "n": "Grilletes y conectores de fondeo", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S04.FON-008", "n": "Chain stoppers de fondeo", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S04.FON-009", "n": "Anclas o pilotes de fondeo", "p": "MB-01.S04", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S05.AMB-001", "n": "Hawser principal de amarre", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S05.AMB-002", "n": "Hawser de reserva", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S05.AMB-003", "n": "Chafe chain (cadena de roce)", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S05.AMB-004", "n": "Grilletes de amarre de buque", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S05.AMB-005", "n": "Pick-up rope y boya de recogida", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S05.AMB-006", "n": "Chain stopper de amarre de buque", "p": "MB-01.S05", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-001", "n": "Manguera flotante tramo 1 (rail end)", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-002", "n": "Manguera flotante tramo 2", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-003", "n": "Manguera flotante tramo 3", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-004", "n": "Manguera flotante tramo 4", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-005", "n": "Manguera de acople a buque (tail hose)", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-006", "n": "Acople de rotura controlada (MBC)", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S06.MGF-007", "n": "Bridas y perneria de mangueras flotantes", "p": "MB-01.S06", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Superficie", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S07.MGS-001", "n": "Manguera submarina tramo 1", "p": "MB-01.S07", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S07.MGS-002", "n": "Manguera submarina tramo 2", "p": "MB-01.S07", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S07.MGS-003", "n": "Manguera submarina tramo 3", "p": "MB-01.S07", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S07.MGS-004", "n": "Manguera submarina tramo 4", "p": "MB-01.S07", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S07.MGS-005", "n": "Boyas de flotacion de mangueras submarinas", "p": "MB-01.S07", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S08.PLM-001", "n": "Estructura del PLEM", "p": "MB-01.S08", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S08.PLM-002", "n": "Valvulas submarinas del PLEM", "p": "MB-01.S08", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S08.PLM-003", "n": "Bridas y conexiones del PLEM", "p": "MB-01.S08", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S08.PLM-004", "n": "Tuberia submarina de conexion a tierra", "p": "MB-01.S08", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S09.ELE-001", "n": "Luz de navegacion principal", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-002", "n": "Luces de navegacion secundarias", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-003", "n": "Panel solar", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-004", "n": "Banco de baterias", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-005", "n": "Tablero electrico y controlador de carga", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Interior", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-006", "n": "Racon o reflector radar", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-007", "n": "Senal sonora de niebla", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S09.ELE-008", "n": "Sistema de telemetria y monitoreo remoto", "p": "MB-01.S09", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S10.PCA-001", "n": "Anodos de sacrificio del casco", "p": "MB-01.S10", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Casco", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S10.PCA-002", "n": "Anodos de cadenas de fondeo", "p": "MB-01.S10", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Submarino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S10.PCA-003", "n": "Anodos del PLEM", "p": "MB-01.S10", "niv": 3, "tipo": "Equipo", "crit": "A", "est": "Operativo", "ubi": "Fondo marino", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S10.PCA-004", "n": "Puntos de medicion de potencial", "p": "MB-01.S10", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Casco", "buzo": "SI", "x": null, "y": null}, {"c": "MB-01.S11.SEG-001", "n": "Extintores portatiles", "p": "MB-01.S11", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S11.SEG-002", "n": "Aros salvavidas", "p": "MB-01.S11", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S11.SEG-003", "n": "Detector de gas portatil", "p": "MB-01.S11", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S11.SEG-004", "n": "Senalizacion de seguridad", "p": "MB-01.S11", "niv": 3, "tipo": "Equipo", "crit": "C", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S12.ACC-001", "n": "Boat landing", "p": "MB-01.S12", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S12.ACC-002", "n": "Defensas perimetrales", "p": "MB-01.S12", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Casco", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S12.ACC-003", "n": "Escalas de acceso", "p": "MB-01.S12", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}, {"c": "MB-01.S12.ACC-004", "n": "Pescante o grua de izaje", "p": "MB-01.S12", "niv": 3, "tipo": "Equipo", "crit": "B", "est": "Operativo", "ubi": "Cubierta", "buzo": "NO", "x": null, "y": null}], "materiales": {"MAT-001": {"sap": "", "desc": "Grasa para rodamiento principal segun especificacion del fabricante", "un": "KG", "cat": "Consumible", "crit": "Critico", "lead": 45, "min": 50.0, "max": 200.0}, "MAT-002": {"sap": "", "desc": "Anodo de sacrificio de zinc para casco", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 90, "min": 4.0, "max": 12.0}, "MAT-003": {"sap": "", "desc": "Anodo de sacrificio para cadena de fondeo", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 90, "min": 6.0, "max": 18.0}, "MAT-004": {"sap": "", "desc": "Juego de sellos del rodamiento principal", "un": "JGO", "cat": "Repuesto", "crit": "Critico", "lead": 120, "min": 1.0, "max": 2.0}, "MAT-005": {"sap": "", "desc": "Juego de sellos del swivel de producto", "un": "JGO", "cat": "Repuesto", "crit": "Critico", "lead": 150, "min": 1.0, "max": 2.0}, "MAT-006": {"sap": "", "desc": "Manguera flotante de 16 pulgadas tramo estandar", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 180, "min": 1.0, "max": 2.0}, "MAT-007": {"sap": "", "desc": "Manguera submarina de 16 pulgadas tramo estandar", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 180, "min": 1.0, "max": 2.0}, "MAT-008": {"sap": "", "desc": "Empaquetadura de brida de 16 pulgadas", "un": "UN", "cat": "Consumible", "crit": "Critico", "lead": 30, "min": 20.0, "max": 60.0}, "MAT-009": {"sap": "", "desc": "Perno de brida de acero inoxidable", "un": "UN", "cat": "Consumible", "crit": "Normal", "lead": 30, "min": 100.0, "max": 400.0}, "MAT-010": {"sap": "", "desc": "Tuerca de acero inoxidable", "un": "UN", "cat": "Consumible", "crit": "Normal", "lead": 30, "min": 100.0, "max": 400.0}, "MAT-011": {"sap": "", "desc": "Hawser de amarre segun especificacion OCIMF", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 120, "min": 1.0, "max": 2.0}, "MAT-012": {"sap": "", "desc": "Chafe chain de amarre", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 150, "min": 1.0, "max": 1.0}, "MAT-013": {"sap": "", "desc": "Grillete de alta resistencia para amarre", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 90, "min": 4.0, "max": 10.0}, "MAT-014": {"sap": "", "desc": "Pick-up rope con boya de recogida", "un": "JGO", "cat": "Repuesto", "crit": "Normal", "lead": 60, "min": 1.0, "max": 3.0}, "MAT-015": {"sap": "", "desc": "Bateria de ciclo profundo para sistema de navegacion", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 45, "min": 2.0, "max": 6.0}, "MAT-016": {"sap": "", "desc": "Luminaria de navegacion marina LED", "un": "UN", "cat": "Repuesto", "crit": "Critico", "lead": 60, "min": 1.0, "max": 2.0}, "MAT-017": {"sap": "", "desc": "Panel solar fotovoltaico marino", "un": "UN", "cat": "Repuesto", "crit": "Normal", "lead": 60, "min": 1.0, "max": 2.0}, "MAT-018": {"sap": "", "desc": "Controlador de carga solar", "un": "UN", "cat": "Repuesto", "crit": "Normal", "lead": 45, "min": 1.0, "max": 2.0}, "MAT-019": {"sap": "", "desc": "Pintura epoxica anticorrosiva marina", "un": "L", "cat": "Consumible", "crit": "Normal", "lead": 30, "min": 40.0, "max": 160.0}, "MAT-020": {"sap": "", "desc": "Pintura de acabado poliuretano marino", "un": "L", "cat": "Consumible", "crit": "Normal", "lead": 30, "min": 20.0, "max": 80.0}, "MAT-021": {"sap": "", "desc": "Disolvente para sistema de pintura", "un": "L", "cat": "Consumible", "crit": "Normal", "lead": 15, "min": 20.0, "max": 60.0}, "MAT-022": {"sap": "", "desc": "Disco abrasivo para preparacion de superficie", "un": "UN", "cat": "Consumible", "crit": "Normal", "lead": 15, "min": 30.0, "max": 100.0}, "MAT-023": {"sap": "", "desc": "Trapo industrial", "un": "KG", "cat": "Consumible", "crit": "Normal", "lead": 7, "min": 10.0, "max": 40.0}, "MAT-024": {"sap": "", "desc": "Desengrasante industrial", "un": "L", "cat": "Consumible", "crit": "Normal", "lead": 15, "min": 10.0, "max": 40.0}, "MAT-025": {"sap": "", "desc": "Cinta de senalizacion", "un": "M", "cat": "Consumible", "crit": "Normal", "lead": 7, "min": 50.0, "max": 200.0}, "MAT-026": {"sap": "", "desc": "Extintor portatil de polvo quimico seco", "un": "UN", "cat": "Repuesto", "crit": "Normal", "lead": 30, "min": 2.0, "max": 6.0}, "MAT-027": {"sap": "", "desc": "Aro salvavidas con rabiza", "un": "UN", "cat": "Repuesto", "crit": "Normal", "lead": 30, "min": 2.0, "max": 4.0}}, "matNodo": [{"nodo": "MB-01.S09.ELE-001", "mat": "MAT-023", "cant": "1"}, {"nodo": "MB-01.S09.ELE-004", "mat": "MAT-015", "cant": "0"}, {"nodo": "MB-01.S09.ELE-003", "mat": "MAT-023", "cant": "1"}, {"nodo": "MB-01.S09.ELE-003", "mat": "MAT-024", "cant": "2"}, {"nodo": "MB-01.S02.ROD-003", "mat": "MAT-001", "cant": "25"}, {"nodo": "MB-01.S02.ROD-003", "mat": "MAT-023", "cant": "2"}, {"nodo": "MB-01.S03.SWV-005", "mat": "MAT-001", "cant": "5"}, {"nodo": "MB-01.S03.SWV-005", "mat": "MAT-023", "cant": "1"}, {"nodo": "MB-01.S02.ROD-004", "mat": "MAT-009", "cant": "0"}, {"nodo": "MB-01.S02.ROD-004", "mat": "MAT-010", "cant": "0"}, {"nodo": "MB-01.S01.CAS-006", "mat": "MAT-019", "cant": "30"}, {"nodo": "MB-01.S01.CAS-006", "mat": "MAT-020", "cant": "15"}, {"nodo": "MB-01.S01.CAS-006", "mat": "MAT-021", "cant": "10"}, {"nodo": "MB-01.S01.CAS-006", "mat": "MAT-022", "cant": "20"}, {"nodo": "MB-01.S06.MGF-001", "mat": "MAT-008", "cant": "4"}, {"nodo": "MB-01.S06.MGF-001", "mat": "MAT-009", "cant": "32"}, {"nodo": "MB-01.S06.MGF-001", "mat": "MAT-010", "cant": "32"}, {"nodo": "MB-01.S03.SWV-001", "mat": "MAT-005", "cant": "1"}, {"nodo": "MB-01.S10.PCA-001", "mat": "MAT-002", "cant": "4"}, {"nodo": "MB-01.S05.AMB-001", "mat": "MAT-011", "cant": "1"}, {"nodo": "MB-01.S05.AMB-001", "mat": "MAT-013", "cant": "4"}, {"nodo": "MB-01.S03.SWV-002", "mat": "MAT-005", "cant": "1"}, {"nodo": "MB-01.S02.ROD-001", "mat": "MAT-004", "cant": "1"}, {"nodo": "MB-01.S02.ROD-001", "mat": "MAT-001", "cant": "80"}, {"nodo": "MB-01.S06.MGF-001", "mat": "MAT-006", "cant": "5"}, {"nodo": "MB-01.S07.MGS-001", "mat": "MAT-007", "cant": "4"}], "frecuencias": [{"nodo": "MB-01.S01.CAS-001", "desc": "Inspeccion visual general de la monoboya", "tipo": "Inspeccion legal", "val": "1", "uni": "Semanas", "ultima": "", "norma": "OCIMF SMOG"}, {"nodo": "MB-01.S06.MGF-001", "desc": "Inspeccion visual de mangueras flotantes", "tipo": "Inspeccion legal", "val": "1", "uni": "Semanas", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S09.ELE-001", "desc": "Verificacion de luces de navegacion", "tipo": "Preventivo", "val": "1", "uni": "Semanas", "ultima": "", "norma": "DICAPI"}, {"nodo": "MB-01.S01.CAS-003", "desc": "Inspeccion de cubierta y barandas", "tipo": "Preventivo", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S01.CAS-002", "desc": "Verificacion de estanqueidad de compartimentos", "tipo": "Preventivo", "val": "1", "uni": "Meses", "ultima": "", "norma": "OCIMF SMOG"}, {"nodo": "MB-01.S09.ELE-004", "desc": "Mantenimiento de banco de baterias", "tipo": "Preventivo", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S09.ELE-003", "desc": "Limpieza de panel solar", "tipo": "Limpieza", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S11.SEG-001", "desc": "Inspeccion de extintores portatiles", "tipo": "Inspeccion legal", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S11.SEG-002", "desc": "Inspeccion de aros salvavidas y senalizacion", "tipo": "Inspeccion legal", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S12.ACC-001", "desc": "Inspeccion de boat landing y defensas", "tipo": "Preventivo", "val": "1", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S02.ROD-003", "desc": "Lubricacion del rodamiento principal", "tipo": "Lubricacion", "val": "3", "uni": "Meses", "ultima": "", "norma": "Manual del fabricante"}, {"nodo": "MB-01.S03.SWV-005", "desc": "Operacion y engrase de valvulas de producto", "tipo": "Preventivo", "val": "3", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S04.FON-008", "desc": "Inspeccion de chain stoppers de fondeo", "tipo": "Preventivo", "val": "3", "uni": "Meses", "ultima": "", "norma": "OCIMF MEG4"}, {"nodo": "MB-01.S05.AMB-001", "desc": "Inspeccion de hawser y chafe chain", "tipo": "Inspeccion legal", "val": "3", "uni": "Meses", "ultima": "", "norma": "OCIMF MEG4"}, {"nodo": "MB-01.S02.ROD-002", "desc": "Inspeccion de mesa giratoria y sellos", "tipo": "Preventivo", "val": "3", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S09.ELE-005", "desc": "Mantenimiento de tablero electrico", "tipo": "Preventivo", "val": "6", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S02.ROD-004", "desc": "Verificacion de torque de perneria del rodamiento", "tipo": "Preventivo", "val": "6", "uni": "Meses", "ultima": "", "norma": "Manual del fabricante"}, {"nodo": "MB-01.S10.PCA-004", "desc": "Medicion de potencial de proteccion catodica", "tipo": "Predictivo", "val": "6", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S10.PCA-001", "desc": "Inspeccion subacuatica de anodos del casco", "tipo": "Inspeccion legal", "val": "6", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S01.CAS-006", "desc": "Retoque de recubrimiento anticorrosivo", "tipo": "Preventivo", "val": "6", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S04.FON-001", "desc": "Inspeccion subacuatica de cadenas de fondeo", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "API RP 2SK"}, {"nodo": "MB-01.S07.MGS-001", "desc": "Inspeccion subacuatica de mangueras submarinas", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S08.PLM-001", "desc": "Inspeccion subacuatica del PLEM", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S06.MGF-001", "desc": "Prueba hidrostatica de mangueras flotantes", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S03.SWV-001", "desc": "Inspeccion y prueba del swivel de producto", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "Manual del fabricante"}, {"nodo": "MB-01.S01.CAS-002", "desc": "Ensayo de estanqueidad de compartimentos", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "OCIMF SMOG"}, {"nodo": "MB-01.S01.CAS-001", "desc": "Medicion de espesores del casco", "tipo": "Predictivo", "val": "12", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S01.CAS-001", "desc": "Renovacion de certificacion DICAPI", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": "DICAPI"}, {"nodo": "MB-01.S03.SWV-003", "desc": "Inspeccion de tuberia interna de producto", "tipo": "Predictivo", "val": "12", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S10.PCA-001", "desc": "Reemplazo de anodos de sacrificio del casco", "tipo": "Preventivo", "val": "24", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S05.AMB-001", "desc": "Reemplazo de hawser principal", "tipo": "Preventivo", "val": "24", "uni": "Meses", "ultima": "", "norma": "OCIMF MEG4"}, {"nodo": "MB-01.S06.MGF-001", "desc": "Rotacion de mangueras flotantes", "tipo": "Preventivo", "val": "24", "uni": "Meses", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S04.FON-001", "desc": "Medicion de desgaste de cadenas de fondeo", "tipo": "Predictivo", "val": "36", "uni": "Meses", "ultima": "", "norma": "API RP 2SK"}, {"nodo": "MB-01.S03.SWV-002", "desc": "Reemplazo de sellos del swivel", "tipo": "Preventivo", "val": "60", "uni": "Meses", "ultima": "", "norma": "Manual del fabricante"}, {"nodo": "MB-01.S02.ROD-001", "desc": "Overhaul del rodamiento principal", "tipo": "Preventivo", "val": "60", "uni": "Meses", "ultima": "", "norma": "Manual del fabricante"}, {"nodo": "MB-01.S06.MGF-001", "desc": "Reemplazo de mangueras flotantes", "tipo": "Preventivo", "val": "60", "uni": "Meses", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S07.MGS-001", "desc": "Reemplazo de mangueras submarinas", "tipo": "Preventivo", "val": "60", "uni": "Meses", "ultima": "", "norma": "OCIMF GMPHOM 2009"}, {"nodo": "MB-01.S09.ELE-006", "desc": "Inspeccion de racon y senal sonora", "tipo": "Preventivo", "val": "3", "uni": "Meses", "ultima": "", "norma": "DICAPI"}, {"nodo": "MB-01.S09.ELE-008", "desc": "Verificacion del sistema de telemetria", "tipo": "Preventivo", "val": "3", "uni": "Meses", "ultima": "", "norma": ""}, {"nodo": "MB-01.S12.ACC-004", "desc": "Inspeccion del pescante de izaje", "tipo": "Inspeccion legal", "val": "12", "uni": "Meses", "ultima": "", "norma": ""}], "documentos": [{"k": 0, "nodo": "MB-01", "nombre": "Plano general de fondeo", "tipo": "Plano", "emisor": ""}, {"k": 1, "nodo": "MB-01", "nombre": "Plano de disposicion general", "tipo": "Plano", "emisor": ""}, {"k": 2, "nodo": "MB-01", "nombre": "Certificado de operacion de la monoboya", "tipo": "Certificado DICAPI", "emisor": "DICAPI"}, {"k": 3, "nodo": "MB-01", "nombre": "Memoria descriptiva del sistema", "tipo": "Memoria tecnica", "emisor": ""}, {"k": 4, "nodo": "MB-01.S01", "nombre": "Plano estructural del casco", "tipo": "Plano", "emisor": ""}, {"k": 5, "nodo": "MB-01.S01", "nombre": "Informe de medicion de espesores", "tipo": "Informe de inspeccion", "emisor": ""}, {"k": 6, "nodo": "MB-01.S02", "nombre": "Manual del fabricante del rodamiento", "tipo": "Manual", "emisor": ""}, {"k": 7, "nodo": "MB-01.S02", "nombre": "Plano de montaje del rodamiento", "tipo": "Plano", "emisor": ""}, {"k": 8, "nodo": "MB-01.S03", "nombre": "Manual del fabricante del swivel", "tipo": "Manual", "emisor": ""}, {"k": 9, "nodo": "MB-01.S03", "nombre": "Plano isometrico de tuberias de producto", "tipo": "Plano", "emisor": ""}, {"k": 10, "nodo": "MB-01.S04", "nombre": "Plano de configuracion de lineas de fondeo", "tipo": "Plano", "emisor": ""}, {"k": 11, "nodo": "MB-01.S04", "nombre": "Informe de inspeccion subacuatica de cadenas", "tipo": "Informe de inspeccion", "emisor": ""}, {"k": 12, "nodo": "MB-01.S04", "nombre": "Certificado de cadenas de fondeo", "tipo": "Certificado de fabricacion", "emisor": ""}, {"k": 13, "nodo": "MB-01.S05", "nombre": "Certificado del hawser de amarre", "tipo": "Certificado de fabricacion", "emisor": ""}, {"k": 14, "nodo": "MB-01.S06", "nombre": "Certificado de mangueras flotantes (GMPHOM)", "tipo": "Certificado de manguera", "emisor": ""}, {"k": 15, "nodo": "MB-01.S06", "nombre": "Plano de configuracion del tren de mangueras", "tipo": "Plano", "emisor": ""}, {"k": 16, "nodo": "MB-01.S07", "nombre": "Certificado de mangueras submarinas (GMPHOM)", "tipo": "Certificado de manguera", "emisor": ""}, {"k": 17, "nodo": "MB-01.S07", "nombre": "Plano de configuracion submarina", "tipo": "Plano", "emisor": ""}, {"k": 18, "nodo": "MB-01.S08", "nombre": "Plano del PLEM", "tipo": "Plano", "emisor": ""}, {"k": 19, "nodo": "MB-01.S08", "nombre": "Informe de inspeccion subacuatica del PLEM", "tipo": "Informe de inspeccion", "emisor": ""}, {"k": 20, "nodo": "MB-01.S09", "nombre": "Plano unifilar electrico", "tipo": "Plano", "emisor": ""}, {"k": 21, "nodo": "MB-01.S09", "nombre": "Autorizacion de ayudas a la navegacion", "tipo": "Certificado DICAPI", "emisor": "DICAPI"}, {"k": 22, "nodo": "MB-01.S10", "nombre": "Informe de medicion de proteccion catodica", "tipo": "Informe de inspeccion", "emisor": ""}, {"k": 23, "nodo": "MB-01.S10", "nombre": "Plano de distribucion de anodos", "tipo": "Plano", "emisor": ""}, {"k": 24, "nodo": "MB-01.S11", "nombre": "Plano de equipos de seguridad", "tipo": "Plano", "emisor": ""}, {"k": 25, "nodo": "MB-01.S12", "nombre": "Plano de boat landing y accesos", "tipo": "Plano", "emisor": ""}], "ejemplo": {"tecnico": {"MB-01.S02": {"fab": "SKF", "mod": "241/850 ECA/W33", "ser": "RB-4471-A", "inst": "2019-04-12"}, "MB-01.S02.ROD-002": {"fab": "SBM Offshore", "mod": "TT-1600", "ser": "TT-0932", "inst": "2019-04-12"}, "MB-01.S03.SWV-001": {"fab": "Framo", "mod": "PS-16-A", "ser": "SW-2210", "inst": "2019-05-03"}, "MB-01.S09.ELE-003": {"fab": "Sabik", "mod": "SP-85", "ser": "PS-3120", "inst": "2021-11-20"}}, "stock": {"MAT-001": {"disp": 123}, "MAT-002": {"disp": 2}, "MAT-003": {"disp": 17}, "MAT-004": {"disp": 0}, "MAT-005": {"disp": 5}, "MAT-006": {"disp": 5}, "MAT-007": {"disp": 5}, "MAT-008": {"disp": 51}, "MAT-009": {"disp": 243}, "MAT-010": {"disp": 243}, "MAT-011": {"disp": 5}, "MAT-012": {"disp": 5}, "MAT-013": {"disp": 12}, "MAT-014": {"disp": 5}, "MAT-015": {"disp": 7}, "MAT-016": {"disp": 5}, "MAT-017": {"disp": 5}, "MAT-018": {"disp": 5}, "MAT-019": {"disp": 99}, "MAT-020": {"disp": 51}, "MAT-021": {"disp": 51}, "MAT-022": {"disp": 75}, "MAT-023": {"disp": 27}, "MAT-024": {"disp": 27}, "MAT-025": {"disp": 123}, "MAT-026": {"disp": 7}, "MAT-027": {"disp": 7}}, "vence": {"2": "2026-09-05", "5": "2026-10-14", "11": "2026-10-23", "12": "2027-07-27", "13": "2027-08-27", "14": "2027-09-27", "16": "2027-10-28", "19": "2027-11-28", "21": "2027-12-29", "22": "2028-01-29"}}};
+
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------ *
+   * Estado y utilidades
+   * ------------------------------------------------------------------ */
+  const E = { seccion: "global", nodo: null, vista: "lista", pestana: null, sel: null, ejemplo: false, q: "" };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const NODOS = DATOS.nodos;
+  const porCod = Object.fromEntries(NODOS.map((n) => [n.c, n]));
+  const hijos = (c) => NODOS.filter((n) => n.p === c);
+  const subsistemas = () => NODOS.filter((n) => n.niv === 2);
+  const equipos = () => NODOS.filter((n) => n.niv === 3);
+  const raiz = () => NODOS.find((n) => n.niv === 1);
+
+  // Un nodo "cubre" a otro si es el mismo o un ancestro suyo
+  const ruta = (c) => { const r = []; let x = porCod[c]; while (x) { r.unshift(x); x = porCod[x.p]; } return r; };
+  const bajo = (raizC, c) => ruta(c).some((n) => n.c === raizC);
+
+  const materialesDe = (c) => DATOS.matNodo.filter((m) => bajo(c, m.nodo));
+  const frecuenciasDe = (c) => DATOS.frecuencias.filter((f) => bajo(c, f.nodo));
+  const documentosDe = (c) => DATOS.documentos.filter((d) => bajo(c, d.nodo));
+
+  /* Datos de ejemplo: solo cuando el conmutador está activo. Nunca se mezclan
+     con los del levantamiento sin avisar. */
+  const ej = () => (E.ejemplo ? DATOS.ejemplo : null);
+  const tecnicoDe = (c) => (ej() && DATOS.ejemplo.tecnico[c]) || null;
+  const stockDe = (m) => (ej() && DATOS.ejemplo.stock[m]) || null;
+  const venceDe = (k) => (ej() && DATOS.ejemplo.vence[k]) || null;
+
+  function vigencia(fecha) {
+    if (!fecha) return { txt: "Sin fecha", cls: "p-n" };
+    const dias = Math.round((new Date(fecha) - new Date(DATOS.hoy)) / 86400000);
+    if (dias < 0) return { txt: "Vencido", cls: "p-bad", dias };
+    if (dias <= 60) return { txt: "Por vencer", cls: "p-warn", dias };
+    return { txt: "Vigente", cls: "p-ok", dias };
+  }
+
+  // Un subsistema avisa si alguno de sus documentos está vencido o por vencer
+  function avisa(c) {
+    if (!ej()) return false;
+    return documentosDe(c).some((d) => {
+      const f = venceDe(d.k);
+      return f && vigencia(f).cls !== "p-ok";
+    });
+  }
+  const conAviso = () => (ej() ? subsistemas().filter((s) => avisa(s.c)).length : 0);
+
+  /* ------------------------------------------------------------------ *
+   * Menú lateral
+   * ------------------------------------------------------------------ */
+  const MENU = [
+    { grp: "Activo" },
+    { id: "global", txt: "Vista global" },
+    { id: "subsistemas", txt: "Subsistemas", n: () => subsistemas().length },
+    { id: "equipos", txt: "Equipos", n: () => equipos().length },
+    { grp: "Información" },
+    { id: "materiales", txt: "Materiales", n: () => Object.keys(DATOS.materiales).length },
+    { id: "documentos", txt: "Documentos", n: () => DATOS.documentos.length },
+    { id: "frecuencias", txt: "Frecuencias", n: () => DATOS.frecuencias.length }
+  ];
+
+  function pintarMenu() {
+    $("nav").innerHTML = MENU.map((m) => {
+      if (m.grp) return '<span class="grp">' + esc(m.grp) + "</span>";
+      const activo = E.seccion === m.id || (m.id === "global" && E.seccion === "nodo");
+      return '<button type="button" data-ir="' + m.id + '"' + (activo ? ' class="on"' : "") + ">" +
+        esc(m.txt) + (m.n ? '<span class="cuenta">' + m.n() + "</span>" : "") + "</button>";
+    }).join("");
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Pantallas
+   * ------------------------------------------------------------------ */
+  function pintar() {
+    pintarMenu();
+    const v = $("vista");
+    if (E.q.trim()) v.innerHTML = pantallaBusqueda();
+    else if (E.seccion === "nodo") v.innerHTML = pantallaNodo();
+    else if (E.seccion === "global") v.innerHTML = pantallaGlobal();
+    else v.innerHTML = pantallaTabla(E.seccion);
+    if (E.seccion === "global" && E.vista === "esquema" && !E.q.trim()) pintarMarcadores();
+    v.scrollTop = 0;
+  }
+
+  /* --- Vista global --- */
+  function pantallaGlobal() {
+    const r = raiz();
+    const stats = [
+      [subsistemas().length, "Subsistemas"],
+      [equipos().length, "Equipos"],
+      [Object.keys(DATOS.materiales).length, "Materiales"],
+      [DATOS.documentos.length, "Documentos"]
+    ].map((s) => '<div class="stat"><span class="n">' + s[0] + '</span><span class="l">' + s[1] + "</span></div>").join("");
+    const aviso = conAviso()
+      ? '<div class="stat alerta"><span class="n">' + conAviso() + '</span><span class="l">Con documentos por vencer</span></div>'
+      : "";
+
+    return '<div class="cabecera"><span class="cod">' + esc(r.c) + "</span><h2>" + esc(r.n) + "</h2>" +
+      '<span class="pill p-ok" style="margin-left:auto">Operativa</span></div>' +
+      '<div class="stats">' + stats + aviso + "</div>" +
+      '<div class="selector"><span class="et">Ver como</span><div class="conmutador">' +
+        '<button type="button" data-vista="lista"' + (E.vista === "lista" ? ' class="on"' : "") + ">▤ Lista</button>" +
+        '<button type="button" data-vista="esquema"' + (E.vista === "esquema" ? ' class="on"' : "") + ">◈ Esquema</button>" +
+      "</div></div>" +
+      (E.vista === "lista" ? vistaLista() : vistaEsquema());
+  }
+
+  function vistaLista() {
+    return '<div class="tarjetas">' + subsistemas().map((s) => {
+      const d = documentosDe(s.c).length;
+      return '<button class="tarjeta" type="button" data-nodo="' + esc(s.c) + '">' +
+        '<div class="fila"><span class="cod">' + esc(s.c) + "</span>" +
+        '<span class="pill ' + (avisa(s.c) ? "p-warn" : critCls(s.crit)) + '">' +
+          (avisa(s.c) ? "Revisar" : "Crítico " + esc(s.crit)) + "</span></div>" +
+        "<h4>" + esc(s.n) + "</h4>" +
+        '<div class="pie"><span>' + hijos(s.c).length + " partes</span><span>" + d + " docs</span></div></button>";
+    }).join("") + "</div>";
+  }
+
+  function vistaEsquema() {
+    const lista = subsistemas().map((s, i) =>
+      '<button class="li ' + (E.sel === s.c ? "on " : "") + (avisa(s.c) ? "avisa" : "") +
+      '" type="button" data-sel="' + esc(s.c) + '"><span class="n">' + pad(i + 1) +
+      '</span><span class="t">' + esc(s.n) + "</span></button>").join("");
+
+    const sel = E.sel ? porCod[E.sel] : null;
+    const fichaSel = sel
+      ? '<div class="ficha-sel"><div class="txt"><h4>' + esc(sel.n) + "</h4>" +
+        '<span class="cod">' + esc(sel.c) + " · " + hijos(sel.c).length + " partes · " +
+        documentosDe(sel.c).length + " documentos</span></div>" +
+        '<button class="btn-abrir" type="button" data-nodo="' + esc(sel.c) + '" ' +
+        'style="background:var(--accent);color:#fff;border:0;border-radius:5px;padding:8px 16px;font-weight:600;font-size:12.5px">Abrir</button></div>'
+      : '<p class="nota">Toca un punto del esquema o un subsistema de la lista.</p>';
+
+    return '<div class="split"><div class="listado">' + lista + "</div>" +
+      '<div><div class="marco">' + DATOS.escena + "</div>" + fichaSel + "</div></div>";
+  }
+
+  function pintarMarcadores() {
+    const svg = $("esquema");
+    if (!svg) return;
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    subsistemas().forEach((s, i) => {
+      if (s.x == null || s.y == null) return;
+      const x = s.x * 6.6, y = s.y * 3.8;
+      const sel = E.sel === s.c;
+      const nodo = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      nodo.setAttribute("class", "marcador" + (avisa(s.c) ? " avisa" : "") +
+        (sel ? " sel" : E.sel ? " apagado" : ""));
+      nodo.setAttribute("data-sel", s.c);
+      nodo.setAttribute("tabindex", "0");
+      nodo.setAttribute("role", "button");
+      nodo.setAttribute("aria-label", s.n);
+      nodo.innerHTML = '<circle cx="' + x + '" cy="' + y + '" r="' + (sel ? 12 : 9.5) + '"></circle>' +
+        '<text x="' + x + '" y="' + y + '" text-anchor="middle" dominant-baseline="central">' + pad(i + 1) + "</text>";
+      g.appendChild(nodo);
+    });
+    svg.appendChild(g);
+  }
+
+  /* --- Ficha de un nodo (subsistema o equipo) --- */
+  function pantallaNodo() {
+    const n = porCod[E.nodo];
+    if (!n) return '<p class="vacio-msg">Nodo no encontrado.</p>';
+
+    const partes = hijos(n.c), mats = materialesDe(n.c),
+          frecs = frecuenciasDe(n.c), docs = documentosDe(n.c);
+
+    const tabs = [];
+    if (partes.length) tabs.push(["partes", "Partes", partes.length]);
+    tabs.push(["tecnico", "Técnico", null]);
+    tabs.push(["materiales", "Materiales", mats.length]);
+    tabs.push(["frecuencias", "Frecuencias", frecs.length]);
+    tabs.push(["documentos", "Documentos", docs.length]);
+    if (!tabs.some((t) => t[0] === E.pestana)) E.pestana = tabs[0][0];
+
+    const migas = ruta(n.c).map((x, i, a) => i === a.length - 1
+      ? "<b>" + esc(x.c) + "</b>"
+      : '<button type="button" data-nodo="' + esc(x.c) + '">' + esc(x.c) + "</button>").join(" ▸ ");
+
+    const cuerpo = { partes: tabPartes, tecnico: tabTecnico, materiales: tabMateriales,
+                     frecuencias: tabFrecuencias, documentos: tabDocumentos }[E.pestana](n, { partes, mats, frecs, docs });
+
+    return '<p class="miga">' + migas + "</p>" +
+      '<div class="cabecera"><span class="cod">' + esc(n.c) + "</span><h2>" + esc(n.n) + "</h2>" +
+      '<span class="pill ' + critCls(n.crit) + '" style="margin-left:auto">Crítico ' + esc(n.crit) + "</span></div>" +
+      '<div class="pestanas">' + tabs.map((t) =>
+        '<button type="button" data-pestana="' + t[0] + '"' + (E.pestana === t[0] ? ' class="on"' : "") + ">" +
+        esc(t[1]) + (t[2] != null ? '<span class="cuenta">' + t[2] + "</span>" : "") + "</button>").join("") + "</div>" +
+      cuerpo;
+  }
+
+  function tabPartes(n, d) {
+    return tabla(["Código", "Parte", "Ubicación", "Criticidad", "Estado"],
+      d.partes.map((p) => ({
+        clic: p.c,
+        celdas: ['<td class="cod">' + esc(p.c) + "</td>",
+                 '<td class="fuerte">' + esc(p.n) + "</td>",
+                 "<td>" + esc(p.ubi || "—") + "</td>",
+                 "<td>" + esc(p.crit) + "</td>",
+                 '<td><span class="pill ' + (p.est === "Degradado" ? "p-warn" : "p-ok") + '">' + esc(p.est) + "</span></td>"]
+      })));
+  }
+
+  function tabTecnico(n) {
+    const t = tecnicoDe(n.c);
+    const campo = (k, v) => '<div class="kv"><span>' + k + "</span>" +
+      (v ? "<b>" + esc(v) + "</b>" : '<b class="vacio">por completar</b>') + "</div>";
+    return '<div class="kvs">' +
+      campo("Fabricante", t && t.fab) + campo("Criticidad", n.crit) +
+      campo("Modelo", t && t.mod) + campo("Ubicación física", n.ubi) +
+      campo("N° de serie", t && t.ser) + campo("Requiere buzo o ROV", n.buzo) +
+      campo("Fecha de instalación", t && t.inst) + campo("Estado", n.est) +
+      "</div>" +
+      (t ? "" : '<p class="nota">Los campos vacíos los llena la Fase 0, desde la placa del equipo o el manual. La app nunca los rellena sola.</p>');
+  }
+
+  function tabMateriales(n, d) {
+    if (!d.mats.length) return vacio("Sin materiales asociados");
+    return tabla(["Material", "Código SAP", "Cant. ref.", "Disponible", "Estado"],
+      d.mats.map((mn) => {
+        const m = DATOS.materiales[mn.mat] || {};
+        const st = stockDe(mn.mat);
+        const bajo = st && st.disp < m.min;
+        return { celdas: [
+          '<td class="fuerte">' + esc(m.desc || mn.mat) + '<br><span class="cod">' + esc(mn.mat) + "</span></td>",
+          '<td class="cod">' + esc(m.sap || "—") + "</td>",
+          '<td class="num">' + esc(mn.cant) + " " + esc(m.un || "") + "</td>",
+          '<td class="num">' + (st ? st.disp : "—") + "</td>",
+          "<td>" + (st ? '<span class="pill ' + (bajo ? "p-warn" : "p-ok") + '">' + (bajo ? "Bajo mínimo" : "OK") + "</span>"
+                       : '<span class="pill p-n">Sin cargar</span>') + "</td>"
+        ] };
+      })) + (ej() ? "" : '<p class="nota">El stock se carga en la Fase 3. Activa «Datos de ejemplo» para ver cómo se vería.</p>');
+  }
+
+  function tabFrecuencias(n, d) {
+    if (!d.frecs.length) return vacio("Sin frecuencias de referencia");
+    return tabla(["Referencia", "Tipo", "Frecuencia", "Última", "Norma"],
+      d.frecs.map((f) => ({ celdas: [
+        '<td class="fuerte">' + esc(f.desc) + "</td>",
+        "<td>" + esc(f.tipo) + "</td>",
+        '<td class="cod">Cada ' + esc(f.val) + " " + esc(f.uni.toLowerCase()) + "</td>",
+        '<td class="cod">' + esc(f.ultima || "—") + "</td>",
+        '<td class="cod">' + esc(f.norma || "—") + "</td>"
+      ] }))) +
+      '<p class="nota">Información de referencia: la aplicación no programa ni dispara mantenimientos.</p>';
+  }
+
+  function tabDocumentos(n, d) {
+    if (!d.docs.length) return vacio("Sin documentos asociados");
+    return tabla(["Documento", "Tipo", "Emisor", "Vence", "Vigencia"],
+      d.docs.map((doc) => {
+        const f = venceDe(doc.k), v = vigencia(f);
+        return { celdas: [
+          '<td class="fuerte">' + esc(doc.nombre) + "</td>",
+          '<td class="cod">' + esc(doc.tipo) + "</td>",
+          '<td class="cod">' + esc(doc.emisor || "—") + "</td>",
+          '<td class="cod">' + esc(f || "—") + "</td>",
+          '<td><span class="pill ' + v.cls + '">' + v.txt + "</span></td>"
+        ] };
+      }));
+  }
+
+  /* --- Listados del menú --- */
+  function pantallaTabla(sec) {
+    const P = {
+      subsistemas: () => ["Subsistemas", ["Código", "Subsistema", "Partes", "Docs", "Criticidad"],
+        subsistemas().map((s) => ({ clic: s.c, celdas: [
+          '<td class="cod">' + esc(s.c) + "</td>", '<td class="fuerte">' + esc(s.n) + "</td>",
+          '<td class="num">' + hijos(s.c).length + "</td>",
+          '<td class="num">' + documentosDe(s.c).length + "</td>",
+          '<td><span class="pill ' + critCls(s.crit) + '">' + esc(s.crit) + "</span></td>"] }))],
+      equipos: () => ["Equipos", ["Código", "Equipo", "Subsistema", "Ubicación", "Estado"],
+        equipos().map((e) => ({ clic: e.c, celdas: [
+          '<td class="cod">' + esc(e.c) + "</td>", '<td class="fuerte">' + esc(e.n) + "</td>",
+          '<td class="cod">' + esc((porCod[e.p] || {}).n || "") + "</td>",
+          "<td>" + esc(e.ubi || "—") + "</td>",
+          '<td><span class="pill ' + (e.est === "Degradado" ? "p-warn" : "p-ok") + '">' + esc(e.est) + "</span></td>"] }))],
+      materiales: () => ["Catálogo de materiales", ["Código", "Descripción", "SAP", "Unidad", "Mín.", "Plazo"],
+        Object.entries(DATOS.materiales).map(([k, m]) => ({ celdas: [
+          '<td class="cod">' + esc(k) + "</td>", '<td class="fuerte">' + esc(m.desc) + "</td>",
+          '<td class="cod">' + esc(m.sap || "—") + "</td>", "<td>" + esc(m.un) + "</td>",
+          '<td class="num">' + esc(m.min) + "</td>",
+          '<td class="num">' + esc(m.lead) + " d</td>"] }))],
+      documentos: () => ["Documentos y planos", ["Documento", "Tipo", "Nodo", "Vence", "Vigencia"],
+        DATOS.documentos.map((d) => {
+          const f = venceDe(d.k), v = vigencia(f);
+          return { clic: d.nodo, celdas: [
+            '<td class="fuerte">' + esc(d.nombre) + "</td>", '<td class="cod">' + esc(d.tipo) + "</td>",
+            '<td class="cod">' + esc(d.nodo) + "</td>", '<td class="cod">' + esc(f || "—") + "</td>",
+            '<td><span class="pill ' + v.cls + '">' + v.txt + "</span></td>"] };
+        })],
+      frecuencias: () => ["Frecuencias de referencia", ["Referencia", "Nodo", "Tipo", "Frecuencia", "Norma"],
+        DATOS.frecuencias.map((f) => ({ clic: f.nodo, celdas: [
+          '<td class="fuerte">' + esc(f.desc) + "</td>", '<td class="cod">' + esc(f.nodo) + "</td>",
+          "<td>" + esc(f.tipo) + "</td>",
+          '<td class="cod">Cada ' + esc(f.val) + " " + esc(f.uni.toLowerCase()) + "</td>",
+          '<td class="cod">' + esc(f.norma || "—") + "</td>"] }))]
+    }[sec]();
+
+    return '<div class="cabecera"><h2>' + esc(P[0]) + '</h2><span class="pill p-n" style="margin-left:auto">' +
+      P[2].length + " registros</span></div>" + tabla(P[1], P[2]);
+  }
+
+  /* --- Búsqueda --- */
+  function pantallaBusqueda() {
+    const q = E.q.trim().toLowerCase();
+    const res = NODOS.filter((n) => n.c.toLowerCase().includes(q) || n.n.toLowerCase().includes(q));
+    if (!res.length) return '<div class="cabecera"><h2>Sin resultados</h2></div>' +
+      vacio("Nada coincide con «" + esc(E.q) + "»");
+    return '<div class="cabecera"><h2>Resultados</h2><span class="pill p-n" style="margin-left:auto">' +
+      res.length + "</span></div>" +
+      tabla(["Código", "Nombre", "Tipo", "Criticidad"], res.map((n) => ({ clic: n.c, celdas: [
+        '<td class="cod">' + esc(n.c) + "</td>", '<td class="fuerte">' + esc(n.n) + "</td>",
+        "<td>" + esc(n.tipo) + "</td>", "<td>" + esc(n.crit) + "</td>"] })));
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Piezas de presentación
+   * ------------------------------------------------------------------ */
+  const pad = (i) => (i < 10 ? "0" : "") + i;
+  const critCls = (c) => (c === "A" ? "p-bad" : c === "B" ? "p-warn" : "p-n");
+  const vacio = (t) => '<div class="vacio-msg"><b>' + esc(t) + "</b><br>Se carga en la Fase 0.</div>";
+
+  function tabla(cabeceras, filas) {
+    return '<div class="tabla"><table><thead><tr>' +
+      cabeceras.map((c) => "<th>" + esc(c) + "</th>").join("") + "</tr></thead><tbody>" +
+      filas.map((f) => "<tr" + (f.clic ? ' class="clic" data-nodo="' + esc(f.clic) + '"' : "") + ">" +
+        f.celdas.join("") + "</tr>").join("") + "</tbody></table></div>";
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Navegación e interacción
+   * ------------------------------------------------------------------ */
+  function irA(c) {
+    // La raiz no tiene ficha propia: su ficha es la vista global
+    const n = porCod[c];
+    if (n && n.niv === 1) { E.seccion = "global"; E.sel = null; }
+    else { E.seccion = "nodo"; E.nodo = c; E.pestana = null; }
+    E.q = ""; $("q").value = "";
+    guardar();
+  }
+  function guardar() { location.hash = E.seccion === "nodo" ? "#/n/" + E.nodo : "#/" + E.seccion; }
+
+  function desdeHash() {
+    const h = location.hash.replace(/^#\//, "");
+    if (h.startsWith("n/")) {
+      const c = decodeURIComponent(h.slice(2));
+      if (porCod[c]) { E.seccion = "nodo"; E.nodo = c; return; }
+    }
+    E.seccion = ["global", "subsistemas", "equipos", "materiales", "documentos", "frecuencias"]
+      .includes(h) ? h : "global";
+  }
+
+  document.addEventListener("click", (ev) => {
+    const t = ev.target.closest("[data-nodo],[data-sel],[data-vista],[data-pestana],[data-ir]");
+    if (!t) return;
+    if (t.dataset.nodo) { irA(t.dataset.nodo); pintar(); }
+    else if (t.dataset.sel) { E.sel = E.sel === t.dataset.sel ? null : t.dataset.sel; pintar(); }
+    else if (t.dataset.vista) { E.vista = t.dataset.vista; E.sel = null; pintar(); }
+    else if (t.dataset.pestana) { E.pestana = t.dataset.pestana; pintar(); }
+    else if (t.dataset.ir) { E.seccion = t.dataset.ir; E.sel = null; E.q = ""; $("q").value = ""; guardar(); pintar(); }
+  });
+
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    const t = ev.target.closest(".marcador");
+    if (!t) return;
+    ev.preventDefault();
+    E.sel = E.sel === t.dataset.sel ? null : t.dataset.sel;
+    pintar();
+  });
+
+  $("q").addEventListener("input", (ev) => { E.q = ev.target.value; pintar(); });
+
+  $("btn-ejemplo").addEventListener("click", () => {
+    E.ejemplo = !E.ejemplo;
+    const b = $("btn-ejemplo");
+    b.classList.toggle("on", E.ejemplo);
+    b.setAttribute("aria-pressed", String(E.ejemplo));
+    pintar();
+  });
+
+  $("btn-info").addEventListener("click", abrirInfo);
+  window.addEventListener("hashchange", () => { desdeHash(); pintar(); });
+
+  function abrirInfo() {
+    const velo = document.createElement("div");
+    velo.className = "velo";
+    velo.innerHTML = '<div class="modal" role="dialog" aria-modal="true" aria-label="Qué es esto">' +
+      "<h3>Qué es esto</h3><ul>" +
+      "<li>Un <b>prototipo navegable</b> de la aplicación propuesta. Sirve para ver cómo se verá y cómo se moverá uno por ella, no para trabajar.</li>" +
+      "<li>Los datos son los <b>del levantamiento real</b>: " + subsistemas().length + " subsistemas y " +
+        equipos().length + " equipos, con sus materiales, frecuencias y documentos.</li>" +
+      "<li>Los campos técnicos salen <b>vacíos a propósito</b>: es lo que falta por llenar en la Fase 0.</li>" +
+      "<li><b>Datos de ejemplo</b> añade fechas y stock inventados para ver los avisos y el semáforo. Nunca se mezclan con los reales.</li>" +
+      "<li>Los códigos son <b>provisionales</b> hasta que se cargue la codificación oficial de subsistemas.</li>" +
+      "</ul><button class='cerrar' type='button'>Entendido</button></div>";
+    velo.addEventListener("click", (ev) => {
+      if (ev.target === velo || ev.target.classList.contains("cerrar")) velo.remove();
+    });
+    document.body.appendChild(velo);
+    velo.querySelector(".cerrar").focus();
+  }
+
+  desdeHash();
+  pintar();
+})();
+</script>

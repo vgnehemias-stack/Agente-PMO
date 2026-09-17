@@ -96,6 +96,24 @@ Power BI queda reservado para lo único que Dataverse no puede — **tendencia e
 entonces se embebe como un panel más de la app. Detalle y limitaciones en
 [`plan-maestro.md`](01-plan/plan-maestro.md), sección 6 bis.
 
+### `05-prototipo/` — Prototipo navegable ⭐
+
+[`prototipo-monoboyas-offline.html`](05-prototipo/prototipo-monoboyas-offline.html) — **la app se
+puede usar, no solo ver.** Publicado en https://claude.ai/artifact/59MQUSdFe1FPjWSHB7RvzJ
+
+Funciona con los **datos reales del levantamiento**: 12 subsistemas, 68 equipos, 27 materiales,
+40 frecuencias y 26 documentos. Se navega de la vista global al subsistema y de ahí a la ficha del
+equipo, con sus cuatro pestañas; el selector *Ver como* cambia entre lista y esquema, y los puntos
+del esquema se tocan.
+
+Los campos técnicos salen **vacíos a propósito**: es justo lo que falta por llenar en la Fase 0.
+El botón **Datos de ejemplo** añade fechas y stock inventados para ver los avisos y el semáforo,
+sin mezclarlos nunca con los reales.
+
+```bash
+cd monoboyas-powerapps/05-prototipo && python3 construir-prototipo.py
+```
+
 ### `04-construccion/` — Runbook de construcción ⭐
 
 [`runbook-powerapps.html`](04-construccion/runbook-powerapps.html) — **la guía para quien se siente
