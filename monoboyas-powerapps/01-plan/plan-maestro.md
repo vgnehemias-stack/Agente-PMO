@@ -215,12 +215,19 @@ mano. Consecuencias:
 
 | | |
 |---|---|
-| Agregar un subsistema | Es agregar una fila, no editar la pantalla |
+| Agregar un subsistema | Es agregar una fila y duplicar su botón transparente — ver el matiz de abajo |
 | Mover un punto | Es cambiar un número desde la propia ficha |
 | Color de cada punto | Sale del dato (documento vencido, stock bajo mínimo), no de la maqueta |
 | Pantallas distintas | Al ser porcentajes y no píxeles, el esquema escala solo |
 
 Esa es la diferencia entre una pantalla que se mantiene sola y una que hay que tocar cada vez.
+
+> **Matiz, para no prometer de más:** el **dibujo** de los puntos —dónde va cada uno y de qué
+> color— sale del dato por completo. El **clic** no: una galería de Power Apps coloca sus elementos
+> en fila o columna, no en posiciones libres, así que cada punto necesita un botón transparente
+> enlazado al dato. Con 12 subsistemas es un trabajo menor, y duplicar un botón al añadir uno nuevo
+> lleva un par de minutos. La versión completamente sin tocar la pantalla exige un componente de
+> código (PCF), que ya es trabajo de desarrollador.
 
 ### Tres niveles, en orden de costo
 

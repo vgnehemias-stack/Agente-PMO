@@ -1,0 +1,1212 @@
+<title>Construir la app de Monoboyas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F2F1EE;
+    --surface: #FFFFFF;
+    --surface-2: #E9E8E4;
+    --surface-3: #F7F6F4;
+    --ink: #1B2228;
+    --ink-2: #4A555E;
+    --ink-3: #7A858E;
+    --line: #D6D5D0;
+    --line-2: #C2C1BB;
+    --accent: #D2570D;
+    --accent-soft: #FBEEE4;
+    --steel: #2B3A45;
+    --ok: #1C6E48;
+    --ok-soft: #E2F0E8;
+    --warn: #9B6A05;
+    --warn-soft: #F8EED6;
+    --bad: #A8291F;
+    --bad-soft: #F8E5E2;
+    --codigo: #F4F3F0;
+    --shadow: 0 1px 2px rgba(27,34,40,.06), 0 8px 24px rgba(27,34,40,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14191D;
+      --surface: #1D242A;
+      --surface-2: #262E35;
+      --surface-3: #212930;
+      --ink: #E9EDEF;
+      --ink-2: #AFBAC2;
+      --ink-3: #7D8993;
+      --line: #313B43;
+      --line-2: #3E4952;
+      --accent: #F5843D;
+      --accent-soft: #33231A;
+      --steel: #0E1317;
+      --ok: #6FC79A;
+      --ok-soft: #1A2E25;
+      --warn: #E0B25C;
+      --warn-soft: #302819;
+      --bad: #EE8C80;
+      --bad-soft: #33201D;
+      --codigo: #161C21;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #14191D;
+    --surface: #1D242A;
+    --surface-2: #262E35;
+    --surface-3: #212930;
+    --ink: #E9EDEF;
+    --ink-2: #AFBAC2;
+    --ink-3: #7D8993;
+    --line: #313B43;
+    --line-2: #3E4952;
+    --accent: #F5843D;
+    --accent-soft: #33231A;
+    --steel: #0E1317;
+    --ok: #6FC79A;
+    --ok-soft: #1A2E25;
+    --warn: #E0B25C;
+    --warn-soft: #302819;
+    --bad: #EE8C80;
+    --bad-soft: #33201D;
+    --codigo: #161C21;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 15px; line-height: 1.62; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding-inline: 20px; padding-block: 0 76px; }
+  h1, h2, h3, h4 { font-family: Archivo, system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  code {
+    background: var(--codigo); border: 1px solid var(--line);
+    padding: 1px 5px; border-radius: 3px; font-size: .88em;
+  }
+  a { color: var(--accent); }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  }
+
+  /* ---------- Cabecera ---------- */
+  header.hero {
+    border-bottom: 1px solid var(--line); padding-block: 50px 38px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  header.hero h1 {
+    font-size: clamp(29px, 5vw, 46px); font-weight: 700;
+    line-height: 1.05; letter-spacing: -.022em;
+  }
+  header.hero .lead { font-size: 16.5px; color: var(--ink-2); max-width: 62ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    padding: 5px 10px; border: 1px solid var(--line-2); border-radius: 3px;
+    color: var(--ink-2); background: var(--surface);
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  section { padding-block: 46px 0; }
+  .sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .sec-head h2 { font-size: clamp(20px, 3vw, 26px); font-weight: 600; letter-spacing: -.012em; }
+  .sec-head p { color: var(--ink-2); max-width: 70ch; }
+  .sec-head .dur {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3);
+  }
+
+  /* ---------- Paso ---------- */
+  .paso {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+    padding: 18px 20px 20px; margin-bottom: 14px;
+    display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 6px 15px;
+  }
+  .paso .num {
+    grid-row: 1 / span 9;
+    font-family: Archivo, sans-serif; font-size: 17px; font-weight: 700;
+    color: var(--accent); background: var(--accent-soft);
+    border-radius: 5px; height: 34px; display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .paso h3 { font-size: 16.5px; font-weight: 600; line-height: 1.3; align-self: center; min-height: 34px; display: flex; align-items: center; }
+  .paso > * { min-width: 0; }
+  .paso .bloque { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; min-width: 0; }
+  .paso .et {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .paso p, .paso li { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+  .paso ol, .paso ul { margin: 0; padding-left: 19px; display: flex; flex-direction: column; gap: 5px; }
+  .paso .donde {
+    font-size: 13.5px; color: var(--ink-2); background: var(--surface-3);
+    border-left: 3px solid var(--line-2); padding: 7px 11px; border-radius: 0 4px 4px 0;
+  }
+  .paso .ver {
+    background: var(--ok-soft); border-left: 3px solid var(--ok);
+    padding: 8px 12px; border-radius: 0 4px 4px 0; font-size: 13.5px; color: var(--ink-2);
+  }
+  .paso .ver b { color: var(--ok); }
+  .paso .tiempo {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3);
+    margin-top: 10px;
+  }
+  .trampa {
+    background: var(--warn-soft); border-left: 3px solid var(--warn);
+    padding: 9px 12px; border-radius: 0 4px 4px 0; font-size: 13.5px; color: var(--ink-2);
+    margin-top: 10px;
+  }
+  .trampa b { color: var(--warn); }
+  .dudoso {
+    background: var(--bad-soft); border-left: 3px solid var(--bad);
+    padding: 9px 12px; border-radius: 0 4px 4px 0; font-size: 13.5px; color: var(--ink-2);
+    margin-top: 10px;
+  }
+  .dudoso b { color: var(--bad); }
+
+  pre {
+    background: var(--codigo); border: 1px solid var(--line); border-radius: 5px;
+    padding: 11px 13px; overflow-x: auto; margin: 0;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; line-height: 1.6;
+    color: var(--ink); white-space: pre;
+  }
+  pre .c { color: var(--ink-3); }
+
+  /* ---------- Tablas ---------- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 440px; }
+  thead th {
+    background: var(--surface-3); text-align: left;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+    padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  tbody td { padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td code { font-size: 11.5px; }
+
+  /* ---------- Antes de empezar ---------- */
+  .check { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .ck { background: var(--surface); padding: 12px 15px; display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: baseline; }
+  .ck .b { color: var(--line-2); font-size: 15px; line-height: 1; }
+  .ck h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .ck p { font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+  .pill {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase; padding: 3px 7px;
+    border-radius: 3px; white-space: nowrap;
+  }
+  .p-bad { background: var(--bad-soft); color: var(--bad); }
+  .p-warn { background: var(--warn-soft); color: var(--warn); }
+  .p-ok { background: var(--ok-soft); color: var(--ok); }
+
+  /* ---------- Glosario ---------- */
+  .glos { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .gl { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 13px 15px 15px; }
+  .gl h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .gl p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+  /* ---------- Figura del mapa ---------- */
+  figure { margin: 0; }
+  figure svg { width: 100%; max-width: 100%; height: auto; display: block; }
+  figcaption { font-size: 12.5px; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
+  .f-caja { fill: var(--surface); stroke: var(--line-2); }
+  .f-caja.on { fill: var(--accent-soft); stroke: var(--accent); }
+  .f-t { font-family: Archivo, sans-serif; font-size: 11px; fill: var(--ink); font-weight: 600; }
+  .f-s { font-family: "IBM Plex Mono", monospace; font-size: 8.5px; fill: var(--ink-3); }
+  .f-ln { stroke: var(--line-2); stroke-width: 1.5; fill: none; }
+  .f-ln.on { stroke: var(--accent); }
+
+  .aviso {
+    border-left: 3px solid var(--accent); background: var(--accent-soft);
+    padding: 16px 18px; border-radius: 0 5px 5px 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .aviso h3 { font-size: 15px; font-weight: 600; }
+  .aviso p { font-size: 13.5px; color: var(--ink-2); }
+
+  footer {
+    margin-top: 52px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--ink-3);
+    display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: space-between;
+  }
+
+  @media (max-width: 560px) {
+    .paso { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .paso .num { grid-row: auto; width: 34px; }
+    .ck { grid-template-columns: 18px 1fr; }
+    .ck .pill { grid-column: 2; justify-self: start; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">TAMOIN · Repsol — Refinería La Pampilla</p>
+    <h1>Construir la app de Monoboyas</h1>
+    <p class="lead">
+      Guía paso a paso para levantar la aplicación en Power Platform, escrita para quien no ha
+      trabajado antes con la herramienta. Cada paso dice dónde se hace, qué hay que hacer y qué se
+      debe ver al terminar.
+    </p>
+    <div class="chips">
+      <span class="chip">28 pasos · <b>7 fases</b></span>
+      <span class="chip">Esfuerzo · <b>12–17 días de trabajo</b></span>
+      <span class="chip">Dataverse · <b>11 tablas</b></span>
+      <span class="chip">1 app · <b>1 página · 4 flujos</b></span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Cómo leer esta guía</p>
+      <h2>Tres cosas antes de nada</h2>
+    </div>
+    <div class="aviso">
+      <h3>1 · No empieces si falta algo de la lista de abajo</h3>
+      <p>
+        La mitad de los problemas de un proyecto así vienen de arrancar sin el tenant decidido o sin
+        los datos listos, y descubrirlo en el paso 12. La lista de «antes de empezar» es una
+        barrera, no una sugerencia.
+      </p>
+      <h3>2 · Lo marcado en rojo hay que comprobarlo, no darlo por hecho</h3>
+      <p>
+        Dos detalles de la plataforma cambian entre versiones y entre entornos. Están señalados y
+        tienen su propia prueba corta en la Fase 1. No construyas media pantalla sobre un supuesto.
+      </p>
+      <h3>3 · Lo marcado en ámbar son las trampas que hacen perder días</h3>
+      <p>
+        Cosas que no dan error en el momento y se descubren dos semanas después, cuando ya hay que
+        rehacer. Léelas antes de ejecutar el paso, no después.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Antes de empezar</p>
+      <h2>Lo que tienes que tener delante</h2>
+      <p>Si algo de esto falta, el paso 1 no se puede dar. Conseguirlo es el trabajo previo.</p>
+    </div>
+    <div class="check">
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>El tenant decidido: ¿TAMOIN o Repsol?</h4>
+        <p>Define quién paga las licencias, de quién es el dato y qué pasa al terminar el contrato. Cambiarlo después es rehacerlo todo.</p></div>
+        <span class="pill p-bad">Bloqueante</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>La codificación oficial de subsistemas</h4>
+        <p>Los códigos reales. Sin ellos se puede construir la estructura, pero no cargar los datos definitivos.</p></div>
+        <span class="pill p-bad">Bloqueante</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>Licencias Power Apps Premium asignadas</h4>
+        <p>Una por persona que vaya a usar la app, o el plan por aplicación. Dataverse no funciona con la licencia incluida en Microsoft 365.</p></div>
+        <span class="pill p-bad">Bloqueante</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>Rol de administrador de Power Platform</h4>
+        <p>Para poder crear entornos. Lo concede el administrador del tenant.</p></div>
+        <span class="pill p-warn">Paso 1</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>Una cuenta de servicio creada</h4>
+        <p>Por ejemplo <code>svc-monoboyas@…</code>, con licencia propia. Será la dueña de la app y de los flujos.</p></div>
+        <span class="pill p-warn">Paso 1</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>Los seis CSV de levantamiento, llenos y validados</h4>
+        <p>Los de <code>02-levantamiento/</code>, sin ningún <code>PROPUESTA - VALIDAR</code> y pasando el verificador de integridad.</p></div>
+        <span class="pill p-warn">Paso 12</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>Un sitio de SharePoint para los documentos</h4>
+        <p>Donde vivirán planos, manuales y certificados. Puede crearse en el momento, pero decide antes quién lo administra.</p></div>
+        <span class="pill p-warn">Paso 25</span>
+      </div>
+      <div class="ck">
+        <span class="b">☐</span>
+        <div><h4>La imagen del esquema de la monoboya</h4>
+        <p>El plano de disposición general si existe; si no, el esquema de la propuesta. Proporción aproximada 660×380.</p></div>
+        <span class="pill p-ok">Paso 19</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El recorrido</p>
+      <h2>Siete fases y qué bloquea a qué</h2>
+    </div>
+    <figure>
+      <svg viewBox="0 0 880 150" role="img" aria-label="Las siete fases de construcción en cadena: entorno y solución, las tablas, cargar los datos, la aplicación, el panel visual, documentos y avisos, y probar y publicar. El panel visual depende de la aplicación y los documentos y avisos pueden hacerse en paralelo.">
+        <defs>
+          <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,1 L9,5 L0,9 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g class="f-ln" style="color: var(--line-2)">
+          <path d="M108,46 L124,46" marker-end="url(#fl)"/>
+          <path d="M228,46 L244,46" marker-end="url(#fl)"/>
+          <path d="M348,46 L364,46" marker-end="url(#fl)"/>
+          <path d="M468,46 L484,46" marker-end="url(#fl)"/>
+          <path d="M588,46 L604,46" marker-end="url(#fl)"/>
+          <path d="M724,46 L740,46" marker-end="url(#fl)"/>
+          <path d="M424,70 L424,104 L724,104 L724,62" marker-end="url(#fl)"/>
+        </g>
+
+        <rect class="f-caja on" x="8" y="24" width="100" height="44" rx="5"/>
+        <text class="f-t" x="20" y="44">Entorno</text><text class="f-s" x="20" y="58">1 · 3 pasos</text>
+
+        <rect class="f-caja on" x="128" y="24" width="100" height="44" rx="5"/>
+        <text class="f-t" x="140" y="44">Las tablas</text><text class="f-s" x="140" y="58">2 · 7 pasos</text>
+
+        <rect class="f-caja" x="248" y="24" width="100" height="44" rx="5"/>
+        <text class="f-t" x="260" y="44">Los datos</text><text class="f-s" x="260" y="58">3 · 3 pasos</text>
+
+        <rect class="f-caja" x="368" y="24" width="100" height="44" rx="5"/>
+        <text class="f-t" x="380" y="44">La app</text><text class="f-s" x="380" y="58">4 · 5 pasos</text>
+
+        <rect class="f-caja" x="488" y="24" width="100" height="44" rx="5"/>
+        <text class="f-t" x="500" y="44">El esquema</text><text class="f-s" x="500" y="58">5 · 6 pasos</text>
+
+        <rect class="f-caja" x="608" y="24" width="112" height="44" rx="5"/>
+        <text class="f-t" x="620" y="44">Docs y avisos</text><text class="f-s" x="620" y="58">6 · 2 pasos</text>
+
+        <rect class="f-caja" x="744" y="24" width="128" height="44" rx="5"/>
+        <text class="f-t" x="756" y="44">Probar y publicar</text><text class="f-s" x="756" y="58">7 · 2 pasos</text>
+
+        <text class="f-s" x="440" y="118">la fase 6 puede ir en paralelo desde que existen las tablas</text>
+        <text class="f-s" x="8" y="140">En naranja, lo que se puede empezar sin tener la codificación oficial.</text>
+      </svg>
+      <figcaption>
+        Las fases 1 y 2 se pueden adelantar con códigos provisionales. De la 3 en adelante hace
+        falta la codificación oficial.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ FASE 1 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 1</p>
+      <h2>Entorno y solución</h2>
+      <p>Preparar la casa antes de meter muebles. Todo lo que se construya después vive dentro de lo que se decide aquí.</p>
+      <p class="dur">≈ 1 día</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">01</span>
+      <h3>Crear los tres entornos</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde"><code>admin.powerplatform.microsoft.com</code> → <b>Entornos</b> → <b>Nuevo</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>Crear tres entornos: <code>Monoboyas DEV</code>, <code>Monoboyas UAT</code> y <code>Monoboyas PROD</code>.</li>
+          <li>Tipo: <b>Espacio aislado</b> para DEV y UAT, <b>Producción</b> para PROD.</li>
+          <li>Región: la que corresponda a la operación. Idioma: español.</li>
+          <li><b>Marcar «Agregar una base de datos de Dataverse»</b> en los tres.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Los tres entornos en la lista con estado <b>Listo</b> y con Dataverse activo. Si en la columna de base de datos aparece vacío, algo falló.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> si no marcas la casilla de la base de datos, el entorno se crea sin Dataverse y <b>no se le puede añadir después</b> en algunos tipos de entorno. Habría que borrarlo y volver a crearlo.</p>
+      <p class="tiempo">≈ 1 hora, más la espera de aprovisionamiento</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">02</span>
+      <h3>Crear el publicador y la solución</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde"><code>make.powerapps.com</code> → arriba a la derecha, elegir el entorno <b>Monoboyas DEV</b> → <b>Soluciones</b> → <b>Nueva solución</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>Nombre para mostrar: <code>Monoboyas</code>.</li>
+          <li>En Publicador, <b>Nuevo publicador</b>: nombre <code>TAMOIN</code>, prefijo <code>tam</code>.</li>
+          <li>Guardar. A partir de ahora <b>todo se crea dentro de esta solución</b>.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La solución <b>Monoboyas</b> abierta y vacía, con el nombre del entorno DEV arriba a la derecha.</p>
+      </div>
+      <p class="trampa"><b>Trampa doble.</b> Primera: el <b>prefijo del publicador no se puede cambiar</b> nunca más; quedará delante del nombre interno de cada tabla y columna (<code>tam_nodo</code>). Segunda, y la más común: si creas una tabla desde <b>Tablas</b> en el menú izquierdo en vez de desde dentro de la solución, la tabla <b>no queda en tu solución</b> y no viajará a UAT ni a PROD. Entra siempre por Soluciones → Monoboyas → Nuevo.</p>
+      <p class="tiempo">≈ 20 minutos</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">03</span>
+      <h3>La prueba corta: comprobar los dos supuestos</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">En la solución <b>Monoboyas</b> del entorno DEV</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>Crear una tabla de juguete con dos columnas y meterle un par de filas a mano.</li>
+          <li>Crear una <b>app basada en modelo</b> mínima que muestre esa tabla.</li>
+          <li>Crear una <b>página personalizada</b> y añadirla al mapa del sitio de esa app.</li>
+          <li>En la página, poner un botón que abra un registro de la tabla con esta fórmula:</li>
+        </ol>
+        <pre>Launch(
+  "?pagetype=entityrecord&amp;etn=tam_prueba&amp;id=" &amp; varRegistro.tam_pruebaid,
+  {},
+  LaunchTarget.Replace
+)</pre>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La página personalizada dentro de la app, y al pulsar el botón, <b>el formulario del registro abierto</b> sin salir de la aplicación.</p>
+      </div>
+      <p class="dudoso"><b>Esto es lo que hay que comprobar, no dar por hecho.</b> Que las páginas personalizadas estén disponibles en el entorno, y que esa llamada para abrir un registro funcione tal cual. Si algo falla aquí, la Fase 5 hay que replantearla — y es mucho mejor descubrirlo ahora, con media hora invertida, que con la pantalla a medio construir.</p>
+      <p class="tiempo">≈ 30 minutos. El paso más rentable de toda la guía.</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 2 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 2</p>
+      <h2>Las tablas</h2>
+      <p>
+        Once tablas. El detalle completo de columnas está en <code>01-plan/modelo-datos.md</code>;
+        aquí va el orden de creación y lo que tiene truco.
+      </p>
+      <p class="dur">≈ 3 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">04</span>
+      <h3>Los conjuntos de opciones, primero</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Solución <b>Monoboyas</b> → <b>Nuevo</b> → <b>Más</b> → <b>Opciones</b> (lista de opciones global)</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Crear como <b>globales</b> los que se repiten en varias tablas:</p>
+        <ul>
+          <li><code>Criticidad</code> — A (crítico) · B (importante) · C (normal)</li>
+          <li><code>Tipo de nodo</code> — Monoboya · Subsistema · Equipo · Componente</li>
+          <li><code>Estado del nodo</code> — Operativo · Degradado · Fuera de servicio · Retirado</li>
+          <li><code>Ubicación física</code> — Cubierta · Casco · Interior · Superficie · Submarino · Fondo marino</li>
+          <li><code>Unidad de medida</code> — UN · M · KG · L · JGO</li>
+          <li><code>Unidad de frecuencia</code> — Días · Semanas · Meses · Años</li>
+        </ul>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Seis listas de opciones en la solución, cada una con sus valores y <b>disponibles para cualquier tabla</b>.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> si creas las opciones sobre la marcha dentro de cada tabla, salen <b>locales</b> y no se pueden reutilizar. Acabarás con tres «Criticidad» distintas que no se pueden comparar entre sí. Hacerlas globales primero cuesta media hora y ahorra el rehacer.</p>
+      <p class="tiempo">≈ 1 hora</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">05</span>
+      <h3>La tabla Nodo del sistema — la columna vertebral</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Solución <b>Monoboyas</b> → <b>Nuevo</b> → <b>Tabla</b> → <b>Tabla (propiedades avanzadas)</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>Nombre: <code>Nodo del sistema</code>. Plural: <code>Nodos del sistema</code>.</li>
+          <li><b>Columna principal</b>: cambiarla a <code>Código oficial</code>, texto de 40. Esta es la que se verá en cada búsqueda del resto de la app.</li>
+          <li>Añadir las columnas simples: <code>Nombre</code>, <code>Código provisional</code>, <code>Nivel</code> (entero), <code>Descripción</code>, <code>Ruta completa</code> (texto 500), <code>Coordenada X</code> y <code>Coordenada Y</code> (decimal), <code>Imagen de referencia</code> (URL).</li>
+          <li>Añadir las de opciones, eligiendo las globales del paso 4: <code>Tipo de nodo</code>, <code>Criticidad</code>, <code>Estado del nodo</code>.</li>
+          <li><b>La columna clave:</b> añadir <code>Nodo padre</code>, tipo <b>Búsqueda</b>, y en «Tabla relacionada» elegir <b>la propia tabla Nodo del sistema</b>.</li>
+          <li>Añadir <code>Monoboya</code> como búsqueda (se creará en el paso 6; se puede volver luego).</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La tabla con todas sus columnas, y en <b>Relaciones</b> una de <b>Varios a uno</b> <b>consigo misma</b>. Ese es el árbol.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> no crees la relación por separado desde el menú Relaciones. En Dataverse, <b>añadir una columna de búsqueda ya crea la relación</b>. Si haces las dos cosas acabas con dos relaciones y dos columnas, y luego no sabes cuál usa el formulario.</p>
+      <p class="tiempo">≈ 3 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">06</span>
+      <h3>La clave alternativa sobre el código oficial</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Tabla <b>Nodo del sistema</b> → <b>Claves</b> → <b>Nueva clave</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Crear una clave llamada <code>Código oficial único</code> con la columna <code>Código oficial</code>.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La clave en estado <b>Activo</b>. Si se queda en «Pendiente», espera: se está construyendo el índice.</p>
+      </div>
+      <p class="trampa"><b>Por qué importa tanto:</b> sin esta clave, al cargar los datos tendrías que resolver cada «Nodo padre» por su identificador interno, que es un código largo generado por el sistema y que nadie tiene en el Excel. Con la clave, la carga resuelve el padre <b>por su código</b>, que es justo lo que traen los CSV. Es la diferencia entre una carga de una tarde y una de tres días.</p>
+      <p class="tiempo">≈ 20 minutos</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">07</span>
+      <h3>La columna de acumulación: número de partes</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Tabla <b>Nodo del sistema</b> → <b>Nueva columna</b> → tipo de datos <b>Entero</b> → <b>Acumulación</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Nombre <code>N° de partes</code>. Origen: la relación de la tabla consigo misma. Agregado: <b>Contar</b>.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">En un subsistema con cinco equipos, el valor <b>5</b>. Puede tardar en aparecer.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> las columnas de acumulación <b>no se actualizan al instante</b>: se recalculan por trabajos programados, por defecto cada hora. Si acabas de cargar datos y ves ceros, no está roto — usa «Recalcular» en la columna o espera. No montes ninguna lógica que dependa de que este número esté al segundo.</p>
+      <p class="tiempo">≈ 30 minutos</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">08</span>
+      <h3>Las tablas maestras sencillas</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Cuatro tablas sin complicación, con las columnas de <code>modelo-datos.md</code>:</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Tabla</th><th>Columna principal</th><th>Búsquedas que lleva</th></tr></thead>
+            <tbody>
+              <tr><td><b>Monoboya</b></td><td><code>Código</code></td><td>Nodo raíz → Nodo del sistema</td></tr>
+              <tr><td><b>Atributos técnicos</b></td><td><code>Nombre</code></td><td>Nodo → Nodo del sistema</td></tr>
+              <tr><td><b>Almacén</b></td><td><code>Código</code></td><td>Responsable → Personal</td></tr>
+              <tr><td><b>Personal</b></td><td><code>Nombre completo</code></td><td>Usuario → Usuario (tabla del sistema)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Las cuatro tablas en la solución, y las búsquedas apuntando donde toca.</p>
+      </div>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">09</span>
+      <h3>Las tablas de materiales</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Cuatro tablas: <b>Material</b>, <b>Material por nodo</b>, <b>Stock</b> y <b>Solicitud de material</b>.</p>
+        <ul>
+          <li>En <b>Solicitud de material</b>, la columna principal es de tipo <b>Autonumeración</b> con formato <code>SM-{SEQNUM:00000}</code>.</li>
+          <li>En <b>Stock</b>, añadir una columna calculada <code>Bajo mínimo</code>:</li>
+        </ul>
+        <pre><span class="c">// Columna calculada de tipo Sí/No, en la tabla Stock</span>
+IF(
+  tam_cantidaddisponible &lt; tam_material.tam_stockminimo,
+  <span class="c">Sí</span>,
+  <span class="c">No</span>
+)</pre>
+        <p>Una columna calculada puede mirar columnas de la tabla a la que apunta una de sus búsquedas, que es justo lo que hace falta aquí.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Al poner un stock por debajo del mínimo del material, la columna cambia sola a <b>Sí</b>, sin guardar nada más.</p>
+      </div>
+      <p class="tiempo">≈ 5 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">10</span>
+      <h3>Frecuencia de referencia y Documento</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Las dos últimas tablas. En <b>Documento</b>, añadir la columna calculada <code>Vigencia</code>, de texto:</p>
+        <pre><span class="c">// Columna calculada de texto, en la tabla Documento</span>
+IF( ISBLANK(tam_fechavencimiento), "No aplica",
+  IF( DIFFINDAYS(NOW(), tam_fechavencimiento) &lt; 0,  "Vencido",
+    IF( DIFFINDAYS(NOW(), tam_fechavencimiento) &lt;= 60, "Por vencer",
+        "Vigente" )))</pre>
+        <p>En <b>Frecuencia de referencia</b>, la columna <code>Próxima referencial</code> también es calculada, sumando la frecuencia a la última ejecución.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Un certificado con vencimiento dentro de 30 días muestra <b>Por vencer</b>; un plano sin vencimiento muestra <b>No aplica</b>.</p>
+      </div>
+      <p class="trampa"><b>Recuerda lo que estas columnas NO hacen:</b> «Próxima referencial» solo se muestra. No genera órdenes, no programa nada, no dispara ningún aviso. Es información. Si alguien pide «que cuando llegue la fecha se cree algo», eso es otra aplicación y otro alcance.</p>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 3 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 3</p>
+      <h2>Cargar los datos</h2>
+      <p>Aquí es donde se paga el trabajo bien hecho en las plantillas — o se descubre que no lo estaba.</p>
+      <p class="dur">≈ 2 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">11</span>
+      <h3>Sustituir el código provisional por el oficial</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">En los CSV, antes de tocar Power Apps</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>En <code>01_jerarquia_subsistemas.csv</code>, la columna <code>codigo_oficial</code> debe estar completa.</li>
+          <li>Con un BUSCARV en Excel, reemplazar en los otros cinco archivos cada <code>codigo_nodo</code> provisional por el oficial.</li>
+          <li>Hacer lo mismo con <code>codigo_padre</code> dentro del propio archivo de jerarquía.</li>
+          <li>Volver a pasar el verificador de integridad del <code>README.md</code> del paquete.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">El verificador en <b>OK</b> en sus ocho comprobaciones, y ningún código provisional suelto.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> no cargues «para ir probando» con los códigos provisionales y cambiarlos después. Cambiar el código de un nodo ya cargado significa rehacer todas las búsquedas que lo apuntan. Si necesitas probar antes de tener la codificación, hazlo en DEV con datos de juguete y borra esas filas.</p>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">12</span>
+      <h3>Cargar la jerarquía, nivel por nivel</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Tabla <b>Nodo del sistema</b> → <b>Editar</b> → <b>Obtener datos</b> → <b>Obtener datos de CSV</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Partir el CSV en tres y cargarlos <b>en este orden</b>:</p>
+        <ol>
+          <li><b>Nivel 1</b>, la monoboya. Sin nodo padre.</li>
+          <li><b>Nivel 2</b>, los 12 subsistemas. Su padre ya existe.</li>
+          <li><b>Nivel 3</b>, los 68 equipos.</li>
+        </ol>
+        <p>Al asignar las columnas, la de <code>codigo_padre</code> se enlaza contra <b>Código oficial</b> gracias a la clave alternativa del paso 6.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">81 filas, y al abrir un equipo, su <b>Nodo padre</b> relleno con el subsistema correcto. Si el padre sale vacío, el orden o la clave fallaron.</p>
+      </div>
+      <p class="trampa"><b>La trampa clásica de toda carga jerárquica:</b> si cargas todo de golpe, las filas cuyo padre aún no existe se crean <b>con el padre vacío y sin dar error</b>. Acabas con 68 equipos huérfanos y un árbol que parece cargado y no lo está. Tres pasadas, siempre.</p>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">13</span>
+      <h3>Cargar el resto y rellenar la ruta completa</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Con el árbol montado, el resto va en cualquier orden: Material, Almacén, Personal, Atributos técnicos, Material por nodo, Frecuencias y Documentos.</p>
+        <p>La columna <code>Ruta completa</code> se calcula en Excel antes de cargar, concatenando los nombres desde la raíz:</p>
+        <pre>MB-01 ▸ Rodamiento principal y girador ▸ Sistema de lubricación</pre>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Al abrir cualquier nodo, su ruta completa legible, y sus materiales y documentos colgando de él.</p>
+      </div>
+      <p class="trampa"><b>Por qué la ruta no es una columna calculada:</b> construirla exige subir por el árbol padre a padre, y eso es un cálculo recursivo que Dataverse no permite en una columna calculada. Se llena en la carga, y más adelante un flujo la recalcula cuando alguien cambia la jerarquía. Es una limitación real de la plataforma, no una decisión de diseño.</p>
+      <p class="tiempo">≈ 6 horas</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 4 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 4</p>
+      <h2>La aplicación</h2>
+      <p>La parte que más se ve y la que menos código lleva: una app basada en modelo se arma configurando, no programando.</p>
+      <p class="dur">≈ 4 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">14</span>
+      <h3>Crear la app y el mapa del sitio</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Solución <b>Monoboyas</b> → <b>Nuevo</b> → <b>Aplicación</b> → <b>Aplicación basada en modelo</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Nombre <code>Monoboyas</code>. En el mapa del sitio, tres grupos:</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Grupo</th><th>Entradas</th></tr></thead>
+            <tbody>
+              <tr><td><b>Activo</b></td><td>Vista global (la página del paso 21) · Subsistemas · Equipos</td></tr>
+              <tr><td><b>Información</b></td><td>Materiales · Documentos · Frecuencias</td></tr>
+              <tr><td><b>Avisos</b></td><td>Vencimientos · Stock bajo mínimo</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>«Subsistemas» y «Equipos» apuntan a la misma tabla con vistas distintas, filtradas por tipo de nodo.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La app abriéndose con la barra lateral de tres grupos, tal como en la propuesta.</p>
+      </div>
+      <p class="tiempo">≈ 3 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">15</span>
+      <h3>Las vistas</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Sobre la tabla Nodo del sistema y las demás:</p>
+        <ul>
+          <li><b>Subsistemas</b> — filtro <code>Tipo de nodo = Subsistema</code>. Columnas: código, nombre, criticidad, n° de partes.</li>
+          <li><b>Equipos</b> — filtro <code>Tipo de nodo = Equipo</code>. Añadir la columna Nodo padre.</li>
+          <li><b>Documentos por vencer</b> — filtro <code>Vigencia = Por vencer</code> o <code>Vencido</code>, ordenada por fecha.</li>
+          <li><b>Stock bajo mínimo</b> — filtro <code>Bajo mínimo = Sí</code>, ordenada por plazo de reposición descendente.</li>
+        </ul>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La vista de subsistemas con <b>12 filas</b> y la de equipos con <b>68</b>.</p>
+      </div>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">16</span>
+      <h3>El formulario con las cuatro pestañas</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Tabla <b>Nodo del sistema</b> → <b>Formularios</b> → el formulario principal</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Cuatro pestañas, como en la propuesta:</p>
+        <ol>
+          <li><b>Técnico</b> — las columnas del nodo y las de Atributos técnicos.</li>
+          <li><b>Materiales</b> — una <b>subcuadrícula</b> de Material por nodo, filtrada por el registro actual.</li>
+          <li><b>Frecuencias</b> — subcuadrícula de Frecuencia de referencia.</li>
+          <li><b>Documentos</b> — subcuadrícula de Documento.</li>
+        </ol>
+        <p>Arriba, en la cabecera, poner el <b>Código oficial</b> y la <b>Ruta completa</b>: son las migas de pan.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Al abrir un equipo, las cuatro pestañas, y al cambiar de una a otra <b>la cabecera no se mueve</b>. Eso es exactamente lo prometido en la propuesta.</p>
+      </div>
+      <p class="tiempo">≈ 6 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">17</span>
+      <h3>Los cinco perfiles de acceso</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Solución → <b>Nuevo</b> → <b>Seguridad</b> → <b>Rol de seguridad</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Rol</th><th>Lectura</th><th>Escritura</th></tr></thead>
+            <tbody>
+              <tr><td><b>Consulta</b></td><td>Organización, en todas las tablas</td><td>ninguna</td></tr>
+              <tr><td><b>Materiales</b></td><td>Organización</td><td>Material por nodo · Stock · Solicitud</td></tr>
+              <tr><td><b>Documentación</b></td><td>Organización</td><td>Documento</td></tr>
+              <tr><td><b>Técnico</b></td><td>Organización</td><td>Atributos técnicos · Frecuencia de referencia</td></tr>
+              <tr><td><b>Administrador</b></td><td>Organización</td><td>Todas, incluida Nodo del sistema</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ningún rol salvo Administrador recibe escritura sobre <b>Nodo del sistema</b>.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Con un usuario de perfil Consulta, los botones de guardar <b>no aparecen</b>. Si aparecen y dan error al pulsar, el permiso está mal puesto.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> en Dataverse cada permiso tiene un <b>nivel</b> (Usuario, Unidad de negocio, Organización), no es un simple sí o no. Para esta app casi todo es <b>Organización</b>, porque todos ven todo el activo. Si lo dejas en «Usuario», cada persona solo verá los registros que ella misma creó — y como los cargó el administrador, verán la app vacía. Es el fallo más desconcertante de los primeros días.</p>
+      <p class="tiempo">≈ 5 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">18</span>
+      <h3>Pasar la app a la cuenta de servicio</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Cambiar el propietario de la aplicación a la cuenta de servicio y compartirla con los grupos de usuarios, asignando a cada uno su rol.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La app listada a nombre de <code>svc-monoboyas</code>, no de una persona.</p>
+      </div>
+      <p class="trampa"><b>Trampa de las que se pagan caras:</b> si la app y los flujos quedan a nombre de quien los construyó y esa persona deja la empresa o pierde la licencia, <b>la aplicación deja de funcionar</b> para todos. Hacerlo al final cuesta diez minutos; descubrirlo un año después cuesta mucho más.</p>
+      <p class="tiempo">≈ 1 hora</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 5 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 5</p>
+      <h2>El panel visual</h2>
+      <p>La única parte con fórmulas de verdad. Es también la más vistosa, así que merece la pena hacerla bien.</p>
+      <p class="dur">≈ 3 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">19</span>
+      <h3>Preparar la imagen del esquema</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>El dibujo de la monoboya <b>sin los puntos</b>: solo el mar, el fondo, la boya, el buque, las mangueras y las cadenas. Los puntos se dibujan desde el dato.</p>
+        <p>Guardarlo con proporción <b>660 × 380</b> y subirlo a la solución como recurso web.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La imagen visible en la solución y utilizable desde una página.</p>
+      </div>
+      <p class="tiempo">≈ 2 horas, si el dibujo ya existe</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">20</span>
+      <h3>Dibujar los puntos desde el dato</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>En la página personalizada, un control <b>Imagen</b> cuya propiedad <code>Image</code> construye el SVG con una fórmula sobre la tabla. Esto sí es <b>enteramente dato</b>: posición y color salen de cada fila.</p>
+        <pre><span class="c">// Propiedad Image de un control Imagen</span>
+"data:image/svg+xml;utf8, " &amp; EncodeUrl(
+  "&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 660 380'&gt;" &amp;
+  Concat(
+      Filter( Nodos, 'Tipo de nodo' = 'Tipo de nodo'.Subsistema ),
+      "&lt;circle cx='" &amp; Text( tam_coordenadax * 6.6 ) &amp;
+            "' cy='" &amp; Text( tam_coordenaday * 3.8 ) &amp;
+            "' r='10' stroke='white' stroke-width='2' fill='" &amp;
+            If( tam_tienealerta, "#9B6A05", "#D2570D" ) &amp; "'/&gt;"
+  ) &amp;
+  "&lt;/svg&gt;"
+)</pre>
+        <p>Se coloca encima de la imagen de fondo del paso 19. Los factores <code>6.6</code> y <code>3.8</code> convierten el porcentaje a las coordenadas del dibujo: 660 y 380 divididos entre 100.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Los 12 puntos sobre la parte que les toca. Al cambiar una coordenada en la ficha y refrescar, <b>el punto se mueve</b> sin tocar la pantalla.</p>
+      </div>
+      <p class="tiempo">≈ 5 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">21</span>
+      <h3>Hacer clicables los puntos</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Un <b>botón transparente</b> por subsistema, encima de cada punto. Doce botones. Su posición sale del dato:</p>
+        <pre><span class="c">// Propiedades de cada botón. Solo cambia el código entre botones.</span>
+X:  imgEsquema.X + imgEsquema.Width  *
+    ( LookUp( Nodos, tam_codigooficial = "MB-01.S02" ).tam_coordenadax / 100 )
+    - Self.Width / 2
+
+Y:  imgEsquema.Y + imgEsquema.Height *
+    ( LookUp( Nodos, tam_codigooficial = "MB-01.S02" ).tam_coordenaday / 100 )
+    - Self.Height / 2
+
+Fill:      Transparent
+OnSelect:  Set( varNodo, LookUp( Nodos, tam_codigooficial = "MB-01.S02" ) )</pre>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Al pulsar sobre un punto, el subsistema <b>queda seleccionado</b> y la lista de la izquierda lo resalta.</p>
+      </div>
+      <p class="dudoso"><b>Sé por qué esto no es una galería, y conviene que lo sepas tú también.</b> Lo natural sería una galería que recorra los subsistemas y coloque un punto por cada uno. No se puede: una galería de Power Apps coloca sus elementos en fila o en columna, no en posiciones libres. Por eso el <b>dibujo</b> sale del dato (paso 20) pero el <b>clic</b> necesita un botón por subsistema. Con doce es un trabajo menor, y añadir uno nuevo es duplicar un botón y cambiarle el código: un par de minutos. La versión sin tocar nunca la pantalla exige un componente de código (PCF), que ya es trabajo de desarrollador y no hace falta para arrancar.</p>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">22</span>
+      <h3>La lista sincronizada</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>A la izquierda, una galería normal con los subsistemas. Aquí sí es una galería, porque es una lista.</p>
+        <pre>Items:     Sort( Filter( Nodos, 'Tipo de nodo' = 'Tipo de nodo'.Subsistema ),
+                 tam_codigooficial )
+OnSelect:  Set( varNodo, ThisItem )
+Fondo del elemento seleccionado:
+           If( ThisItem.tam_nodoid = varNodo.tam_nodoid,
+               ColorValue("#FBEEE4"), Transparent )</pre>
+        <p>Como las dos direcciones escriben en la misma variable <code>varNodo</code>, la sincronía sale sola: no hay que programarla dos veces.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Elegir en la lista resalta el punto en el dibujo, y pulsar el punto resalta la fila de la lista. <b>Las dos direcciones.</b></p>
+      </div>
+      <p class="tiempo">≈ 3 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">23</span>
+      <h3>El selector «Ver como»</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Dos botones, <b>Lista</b> y <b>Esquema</b>, que escriben en una variable, y los dos paneles cuya visibilidad depende de ella.</p>
+        <pre>OnSelect del botón Lista:    Set( varVista, "lista" )
+OnSelect del botón Esquema:  Set( varVista, "esquema" )
+
+Visible del panel de tarjetas:  varVista = "lista"
+Visible del panel del esquema:  varVista = "esquema"
+
+OnStart de la app:  Set( varVista, "lista" )</pre>
+        <p>Recordar la última elección de cada persona se puede añadir después, guardando la preferencia en una tabla.</p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">El selector cambia entre las dos presentaciones <b>sin recargar ni cambiar de pantalla</b>, y lo que estuviera seleccionado sigue seleccionado.</p>
+      </div>
+      <p class="tiempo">≈ 2 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">24</span>
+      <h3>Abrir la ficha desde el esquema</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>El botón «Abrir el subsistema» usa la llamada que ya validaste en el paso 3:</p>
+        <pre>Launch(
+  "?pagetype=entityrecord&amp;etn=tam_nodo&amp;id=" &amp; varNodo.tam_nodoid,
+  {},
+  LaunchTarget.Replace
+)</pre>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Del esquema a la ficha del subsistema, <b>dentro de la misma aplicación</b>, sin abrir otra pestaña.</p>
+      </div>
+      <p class="tiempo">≈ 2 horas</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 6 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 6</p>
+      <h2>Documentos y avisos</h2>
+      <p>Se puede hacer en paralelo con las fases 4 y 5, en cuanto existan las tablas.</p>
+      <p class="dur">≈ 2 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">25</span>
+      <h3>La biblioteca de SharePoint</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>Crear el sitio y una biblioteca <code>Documentos monoboyas</code>.</li>
+          <li>Carpetas por subsistema, con el código oficial como nombre.</li>
+          <li>Desde la app, la columna <code>Enlace</code> del Documento apunta al archivo.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Desde la pestaña Documentos de un nodo, un clic <b>abre el plano</b>.</p>
+      </div>
+      <p class="trampa"><b>Por qué en SharePoint y no dentro de Dataverse:</b> la capacidad de archivos de Dataverse es cara, y un plano en formato de dibujo o un informe de inspección con fotos pesan. Dataverse guarda el enlace y los datos del documento; el archivo vive donde es barato.</p>
+      <p class="tiempo">≈ 4 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">26</span>
+      <h3>Los cuatro flujos de aviso</h3>
+      <div class="bloque">
+        <span class="et">Dónde</span>
+        <p class="donde">Solución <b>Monoboyas</b> → <b>Nuevo</b> → <b>Automatización</b> → <b>Flujo de nube</b> → <b>Programado</b></p>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>Los cuatro tienen la misma forma: periodicidad → listar filas con un filtro → recorrerlas → avisar en Teams y por correo.</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Flujo</th><th>Cada</th><th>Filtro</th></tr></thead>
+            <tbody>
+              <tr><td><b>Certificados por vencer</b></td><td>día</td><td><code>Vigencia = Por vencer</code></td></tr>
+              <tr><td><b>Stock bajo mínimo</b></td><td>día</td><td><code>Bajo mínimo = Sí</code></td></tr>
+              <tr><td><b>Inventario pendiente</b></td><td>mes</td><td>último inventario anterior al plazo acordado</td></tr>
+              <tr><td><b>Solicitud sin código de reserva</b></td><td>día</td><td><code>Estado = Aprobada</code> y código vacío</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Poner a mano un certificado con vencimiento dentro de 30 días y, al ejecutar el flujo, <b>el mensaje en Teams</b>.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> los flujos también deben quedar a nombre de la <b>cuenta de servicio</b>, y sus conexiones a Dataverse y Teams igual. Un flujo con la conexión de una persona deja de ejecutarse cuando esa persona cambia la contraseña.</p>
+      <p class="tiempo">≈ 8 horas</p>
+    </div>
+  </section>
+
+  <!-- ============ FASE 7 ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Fase 7</p>
+      <h2>Probar y publicar</h2>
+      <p class="dur">≈ 2 días</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">27</span>
+      <h3>La prueba de verdad: los siete recorridos</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <p>No pruebes pantallas: prueba lo que alguien va a querer hacer. Con un usuario de cada perfil:</p>
+        <ol>
+          <li>Ver todos los subsistemas y entrar en uno.</li>
+          <li>Ver qué equipos lo componen y abrir la ficha de uno.</li>
+          <li>Ver qué repuestos le corresponden y cuántos hay.</li>
+          <li>Ver cada cuánto toca mantenerlo y cuándo fue la última vez.</li>
+          <li>Abrir su plano y su certificado, y ver si alguno está por vencer.</li>
+          <li>Actualizar un stock desde la app y comprobar que queda el rastro de quién y cuándo.</li>
+          <li>Subir un certificado nuevo y corregir la fecha de vencimiento.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">Los siete, de principio a fin, <b>sin ayuda y sin explicaciones</b>. Si hay que explicar alguno, ese es el que hay que arreglar.</p>
+      </div>
+      <p class="tiempo">≈ 6 horas</p>
+    </div>
+
+    <div class="paso">
+      <span class="num">28</span>
+      <h3>Llevar la solución a UAT y a producción</h3>
+      <div class="bloque">
+        <span class="et">Qué hacer</span>
+        <ol>
+          <li>En DEV: <b>Exportar solución</b> → como <b>Gestionada</b>.</li>
+          <li>En UAT: <b>Importar</b>. Revisar las conexiones de los flujos.</li>
+          <li>Probar los siete recorridos otra vez en UAT, ahora con alguien del equipo de mantenimiento.</li>
+          <li>Repetir el mismo paso hacia PROD.</li>
+          <li>Cargar los datos reales en PROD.</li>
+        </ol>
+      </div>
+      <div class="bloque">
+        <span class="et">Qué debes ver</span>
+        <p class="ver">La misma aplicación en los tres entornos, y en UAT y PROD la solución marcada como <b>Gestionada</b>.</p>
+      </div>
+      <p class="trampa"><b>Trampa:</b> exporta <b>gestionada</b> hacia UAT y PROD. Si importas no gestionada, luego no se puede desinstalar limpiamente ni actualizar de forma ordenada, y acabas con capas de personalización que nadie sabe deshacer. La no gestionada solo sirve como copia de seguridad de DEV.</p>
+      <p class="tiempo">≈ 6 horas</p>
+    </div>
+  </section>
+
+  <!-- ============ TRAMPAS ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Léelo antes, no después</p>
+      <h2>Las diez trampas, juntas</h2>
+      <p>
+        Todas tienen algo en común: no dan error en el momento. Se descubren días después, cuando
+        deshacerlas ya cuesta.
+      </p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Paso</th><th>La trampa</th><th>Qué pasa si caes</th></tr></thead>
+        <tbody>
+          <tr><td><code>01</code></td><td>Crear el entorno sin base de datos</td><td>No hay Dataverse y hay que rehacer el entorno</td></tr>
+          <tr><td><code>02</code></td><td>Crear tablas fuera de la solución</td><td>No viajan a UAT ni a PROD</td></tr>
+          <tr><td><code>02</code></td><td>Elegir mal el prefijo del publicador</td><td>No se puede cambiar nunca más</td></tr>
+          <tr><td><code>04</code></td><td>Opciones locales en vez de globales</td><td>Tres «Criticidad» distintas que no se comparan</td></tr>
+          <tr><td><code>05</code></td><td>Crear la relación además de la búsqueda</td><td>Relaciones duplicadas y formularios que no sabes cuál usan</td></tr>
+          <tr><td><code>07</code></td><td>Creer que la acumulación es instantánea</td><td>Ves ceros y piensas que está roto</td></tr>
+          <tr><td><code>12</code></td><td>Cargar la jerarquía de golpe</td><td>68 equipos huérfanos, sin ningún error</td></tr>
+          <tr><td><code>17</code></td><td>Dejar los permisos en nivel «Usuario»</td><td>Cada persona ve la app vacía</td></tr>
+          <tr><td><code>18</code></td><td>App y flujos a nombre de una persona</td><td>Se caen cuando esa persona se va</td></tr>
+          <tr><td><code>28</code></td><td>Importar no gestionada en producción</td><td>Capas que nadie sabe deshacer</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ GLOSARIO ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Para entender los pasos</p>
+      <h2>Glosario</h2>
+      <p>Los términos que la plataforma da por sabidos y que aparecen en esta guía.</p>
+    </div>
+    <div class="glos">
+      <div class="gl"><h4>Entorno</h4><p>Un espacio de trabajo aislado con sus datos y sus apps. Se usan tres: uno para construir, uno para probar y uno de verdad.</p></div>
+      <div class="gl"><h4>Dataverse</h4><p>La base de datos de Power Platform. Guarda las tablas, los permisos y el registro de cambios.</p></div>
+      <div class="gl"><h4>Solución</h4><p>La caja donde vive todo lo que construyes. Lo que está dentro se puede mover de un entorno a otro; lo que está fuera, no.</p></div>
+      <div class="gl"><h4>Publicador y prefijo</h4><p>Quién firma lo que creas. Su prefijo (<code>tam_</code>) queda pegado al nombre interno de cada tabla y columna, para siempre.</p></div>
+      <div class="gl"><h4>Columna de búsqueda</h4><p>Una columna que apunta a una fila de otra tabla. Es lo que enlaza un equipo con su subsistema. Crearla ya crea la relación.</p></div>
+      <div class="gl"><h4>Columna calculada</h4><p>Su valor sale de una fórmula sobre otras columnas y se actualiza solo. No se puede escribir a mano.</p></div>
+      <div class="gl"><h4>Columna de acumulación</h4><p>Cuenta o suma filas relacionadas — por ejemplo, cuántos equipos cuelgan de un subsistema. Se recalcula por horas, no al instante.</p></div>
+      <div class="gl"><h4>Clave alternativa</h4><p>Un segundo identificador propio, además del interno. Permite enlazar filas por su código en vez de por un identificador que nadie conoce.</p></div>
+      <div class="gl"><h4>App basada en modelo</h4><p>Una aplicación que se genera a partir de las tablas. Configurando vistas y formularios, sin diseñar pantallas.</p></div>
+      <div class="gl"><h4>Mapa del sitio</h4><p>El menú lateral de la aplicación: qué grupos hay y a qué lleva cada entrada.</p></div>
+      <div class="gl"><h4>Página personalizada</h4><p>Una pantalla de diseño libre dentro de una app basada en modelo. Es donde vive el esquema de la monoboya.</p></div>
+      <div class="gl"><h4>Subcuadrícula</h4><p>Una tabla dentro de un formulario que muestra las filas relacionadas: los materiales de este nodo, sus documentos.</p></div>
+      <div class="gl"><h4>Rol de seguridad</h4><p>Qué puede leer y escribir cada perfil, tabla por tabla y con un nivel: solo lo suyo, lo de su área, o todo.</p></div>
+      <div class="gl"><h4>Solución gestionada</h4><p>La versión sellada que se instala en pruebas y en producción. No se edita en destino, y por eso se puede actualizar de forma ordenada.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AYUDA ============ -->
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Sé honesto contigo mismo</p>
+      <h2>Dónde conviene pedir ayuda</h2>
+      <p>El resto de la guía se puede seguir sin experiencia previa. Estas cuatro cosas, no siempre.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Qué</th><th>Por qué</th><th>Señal de que toca pedir ayuda</th></tr></thead>
+        <tbody>
+          <tr><td><b>Los roles de seguridad</b> (paso 17)</td><td>El modelo de privilegios y niveles de Dataverse no es intuitivo</td><td>Llevas medio día y un perfil ve cosas que no debería</td></tr>
+          <tr><td><b>La carga jerárquica</b> (paso 12)</td><td>Resolver búsquedas por clave alternativa tiene su técnica</td><td>Los nodos se cargan con el padre vacío y no encuentras por qué</td></tr>
+          <tr><td><b>Las fórmulas del esquema</b> (pasos 20–22)</td><td>Es lo único que se parece a programar</td><td>El SVG no se dibuja y no sabes si es la fórmula o el dato</td></tr>
+          <tr><td><b>El componente de código (PCF)</b></td><td>Exige herramientas de desarrollo y un perfil distinto</td><td>Solo si algún día hay tantos puntos que los botones dejan de ser razonables</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="aviso">
+      <h3>Y una última cosa, la que de verdad decide si esto funciona</h3>
+      <p>
+        Nada de lo anterior sirve si la información no se mantiene. Una aplicación de consulta se
+        carga completa, se usa unos meses, y si nadie la actualiza pasa a ser una foto vieja en la
+        que ya nadie confía. Los avisos de la Fase 6 ayudan, pero no sustituyen a lo que hay que
+        tener decidido antes del arranque: <b>un responsable nombrado por cada clase de
+        información</b> — quién responde de los materiales, quién de los documentos, quién de los
+        datos técnicos.
+      </p>
+      <p>
+        Es el único punto de esta guía que no se resuelve dentro de Power Apps.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Runbook de construcción · Power Platform · v1.0</span>
+    <span class="mono">TAMOIN · 2026</span>
+  </footer>
+
+</div>

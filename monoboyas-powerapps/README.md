@@ -88,11 +88,25 @@ La visualización dinámica vive **dentro de la misma aplicación**, no en un Po
 página con la lista de subsistemas a la izquierda y el esquema de la monoboya a la derecha,
 sincronizados en las dos direcciones. Lo que evita que se vuelva inmanejable es que **las
 posiciones de los puntos se guardan como dato** (`coordenada_x`, `coordenada_y` en la tabla del
-nodo), no como controles colocados a mano: agregar un subsistema es agregar una fila.
+nodo): mover un punto es cambiar un número desde la propia ficha, y el color de cada marca sale del
+estado de su información. El clic sobre cada punto sí necesita un botón por subsistema — el matiz
+está explicado en el plan maestro y en el runbook.
 
 Power BI queda reservado para lo único que Dataverse no puede — **tendencia en el tiempo** — y aun
 entonces se embebe como un panel más de la app. Detalle y limitaciones en
 [`plan-maestro.md`](01-plan/plan-maestro.md), sección 6 bis.
+
+### `04-construccion/` — Runbook de construcción ⭐
+
+[`runbook-powerapps.html`](04-construccion/runbook-powerapps.html) — **la guía para quien se siente
+a construir.** 28 pasos en 7 fases, escrita para alguien sin experiencia previa en Power Platform.
+Publicada en https://claude.ai/artifact/VW57WCA1dRFUtBuZiuHA7Q
+
+Cada paso dice **dónde** se hace, **qué** hay que hacer, **qué se debe ver al terminar** y cuánto
+tarda. Incluye las fórmulas del panel visual, las diez trampas que hacen perder días, un glosario
+de los términos que la plataforma da por sabidos, y las cuatro cosas donde conviene pedir ayuda.
+
+Esfuerzo estimado: **12–17 días de trabajo**, sin contar la espera de decisiones.
 
 ### `03-mockups/` — Documento consolidado para el cliente ⭐
 

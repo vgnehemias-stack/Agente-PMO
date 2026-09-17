@@ -59,7 +59,7 @@ relación padre-hijo es la que produce tanto la vista global como el desglose.
 | Criticidad | Choice | A (crítico) / B (importante) / C (normal) |
 | Estado | Choice | Operativo / Degradado / Fuera de servicio / Retirado |
 | Descripción | Texto multilínea | |
-| Ruta completa | Calc | `MB-01 ▸ Rodamiento ▸ Sistema de lubricación`. Facilita búsqueda y migas de pan |
+| Ruta completa | Texto (500) | `MB-01 ▸ Rodamiento ▸ Sistema de lubricación`. Facilita búsqueda y migas de pan. **No es columna calculada:** recorrer el árbol hacia arriba es recursivo y Dataverse no lo permite. Se llena en la carga y la mantiene un flujo cuando cambia la jerarquía |
 | N° de partes | Calc | Hijos directos. Es lo que la vista global muestra por subsistema |
 | **Coordenada X (%)** | Decimal 0–100 | Posición horizontal del punto sobre el esquema de la monoboya |
 | **Coordenada Y (%)** | Decimal 0–100 | Posición vertical |
@@ -88,10 +88,16 @@ Las tres primeras se validan en la carga; la cuarta, con una clave alternativa d
 Los tres campos del final son los que sostienen el panel visual (ver el plan maestro). Guardarlos
 **en la tabla** y no en la pantalla es lo que evita que el esquema se vuelva inmanejable:
 
-- Agregar un subsistema es **agregar una fila**, no editar la aplicación.
-- Mover un punto es **cambiar un número** desde la propia ficha.
+- **Dibujar** los puntos sale del dato por completo: la posición y el color de cada marca se
+  calculan con una fórmula sobre esta tabla.
+- **Mover** un punto es **cambiar un número** desde la propia ficha, sin tocar la aplicación.
 - Al ser porcentajes y no píxeles, el esquema **escala solo** en cualquier pantalla.
-- El color de cada punto sale de los datos del nodo, no de la maqueta.
+
+> **Matiz de construcción:** una galería de Power Apps coloca sus elementos en fila o columna, no
+> en posiciones libres. Por eso el **clic** sobre cada punto necesita un botón transparente por
+> subsistema, con su posición enlazada al dato. Agregar un subsistema es, entonces, agregar la fila
+> **y duplicar ese botón** — un par de minutos. La versión sin tocar nada exige un componente de
+> código (PCF). El detalle está en el runbook de construcción.
 
 Se guardan en `Nodo del sistema` y no en una tabla aparte porque son un atributo del nodo: cada
 subsistema tiene un único sitio en el dibujo.
