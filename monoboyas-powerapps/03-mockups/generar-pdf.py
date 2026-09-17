@@ -57,7 +57,10 @@ const { chromium } = require('%(playwright)s');
     format: '%(formato)s',
     scale: %(escala)s,
     printBackground: true,                            // sin esto saldria todo en blanco
-    margin: { top: '18mm', bottom: '18mm', left: '18mm', right: '18mm' },
+    // Margen de pagina a cero a proposito: con cualquier margen, Chromium deja
+    // esa franja en BLANCO y no la pinta ni el fondo del body ni una capa fija.
+    // El aire de los bordes lo pone el CSS de impresion, dentro del contenido.
+    margin: { top: '0', bottom: '0', left: '0', right: '0' },
     preferCSSPageSize: false
   });
 

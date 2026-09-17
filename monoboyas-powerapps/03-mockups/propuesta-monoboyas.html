@@ -680,8 +680,23 @@
   @media print {
     :root { --barra: 0px; }
     .barra, .mando { display: none !important; }
-    body { padding-top: 0; font-size: 12.5px; line-height: 1.5; }
-    .wrap { max-width: none; padding-inline: 0; }
+    /* El PDF se genera con margen de pagina CERO, porque con cualquier margen
+       Chromium deja esa franja en blanco y no hay forma de pintarla. Asi el
+       crema del body llega hasta el borde de la hoja, y el aire de los bordes
+       lo pone este padding. */
+    body {
+      padding: 0; font-size: 12.5px; line-height: 1.5;
+      background: var(--ground);
+    }
+    .wrap { max-width: none; padding: 20mm 18mm 22mm; }
+
+    /* En las hojas de continuacion el padding del .wrap no se repite, y los
+       MARGENES se truncan en un corte de pagina. Los BORDES no: un borde del
+       color del fondo es aire garantizado tambien cuando el bloque estrena
+       hoja. Es lo que evita que nada arranque pegado al filo. */
+    section { padding-block: 0; border-block: 9mm solid var(--ground); }
+    .stack > *, .duo > *,
+    section > div:has(> .app) { border-block: 9mm solid var(--ground); }
 
     /* --- 1. Paginacion ---
        Chromium no fragmenta bien dentro de flex ni grid: los contenedores que
@@ -730,7 +745,6 @@
     .listcol { max-height: none; }
 
     /* --- 3. Densidad ejecutiva --- */
-    section { padding-block: 22px 0; }
     .sec-head { margin-bottom: 16px; }
     header.hero { padding-block: 0 26px; }
     header.hero h1 { font-size: 30px; }

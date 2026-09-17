@@ -160,9 +160,12 @@ Pesa 470 KB: se envía por correo sin problema.
 ### Y en PDF: `propuesta-monoboyas.pdf`
 
 [`03-mockups/propuesta-monoboyas.pdf`](03-mockups/propuesta-monoboyas.pdf) — el mismo documento en
-**A3 vertical y tema claro**, 8 páginas, en formato ejecutivo: flujo continuo, márgenes de 18 mm,
-tipografía más densa y las tablas largas partidas entre hojas repitiendo su cabecera. Ningún
-mockup queda cortado.
+**A3 vertical y tema claro**, 8 páginas, en formato ejecutivo: flujo continuo, tipografía densa y
+tablas largas partidas entre hojas repitiendo su cabecera. Ningún mockup queda cortado.
+
+El **fondo crema llega hasta el borde de la hoja**, sin marco blanco. Para eso el PDF se genera con
+margen de página cero: con cualquier margen, Chromium deja esa franja en blanco y no la pinta ni el
+fondo del `body` ni una capa fija. El aire de los bordes lo pone el CSS de impresión.
 
 En papel se omiten dos bloques que en pantalla sí están —la tercera vista del esquema y las
 pestañas sueltas de la ficha— porque repiten lo que ya muestran las anteriores. Van marcados en la
