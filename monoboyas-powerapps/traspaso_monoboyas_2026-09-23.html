@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acta de traspaso — App de Monoboyas</title>
+<meta name="description" content="Acta de traspaso del proyecto de aplicacion de monoboyas de TAMOIN para Repsol La Pampilla.">
+<style>
+  /* Autocontenido a proposito: sin scripts, sin tipografias remotas, sin
+     hojas de estilo externas. Se imprime en una sola hoja A4. */
+  :root{
+    --tinta:#241f1a; --suave:#6d6259; --crema:#faf6ef; --linea:#ddd3c4;
+    --acento:#a9531b; --rojo:#a3302a;
+  }
+  @page{ size:A4 portrait; margin:9mm 9mm 8mm; }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; padding:9mm; background:var(--crema); color:var(--tinta);
+    font:7.9pt/1.26 "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  h1{ font-size:12pt; margin:0 0 .8mm; letter-spacing:-.2px; }
+  .meta{ color:var(--suave); font-size:7.2pt; margin:0 0 1.6mm;
+         border-bottom:.6pt solid var(--linea); padding-bottom:1.6mm; }
+  .meta b{ color:var(--tinta); }
+  .cols{ column-count:2; column-gap:6mm; column-fill:balance; }
+  section{ break-inside:avoid-column; margin:0 0 1.7mm; }
+  h2{ font-size:8.4pt; margin:0 0 1.2mm; text-transform:uppercase;
+      letter-spacing:.5px; color:var(--acento); }
+  h2 span{ color:var(--suave); font-weight:400; }
+  h3{ font-size:7.8pt; margin:1.3mm 0 .5mm; color:var(--suave);
+      font-weight:600; letter-spacing:.2px; }
+  ul{ margin:0; padding-left:3.4mm; list-style:none; }
+  li{ margin:0 0 .7mm; position:relative; }
+  li::before{ content:"·"; position:absolute; left:-3mm; color:var(--acento);
+              font-weight:700; }
+  ol{ margin:0; padding-left:4.2mm; }
+  ol li{ margin:0 0 .7mm; }
+  ol li::before{ content:none; }
+  b,strong{ font-weight:600; }
+  code{ font-family:"Consolas","SF Mono",monospace; font-size:7.5pt;
+        background:#f1e9dc; padding:0 .5mm; border-radius:1px; }
+  table{ width:100%; border-collapse:collapse; font-size:7.4pt; }
+  td{ padding:.6mm 1mm .6mm 0; border-bottom:.5pt solid var(--linea);
+      vertical-align:top; }
+  td:first-child{ white-space:nowrap; font-weight:600; }
+  td:last-child{ color:var(--suave); }
+  .no{ color:var(--rojo); font-weight:600; }
+  .pre p{ margin:0 0 1.4mm; }
+  .pre p:last-child{ margin:0; }
+  .pre{ font-family:"Consolas","SF Mono",monospace; font-size:7pt;
+        line-height:1.3; white-space:normal; background:#f3ece0;
+        border-left:1.6pt solid var(--acento); padding:1.6mm 2mm;
+        margin:0; border-radius:0 2px 2px 0; }
+  footer{ margin-top:2mm; padding-top:1.6mm; border-top:.6pt solid var(--linea);
+          color:var(--suave); font-size:7pt; column-span:all; }
+  @media screen{
+    body{ max-width:220mm; margin:0 auto; }
+  }
+  /* Al imprimir, el aire ya lo pone @page: el relleno del cuerpo sobra y
+     es justo lo que empujaba el documento a una segunda hoja. */
+  @media print{
+    body{ padding:0; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Acta de traspaso · Aplicación de Monoboyas</h1>
+<p class="meta">TAMOIN — Repsol Refinería La Pampilla &nbsp;·&nbsp; <b>2026-09-23</b>
+&nbsp;·&nbsp; repo <code>vgnehemias-stack/Agente-PMO</code>, rama
+<code>claude/blissful-ritchie-s3ewsq</code>, commit <code>b2dd3cc</code>
+&nbsp;·&nbsp; paquete <code>monoboyas-powerapps/</code> &nbsp;·&nbsp;
+no repite los entregables: los referencia por ruta.</p>
+
+<div class="cols">
+
+<section>
+  <h2>1 <span>· Objetivo y entregable</span></h2>
+  <ul>
+    <li>App para <b>centralizar y consultar</b> la información del sistema de monoboyas. Consulta y trazabilidad, <b>no ejecución</b>: la supervisión sigue siendo de Repsol.</li>
+    <li>Entregable: el paquete <code>monoboyas-powerapps/</code> — <code>01-plan/</code> (plan v2.0, modelo de datos, decisiones abiertas), <code>02-levantamiento/</code> (6 CSV precargados), <code>03-mockups/</code> (documento de cliente + PDF), <code>04-construccion/</code> (runbook), <code>05-prototipo/</code> (prototipo navegable).</li>
+    <li>Artifacts: documento <code>ESJQuSq58Ugb2HvHcTuWyp</code>, runbook <code>VW57WCA1dRFUtBuZiuHA7Q</code>, prototipo <code>59MQUSdFe1FPjWSHB7RvzJ</code> (en <code>claude.ai/artifact/…</code>).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>2 <span>· Decisiones y criterios</span></h2>
+  <h3>Alcance</h3>
+  <ul>
+    <li>El eje es la <b>codificación de subsistemas</b>, <span class="no">no</span> la Orden de Trabajo.</li>
+    <li>Eliminado todo lo del perfil ejecutor (partes, firmas, avance).</li>
+    <li>Recorrido: vista global → desglose → ficha con 4 pestañas.</li>
+    <li>Lista y esquemático son <b>la misma vista con distinta visual</b>, con selector desde el inicio.</li>
+    <li>La visualización dinámica va <b>dentro de la app</b> (SVG con <code>Concat()</code>), sin Power BI aparte.</li>
+  </ul>
+  <h3>Plataforma, formato y supuestos</h3>
+  <ul>
+    <li><b>Power Platform</b>, no sólo Power Apps: Dataverse (dato) + Power Apps (pantallas) + Power Automate (avisos). Los 12–17 días cubren las tres.</li>
+    <li>Tono informativo y ejecutivo; lo no verificado se marca como tal. Impresión en tema claro, fondo crema al borde.</li>
+    <li><b>«Se genera, no se edita a mano»:</b> <code>exportar.py</code>, <code>generar-pdf.py</code>, <code>construir-prototipo.py</code>. Fuente única: <code>mockup-pantallas.html</code> y <code>plantilla.html</code>.</li>
+    <li>Supuestos: monoboya tipo <b>CALM</b>, codificación jerárquica, M365 corporativo. Si alguno falla, ajustar antes de construir.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3 <span>· Cifras clave y su origen</span></h2>
+  <table>
+    <tr><td>81 nodos</td><td><code>01_jerarquia_subsistemas.csv</code> · col. <code>nivel</code>: 1 monoboya + 12 subsistemas + 68 equipos; jerarquía por <code>codigo_padre</code>. <code>codigo_oficial</code> <span class="no">vacío</span>: manda <code>codigo_provisional</code></td></tr>
+    <tr><td>12 puntos</td><td>mismo archivo · <code>coordenada_x</code>/<code>coordenada_y</code>, en % sobre un viewBox de 660×380</td></tr>
+    <tr><td>40 frecuencias</td><td><code>02_frecuencias_referencia.csv</code> · <code>frecuencia_valor</code>+<code>_unidad</code>, <code>norma_referencia</code></td></tr>
+    <tr><td>27 materiales</td><td><code>03_catalogo_materiales.csv</code> · llave <code>codigo_interno</code>; <code>codigo_sap</code> sin confirmar</td></tr>
+    <tr><td>26 vínculos</td><td><code>04_materiales_por_nodo.csv</code> · material ↔ nodo</td></tr>
+    <tr><td>26 documentos</td><td><code>05_documentos_planos.csv</code> · 13 planos; avisos desde <code>fecha_vencimiento</code></td></tr>
+    <tr><td>5 perfiles</td><td><code>06_personal_accesos.csv</code> · <span class="no">0 personas nombradas</span></td></tr>
+    <tr><td>9 tablas + 2 cat.</td><td><code>01-plan/modelo-datos.md</code> · <i>Nodo del sistema</i> es autorreferenciada</td></tr>
+    <tr><td>12–17 días</td><td><code>runbook-powerapps.html</code> · 28 pasos, 7 fases, sin contar esperas</td></tr>
+    <tr><td>21 decisiones</td><td><code>decisiones-abiertas.md</code> · D-01…D-21, 4 bloqueantes</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>4 <span>· Readjuntar en el chat nuevo</span></h2>
+  <ul>
+    <li>Este acta, primero; después los <b>6 CSV</b> de <code>02-levantamiento/</code>, que son el dato vivo.</li>
+    <li><code>01-plan/</code> (plan maestro, modelo de datos, decisiones), <code>03-mockups/mockup-pantallas.html</code>, <code>04-construccion/runbook-powerapps.html</code>.</li>
+    <li><code>05-prototipo/</code>: <code>plantilla.html</code>, <code>construir-prototipo.py</code>, <code>_escena.svg</code>.</li>
+    <li><b>Atajo:</b> si el chat nuevo accede al repositorio, basta indicar la rama y adjuntar sólo este acta.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>5 <span>· Probado y descartado</span></h2>
+  <h3>De producto</h3>
+  <ul>
+    <li><b>Power BI aparte</b> → duplicaba licencia y sacaba al usuario de la app. Sustituido por SVG dentro de Power Apps. Vuelve a la mesa sólo si se pide tendencia histórica (D-20).</li>
+    <li><b>Modelo por OT</b> y <b>alcance de ejecutor</b> → descartados por el cliente.</li>
+  </ul>
+  <h3>Técnicos, verificados</h3>
+  <ul>
+    <li><b>Galería para los puntos clicables</b> → no sirve: una galería coloca en fila o columna, no en posiciones libres. Va un botón transparente por punto. <b>Consecuencia: añadir un subsistema sí obliga a tocar la pantalla</b>, no basta una fila.</li>
+    <li><b><code>Ruta completa</code> como columna calculada</b> → Dataverse no permite recursión. Se llena en la carga y la mantiene un flujo.</li>
+    <li><b>PDF de presentación</b> (<code>break-before: page</code> por apartado) → 20 páginas medio vacías. Flujo continuo: 8. El <code>zoom: 0.84</code> en los mockups empeoraba el empaquetado; revertido.</li>
+    <li><b><code>break-inside: avoid</code> dentro de flex/grid</b> → Chromium lo ignora. Esos contenedores pasan a <code>display: block</code> al imprimir.</li>
+    <li><b>Pintar el margen de página por CSS</b> → Chromium nunca pinta esa franja. Margen 0 y el aire dentro, con <b>bordes</b> (el <code>padding</code> se trunca al cortar).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6 <span>· Pendientes, por prioridad</span></h2>
+  <ol>
+    <li><b class="no">D-01 · Codificación oficial.</b> Nada se carga sin ella. <i>TAMOIN Mantenimiento.</i></li>
+    <li><b class="no">D-02 · Tenant TAMOIN o Repsol.</b> Licencias, propiedad del dato, fin de contrato. Cambiarlo después es migrar todo. <i>Gerencia + TI Repsol.</i></li>
+    <li><b class="no">D-03 · Usuarios y cuántos sólo consultan.</b> Decide el licenciamiento.</li>
+    <li><b class="no">D-04 · Cuántas monoboyas.</b> Afecta al levantamiento, no al desarrollo.</li>
+    <li><b>D-13 · Responsable por clase de información.</b> Riesgo principal: sin esto la app se desactualiza en meses.</li>
+    <li><b>Decidir sobre el PDF:</b> omite dos bloques <code>data-pdf="omitir"</code> de <code>mockup-pantallas.html</code> (líneas 889 y 1111). Si se recuperan, regenerar.</li>
+    <li><b>Cerrar el correo a gerencia:</b> «Power Apps» (lo que reconocen) frente a «Power Platform» (lo que se construye). Recomendado: nombrar ambos.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>7 <span>· Prompt de arranque</span></h2>
+  <div class="pre">
+<p>Retomo la aplicación de monoboyas de TAMOIN para Repsol La Pampilla. Adjunto el acta de traspaso del 2026-09-23; léela primero.</p>
+<p>Es una app de CONSULTA (no de ejecución) sobre Power Platform, gobernada por la codificación de subsistemas y no por la OT. Está en el repo vgnehemias-stack/Agente-PMO, rama claude/blissful-ritchie-s3ewsq, carpeta monoboyas-powerapps/. Todo lo generado sale de sus scripts: no edites a mano los HTML ni el PDF de salida.</p>
+<p>Necesito ahora [ELEGIR UNO]: (a) ya tengo la codificación oficial, recárgala en los CSV de 02-levantamiento/ y regenera prototipo y documento; (b) prepara la reunión de gerencia sobre el tenant (D-02); (c) empieza la Fase 0 del runbook de 04-construccion/.</p>
+<p>Antes de proponer nada, dime qué sigue vigente y qué habría que rehacer.</p>
+</div>
+</section>
+
+</div>
+
+<footer>Acta de traspaso generada el 2026-09-23 · versión extendida en Markdown:
+<code>traspaso_monoboyas_2026-09-23.md</code> · documento autocontenido, sin scripts ni recursos externos.</footer>
+
+</body>
+</html>

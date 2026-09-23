@@ -198,6 +198,18 @@ Cada línea va marcada como `PROPUESTA - VALIDAR` en su columna `observaciones`.
 
 ---
 
+## Acta de traspaso
+
+Resumen de una página para retomar el proyecto en una sesión nueva sin releer nada: objetivo,
+criterios acordados, cifras clave con su origen, enfoques descartados y pendientes por prioridad.
+
+| Archivo | Para qué |
+|---|---|
+| [`traspaso_monoboyas_2026-09-23.md`](traspaso_monoboyas_2026-09-23.md) | Versión extendida, para readjuntar en el chat nuevo |
+| [`traspaso_monoboyas_2026-09-23.html`](traspaso_monoboyas_2026-09-23.html) | Autocontenido, sin scripts ni recursos externos; se imprime en **una sola hoja A4** |
+
+---
+
 ## Siguiente paso
 
 1. **Compartir la codificación oficial de subsistemas.** Es lo primero y bloquea la carga.
