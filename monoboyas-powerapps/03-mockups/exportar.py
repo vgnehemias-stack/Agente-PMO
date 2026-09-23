@@ -22,7 +22,7 @@ AQUI = Path(__file__).parent
 FUENTE = AQUI / "mockup-pantallas.html"
 SALIDA = AQUI / "propuesta-monoboyas.html"
 
-TITULO = "Sistema de monoboya, centralizado"
+TITULO = "Mantenimiento de Monoboyas"  # el mismo nombre con el que se publica
 DESCRIPCION = (
     "Propuesta de aplicacion en Power Apps para centralizar la informacion del "
     "sistema de monoboya. TAMOIN para Repsol - Refineria La Pampilla."
