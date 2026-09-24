@@ -126,6 +126,17 @@ de los términos que la plataforma da por sabidos, y las cuatro cosas donde conv
 
 Esfuerzo estimado: **12–17 días de trabajo**, sin contar la espera de decisiones.
 
+Para llevarlo a quien va a construir, sin depender de internet:
+
+```bash
+python3 04-construccion/exportar-runbook.py
+```
+
+Genera [`construir-app-monoboyas.html`](04-construccion/construir-app-monoboyas.html) — el mismo
+runbook como documento autónomo, con las tipografías incrustadas y una barra de índice para saltar
+entre las siete fases. Se abre con doble clic. **La fuente sigue siendo el fragmento:** si cambia el
+runbook, se vuelve a ejecutar, no se edita el archivo generado.
+
 ### `03-mockups/` — Documento consolidado para el cliente ⭐
 
 [`mockup-pantallas.html`](03-mockups/mockup-pantallas.html) — **es el entregable que se presenta**.
